@@ -3,9 +3,7 @@
   %hr.contexto{:size => "1"}
 
 %section#areaTrabajo.areaTrabajo{:style => "font: 82.5% 'Trebuchet MS', sans-serif"}
- 
   = render 'regresar'
- 
   %br
   %br  
   %br
@@ -97,7 +95,6 @@
       %td
         %b
           =@fax
-   
     %tr
       %td
         Correo1
@@ -123,8 +120,6 @@
       %td
         %b
           =@empresa.try(:estatus).try(:descripcion).upcase
-    
-      
     %tr
       %td
         Responsable Legal
@@ -148,7 +143,7 @@
         Aporte Mantenimiento
       %td
         %b
-          =@empresa.try(:aporte_mantenimiento)
+          =@empresa.try(:aporte_mantenimiento_bs)
   
     %tr
       %td
@@ -277,7 +272,6 @@
       %td
         %b
           =@empresa.try(:email1_ean)
-   
 
   %br
   %br
@@ -368,7 +362,6 @@
       %td
         %b
           =@empresa.try(:email1_edi)
-   
   %br
   %br
   %br
@@ -389,8 +382,6 @@
       %td
         %b
           =@empresa.try(:rep_recursos_cargo)
-    
-   
     %tr
       %td
         Teléfono 1
@@ -441,7 +432,6 @@
       %td
         %b
           =@telefono1_mercadeo
-   
     %tr
       %td
         Fax
