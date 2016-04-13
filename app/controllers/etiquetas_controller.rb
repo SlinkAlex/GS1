@@ -5,9 +5,13 @@ class EtiquetasController < ApplicationController
   def show
 
     @empresa = Empresa.find(:first, :conditions => ["prefijo = ?", params[:id]])
-    @estado_ean = Estado.find(@empresa.id_estado_ean)
-    @ciudad_ean = Ciudad.find(@empresa.id_ciudad_ean) 
 
+    if (@empresa.id_estado_ean)
+      @estado_ean = Estado.find(@empresa.id_estado_ean)
+    end
+
+
+    @ciudad_ean = Ciudad.find(@empresa.id_ciudad_ean)
     @municipio_ean = Municipio.find(@empresa.id_municipio_ean)
 
     @telefono =  Empresa.telefono1_ean(@empresa)
@@ -19,7 +23,7 @@ class EtiquetasController < ApplicationController
     respond_to do |format|
       format.html # show.html.haml
       format.pdf{
-        pdf = EtiquetaPdf.new(@empresa, @telefono)
+        pdf = EtiquetaPdf.new(@empresa, @telefono,@municipio_ean)
         send_data pdf.render
       }
 
