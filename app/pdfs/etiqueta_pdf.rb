@@ -2,7 +2,7 @@
 class EtiquetaPdf < Prawn::Document
 
   def initialize(empresa, telefono)
-    super(:page_layout => :portrait,:margin => [0, 5], :page_size => [275, 130])
+    super(:page_layout => :portrait,:margin => [0, 10], :page_size => [275, 130])
 
     font("#{Rails.root}/fonts/arial.ttf", :size => 8) do
 
