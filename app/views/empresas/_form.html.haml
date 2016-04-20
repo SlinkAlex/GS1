@@ -38,13 +38,8 @@
                 %li='NOMBRE RESPONSABLE LEGAL no puede estar en blanco.'
               -elsif msg == 'Cargo rep legal No puede estar en blanco'
                 %li='CARGO Rep. Legal no puede estar en blanco.'
-              
-             
               -else
                 %li=msg + '.'
-
-      
-        
       %br
       %table
         -if params[:asociar_prefijo] == 'true'
@@ -91,7 +86,6 @@
           %td         
 
             =f.text_field :direccion_empresa, {:size => "110"}
-            
         %tr
           %td
             Teléfono 1 (58)
@@ -100,7 +94,6 @@
           %td
             =f.text_field :contacto_tlf1,  :placeholder => "123-45-67"
           %td
-            
         %tr
           %td
             Teléfono 2 (58)
@@ -135,8 +128,6 @@
           %td
           %td
             =f.text_field "contacto_email2",  {:class => "email", :placeholder => "correo@prueba.com"}
-
-
         %tr
           %td
             Circunscripción Judicial del Registro Mercantil
@@ -169,8 +160,7 @@
           %td
             =f.select "tipo_rif", ['J', 'G', 'E', 'V'].map{|opcion|[opcion,opcion]}, {:prompt => "--", :select => @empresa_registrada }
           %td
-            = f.text_field :rif, :placeholder => "J-12548785-4"    
-     
+            = f.text_field :rif, :placeholder => "J-12548785-4"
         %tr
           %td
             NOMBRE RESPONSABLE LEGAL
@@ -193,18 +183,14 @@
           %td
             Cédula Representante Legal
           %td
-            
           %td
             =f.text_field :cedula_responsable_legal, :placeholder => "12345678"
-
-
         %tr
           %td
             Domiciliado en
           %td
           %td
             =f.text_field :domicilio_responsable_legal
-    
         %tr
           %td
             VENTAS BRUTAS ANUALES
@@ -217,8 +203,6 @@
           %td
           %td
             =f.text_field :aporte_mantenimiento_bs
-
-
       %br
 
       %br
@@ -234,17 +218,13 @@
               NOMBRE PERSONA CONTACTO
             %td
             %td
-
               =f.text_field :rep_ean
-            
           %tr
             %td
               CARGO
             %td
             %td
-              =f.text_field :rep_ean_cargo              
-
-
+              =f.text_field :rep_ean_cargo
           %tr
             %td
               =f.select(:tipo_galpon_edificio_quinta, options_for_select(['GALPON', 'EDIFICIO', 'QUINTA'], @empresa.tipo_galpon_edificio_quinta), :prompt => "GALPON/EDIFICIO/QUINTA")
@@ -257,7 +237,6 @@
             %td
             %td
               =f.text_field :piso_numero
-
           %tr
             %td
               =f.select(:tipo_oficina_apartamento, options_for_select(['APARTAMENTO', 'OFICINA'], @empresa.tipo_oficina_apartamento), :prompt => "APARTAMENTO/OFICINA")
@@ -270,22 +249,18 @@
             %td
             %td
               =f.text_field :avenida_calle
-
           %tr
             %td
               =f.select(:tipo_urbanizacion_barrio_sector, options_for_select(['URBANIZACION', 'BARRIO', 'SECTOR', 'TERRAZA'], @empresa.tipo_avenida_calle), :prompt => "URBANIZACION/BARRIO/SECTOR/TERRAZA")
             %td
             %td
               =f.text_field :urbanizacion_barrio_sector
-              
           %tr
             %td
               ESTADO
             %td
             %td
               =f.collection_select :id_estado_ean, Estado.find(:all, :order => "nombre ASC"), :id, :nombre, :prompt => "-Seleccione-"
-
-              
           %tr
             %td
               CIUDAD
@@ -293,8 +268,7 @@
             %td
               
               =f.collection_select :id_ciudad_ean, Ciudad.find(:all, :order => "nombre ASC"), :id, :nombre, :prompt => "-Seleccione-"
-              
-              
+
           %tr
             %td
               MUNICIPIO
@@ -302,7 +276,6 @@
             %td
               
               =f.collection_select :id_municipio_ean, Municipio.find(:all, :order => "nombre ASC"), :id, :nombre, :prompt => "-Seleccione-"
-              
           %tr
             %td
               PARROQUIA
@@ -310,7 +283,6 @@
             %td
               
               =f.text_field :parroquia_ean
-              
           %tr
             %td
               Punto Referencia
@@ -364,11 +336,7 @@
               E-mail 1
             %td
             %td
-              
               =f.text_field :email1_ean,  :class => "email"
-            
-         
-      
       %br
       %label.contexto
         b. DIRECCION PARA ENVIO DE CORRESPONDENCIA DE COMERCIO ELECTRONICO Y SINCRONET
@@ -421,7 +389,6 @@
             %td
             %td
               =f.text_field :urbanizacion_barrio_sector_sincronet
-             
           %tr
             %td
               ESTADO
@@ -429,28 +396,24 @@
             %td
               
               =f.collection_select :id_estado_edi, Estado.find(:all, :order => "nombre ASC"), :id, :nombre, :prompt => "-Seleccione-"
-                
           %tr
             %td
               CIUDAD
             %td
             %td
               = f.collection_select :id_ciudad_edi, Ciudad.find(:all, :order => "nombre ASC"), :id, :nombre, :prompt => "-Seleccione-"
-              
           %tr
             %td
               MUNICIPIO
             %td
             %td
               = f.collection_select :id_municipio_edi, Municipio.find(:all, :order => "nombre ASC"), :id, :nombre, :prompt => "-Seleccione-"
-              
           %tr
             %td
               PARROQUIA
             %td
             %td
               =f.text_field :parroquia_edi
-              
           %tr
             %td
               Punto Referencia
@@ -498,8 +461,6 @@
             %td
             %td
               =f.text_field :email1_edi, :class => "email"
-            
-         
       
       %br/
 
@@ -529,7 +490,6 @@
               =f.text_field :cod_tlf1_seminarios, :placeholder => "212", :size => "3"
             %td
               =f.text_field :telefono1_recursos, :class => "formato_telefono"
-              
           %tr
             %td
               Fax (58)
@@ -570,7 +530,6 @@
               =f.text_field :cod_tlf1_mercadeo, :placeholder => "212", :size => "3"
             %td
               =f.text_field :telefono1_mercadeo, :class => "formato_telefono"
-              
           %tr
             %td
               Fax (58)
@@ -578,15 +537,12 @@
               =f.text_field :cod_fax_mercadeo, :placeholder => "212", :size => "3"
             %td
               =f.text_field :fax_mercadeo, :class => "formato_telefono"
-              
           %tr
             %td
               E-mail 1
             %td 
             %td
               =f.text_field :email1_mercadeo, :class => "email"
-          
-
       %br
       %br
       %br
@@ -599,10 +555,12 @@
           %td
             Clasificación
           %td
+
             
-            
+            //=f.collection_select(:id_clasificacion, Clasificacion.all, :id, :clasificacion)
             =f.collection_select(:id_clasificacion, Clasificacion.all, :id, :clasificacion,  { :selected => @clasificacion.id,:style => "width:600px;"})
-            
+            - puts "CLASIFICACION QUE DA ERROR: "+@clasificacion.inspect
+
         %tr
           %td
             Categoría 
@@ -630,14 +588,8 @@
         Guardar
       
       =render 'regresar'
-        
-
-    
-      
 
 
-          
-      
 
 
 
