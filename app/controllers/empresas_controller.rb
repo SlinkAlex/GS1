@@ -11,6 +11,7 @@ class EmpresasController < ApplicationController
 
     respond_to do |format|
       format.html{
+        puts "AQUI 1"
 
                   cookies.clear if params[:eliminar_cookie]
                   
@@ -46,13 +47,14 @@ class EmpresasController < ApplicationController
 
                       render :template =>'/empresas/index.html.haml'
 
+
                   end
 
       } # index.html.erb
       
-      format.json { 
+      format.json {
 
-                    # if (params[:activacion] == 'true')
+        # if (params[:activacion] == 'true')
                     #   render json: (ActivacionEmpresasDatatable.new(view_context))
                     # elsif (params[:retirar] == 'true')
                     if (params[:retirar] == 'true')
@@ -72,10 +74,11 @@ class EmpresasController < ApplicationController
                     
                     else
 
-                      
+
+
 
                       if UsuariosAlcance.verificar_alcance(session[:perfil], session[:gerencia], 'Modificar Empresa')  # Privilegio Modificar Empresa
-                        
+
 
                         if UsuariosAlcance.verificar_alcance(session[:perfil], session[:gerencia], 'Generar Código')  ## Si tiene el privilegio asociado a su perfil puede generar codigos para PRODUCTOS Y GLN
 
@@ -83,18 +86,19 @@ class EmpresasController < ApplicationController
                           render json: EmpresasEditableCodificableDatatable.new(view_context)
 
                         else  # Asociar Nuevo Prefijo
-                        
-                          render json: EmpresasEditableDatatable.new(view_context)  
+
+                          render json: EmpresasEditableDatatable.new(view_context)
 
                         end
 
                       else
-                        
+
                         render json: EmpresasDatatable.new(view_context)
                         
                       end
 
                     end
+
                   }
 
       format.xlsx{
@@ -122,7 +126,7 @@ class EmpresasController < ApplicationController
                     render :template => "/empresas/index.xlsx.axlsx"
 
 
-                  end 
+                  end
       }
 
       
@@ -135,7 +139,7 @@ class EmpresasController < ApplicationController
   # GET /empresas/1.json
   def show
 
-    
+
     respond_to do |format|
       
       @empresa = Empresa.find(:first, :conditions => ["prefijo = ?", params[:id]], :include => [:tipo_usuario_empresa])
@@ -182,6 +186,8 @@ class EmpresasController < ApplicationController
         @telefono3_mercadeo = Empresa.telefono3_mercadeo(@empresa)
         @fax_mercadeo = Empresa.fax_mercadeo(@empresa)
 
+        puts "ENTRA AQUI"
+
         @clasificacion = Clasificacion.find(:first, :conditions => ["categoria = ? and division = ? and grupo = ? and clase = ?", @empresa.categoria, @empresa.division, @empresa.grupo, @empresa.clase])
 
       }
@@ -198,7 +204,7 @@ class EmpresasController < ApplicationController
       }
 
       format.pdf {
-          
+
           @gln_legal = Gln.find(:first,  :include => [:tipo_gln], :conditions =>["prefijo = ? and id_tipo_gln= ? ", @empresa.prefijo, 1])
           @productos = Producto.find(:all, :conditions => ["prefijo = ?", @empresa.prefijo], :include => [:tipo_gtin])
 
@@ -216,7 +222,7 @@ class EmpresasController < ApplicationController
  
   # GET /empresas/1/edit
   def edit
-    
+
     @empresa = Empresa.find(params[:id])
     @nuevo_prefijo_asociado = Empresa.busqueda_exhaustiva_prefijo if params[:asociar_prefijo] == 'true'
     @clasificacion = Clasificacion.where("categoria = '#{@empresa.categoria}' and division = #{@empresa.division} and grupo = #{@empresa.grupo} and clase = #{@empresa.clase}").first
@@ -254,6 +260,7 @@ class EmpresasController < ApplicationController
   def update
 
     @empresa = Empresa.find(params[:id])
+    @clasificacion = Clasificacion.where("categoria = '#{@empresa.categoria}' and division = #{@empresa.division} and grupo = #{@empresa.grupo} and clase = #{@empresa.clase}").first
     
     params[:empresa][:rif_completo] = params[:empresa][:tipo_rif] + "-" + params[:empresa][:rif]
 
@@ -357,7 +364,8 @@ class EmpresasController < ApplicationController
   end
 
   def update_multiple
-   
+
+
     Empresa.validar_empresas(params[:activar_empresas]) if params[:activar_empresas] #Parametro que indica Validar Empresa       
     
     if params[:retiro]
