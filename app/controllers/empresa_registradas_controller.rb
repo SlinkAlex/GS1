@@ -100,6 +100,7 @@ class EmpresaRegistradasController < ApplicationController
 
     @empresa_registrada = EmpresaRegistrada.find(params[:id])
     @clasificacion = Clasificacion.where("categoria = '#{@empresa_registrada.categoria}' and division = #{@empresa_registrada.division} and grupo = #{@empresa_registrada.grupo} and clase = #{@empresa_registrada.clase}").first if (@empresa_registrada.categoria and @empresa_registrada.division and @empresa_registrada.grupo and @empresa_registrada.clase)
+    @tarifa = Tarifa.find(:all, :conditions => ["usuario = ? and tipo_aporte = ?",@empresa_registrada.id_tipo_usuario, "Mantenimiento"])
          
     respond_to do |format|
 
@@ -120,10 +121,7 @@ class EmpresaRegistradasController < ApplicationController
           # Este template no permite la edicion de la empresa. Respetando el alcance del usuario segun privilegio
           render :template => '/empresa_registradas/activar_empresa.html.haml'
 
-
         end
-
-
         
       }
 
@@ -134,7 +132,7 @@ class EmpresaRegistradasController < ApplicationController
   # POST /empresa_registradas
   # POST /empresa_registradas.json
   def create
-
+    params[:empresa_registrada][:ventas_brutas_anuales] = params[:ventas_brutas_anuales]
     params[:empresa_registrada][:id_estatus] = 5 # NO VALIDADA (SIN PREFIJO)
     params[:empresa_registrada][:id_subestatus] = 2 # NO SOLVENTE
     params[:empresa_registrada][:fecha_inscripcion] = Time.now
