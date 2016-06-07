@@ -1,3 +1,11 @@
+:javascript
+  $(document).ready(function() {
+    $("#empresa_id_tarifa").change(function () {
+      $("#ventas_brutas_anuales").val($('#empresa_id_tarifa').children(':selected').text())
+    });          
+
+  } );
+
 %section.contexto
   %label.contexto.titulo_contrato
     
@@ -196,7 +204,21 @@
             VENTAS BRUTAS ANUALES
           %td
           %td
-            =f.select(:ventas_brutas_anuales, options_for_select(['0 a 200.000', 'De 200.001,00 a 2.000.000,00', 'De 2.000.001,00 a 4.500.000,00', 'De 4.500.001,00 a 6.000.000,00', 'De 6.000.0001,00 o más'], @empresa.ventas_brutas_anuales), :prompt => "- Seleccione -")
+            -if @empresa.new_record?
+              =f.select(:id_tarifa, options_for_select(Tarifa.all.map{|p| ["De "+p.desde.to_s+" Hasta "+p.hasta.to_s,p.id]}, @empresa.id_tarifa), :prompt => "- Seleccione -")
+            - else          
+              - if (@empresa.id_tarifa)
+                - x = 0
+                - @tarifa.each do |t|
+                  - if (("De "+t.desde.to_s+" Hasta "+t.hasta.to_s) == @empresa.ventas_brutas_anuales)
+                    - x = 1  
+                - if (x == 1)      
+                  =f.select(:id_tarifa, options_for_select(@tarifa.map{|p| ["De "+p.desde.to_s+" Hasta "+p.hasta.to_s,p.id]}, @empresa.id_tarifa), :prompt => "- Seleccione -")
+                - else
+                  =f.select(:id_tarifa, options_for_select(@tarifa.map{|p| ["De "+p.desde.to_s+" Hasta "+p.hasta.to_s,p.id]}+[[@empresa.ventas_brutas_anuales,0]], 0), :prompt => "- Seleccione -")                   
+              - else 
+                =f.select(:id_tarifa, options_for_select(@tarifa.map{|p| ["De "+p.desde.to_s+" Hasta "+p.hasta.to_s,p.id]}+[[@empresa.ventas_brutas_anuales,0]], 0), :prompt => "- Seleccione -")
+            = hidden_field_tag :ventas_brutas_anuales       
         %tr
           %td
             Aporte Mantenimiento Bs.
