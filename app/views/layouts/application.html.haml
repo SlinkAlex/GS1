@@ -101,6 +101,11 @@
 						%span.ui-icon.ui-icon-person
 						&nbsp;Usuarios
 
+				- if UsuariosAlcance.verificar_alcance(session[:perfil], session[:gerencia],'Ver Usuarios')
+					%a.opcion{:href => "#{tarifas_path}", :title => "Opción para editar las Tarifas Vigentes",:class => "ui-state-default ui-corner-all botones_menu"}
+						%span.ui-icon.ui-icon-circle-plus
+						&nbsp;Tarifas Vigentes
+
 				- if UsuariosAlcance.verificar_alcance(session[:perfil], session[:gerencia],'Listado GTIN-8')
 				
 					=link_to(( content_tag(:span, '',:class => 'ui-icon.ui-icon-transfer-e-w')+'Listado GTIN-8').html_safe, productos_path, {:class => "ui-state-default ui-corner-all botones_menu", :title => "Listado General de Productos GTIN8"})
@@ -109,13 +114,7 @@
 					%span.ui-icon.ui-icon-document
 					&nbsp;Reportes
 
-				
-				
-
-				
-
 			- if params[:controller] == 'productos'
-
 				
 
 				- if (UsuariosAlcance.verificar_alcance(session[:perfil], session[:gerencia], 'Registrar Producto') and params[:empresa_retirada].nil? and params[:insolvente].nil? and params[:empresa_id]) or (UsuariosAlcance.verificar_alcance(session[:perfil], session[:gerencia], 'Generar Código')  and params[:empresa_retirada].nil? and params[:empresa_id])
@@ -133,7 +132,6 @@
 				- if UsuariosAlcance.verificar_alcance(session[:perfil], session[:gerencia],'Transferir GTIN-8') and params[:empresa_id].nil?
 				
 					=link_to(( content_tag(:span, '',:class => 'ui-icon.ui-icon-transfer-e-w')+'Transferir GTIN-8').html_safe, "#{productos_path}?transferencia=true", {:class => "ui-state-default ui-corner-all botones_menu boton_transferir_productos", :title => "Transferencia de Productos GTIN-8"})
-				
 			
 			- if params[:controller] == 'glns' 
 
@@ -173,13 +171,20 @@
 					%span.ui-icon.ui-icon-circle-plus
 					&nbsp;Registrar Usuario
 
+			-if params[:controller] == 'tarifas'
+
+
+				%a.opcion{:href => "#{new_tarifa_path}", :title => "Opción para registrar tarifas",:class => "ui-state-default ui-corner-all botones_menu"}
+
+					%span.ui-icon.ui-icon-circle-plus
+					&nbsp;Registrar Tarifa	
+
 			
 			- if params[:controller] == 'reportes'
 				
 				%a.opcion{:href => "/reportes?reporte_empresa=true", :title => "Listado general de Empresas", :class => "ui-state-default ui-corner-all botones_menu"}
 					%span.ui-icon.ui-icon-document
 					&nbsp;Listado General de Empresas
-					
 				%a.opcion{:href => "/reportes?reporte_producto=true", :title => "Opción para ver listado completo de Productos", :class => "ui-state-default ui-corner-all botones_menu"}
 					%span.ui-icon.ui-icon-document
 					&nbsp;Listado General de Producto
@@ -195,9 +200,4 @@
 				%a.opcion{:href => "/reportes.xlsx?listado_gepir=true", :title => "Exportar el listado en formato GPIR", :class => "ui-state-default ui-corner-all botones_menu"}
 					%span.ui-icon.ui-icon-disk
 					&nbsp;Listado GEPIR
-				
-				
-
-			
-				
 		= yield
