@@ -1,4 +1,29 @@
 $( document ).ready(function() {
+   $("#empresa_registrada_id_tipo_usuario").change(function () {
+        //AJAX que obtiene los rango de montos dependiendo del tipo de usuario seleccionado
+        $.get("/tarifas.json?usuario=" + $(this).val(), function (data) {
+            var rango = $("#empresa_registrada_id_tarifa");
+            rango.empty() // Se eliminan las opciones del select
+            rango.append('<option> - Seleccione - </option>')
+
+            $.each(data, function (key, value) {  // Se itera sobre los motos del usuario seleccionado
+                rango.append('<option value="'+value.id+ '">' +'De '+ value.desde +' Hasta '+value.hasta+ '</option>')// Se agregan los montos al select
+            });
+
+        })
+
+    });
+
+    $("#empresa_registrada_id_tarifa").change(function () {
+        //AJAX que obtiene los montos de aporte de mantenimiento
+         var ventas_brutas = $(this).val()
+        // Obtener aporte de mantenimiento para el rango seleccionado
+        $.get("/tarifas.json?id=" + $(this).val(), function (data) {
+            var aporte = $("#empresa_registrada_aporte_mantenimiento_bs");
+            aporte.val(data.aporte_bs);
+        })
+    });
+
 	
 	// Datatable que maneja el listado de empresas
 
@@ -305,9 +330,6 @@ $( document ).ready(function() {
              });
             
         });
-
-
-        
 
 
 
