@@ -1,5 +1,5 @@
 GS1::Application.routes.draw do
-  
+
   get "gerencia/index"
   get "cargo/index"
   get "perfil/index"
@@ -19,7 +19,9 @@ GS1::Application.routes.draw do
 
   resources :reportes
   
-  resources :usuarios 
+  resources :usuarios
+
+  resources :tarifas
 
   resources :productos do #/empresas/1/productos
 
