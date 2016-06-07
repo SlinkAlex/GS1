@@ -12,6 +12,7 @@
 	belongs_to :sub_estatus, :foreign_key => "id_subestatus"
 	belongs_to :tipo_usuario, :foreign_key => "id_tipo_usuario"
 	belongs_to :motivo_retiro, :foreign_key => "id_motivo_retiro"
+	belongs_to :tarifa, :foreign_key => "id_tarifa"
 
 	has_many :producto, :foreign_key => "prefijo", :dependent => :destroy# Define una asociaicion 1 a N con productos_empresa
 	has_many :empresa_servicio, :foreign_key => "prefijo", :dependent => :destroy
@@ -249,6 +250,7 @@
 	empresa.cedula_responsable_legal = (empresa_registrada.cedula_responsable_legal) ? empresa_registrada.cedula_responsable_legal : ""
 	empresa.ventas_brutas_anuales = empresa_registrada.ventas_brutas_anuales
 	empresa.aporte_mantenimiento_bs = empresa_registrada.aporte_mantenimiento_bs
+	empresa.id_tarifa = empresa_registrada.id_tarifa
 	empresa.fecha_registro_mercantil = (empresa_registrada.fecha_registro_mercantil) ? empresa_registrada.fecha_registro_mercantil : ""
 	empresa.id_parroquia_empresa = empresa_registrada.id_parroquia_empresa
 	empresa.parroquia_empresa = (empresa_registrada.parroquia_empresa) ? empresa_registrada.parroquia_empresa  : ""
