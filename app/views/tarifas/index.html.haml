@@ -1,0 +1,40 @@
+%section.contexto
+  %label.contexto Tarifa > Listado
+  %hr.contexto{:size => "1"}
+%section#areaTrabajo.areaTrabajo
+  %p#notice= notice
+  %table#usuarios.display
+    %thead
+      %tr
+      %th Desde
+      %th Hasta 
+      %th Aporte de Mantenimiento
+      %th Tipo de Aporte       
+      - if UsuariosAlcance.verificar_alcance(session[:perfil], session[:gerencia], 'Modificar Usuario')
+        %th
+      - if UsuariosAlcance.verificar_alcance(session[:perfil], session[:gerencia],'Eliminar Usuario')
+        %th
+    %tbody
+      - @tarifas.each do |tarifa|
+        %tr
+          %td= tarifa.desde
+          %td= tarifa.hasta
+          %td= tarifa.aporte_bs
+          %td= tarifa.tipo_aporte          
+          
+          - if UsuariosAlcance.verificar_alcance(session[:perfil], session[:gerencia], 'Modificar Usuario')
+            %td= link_to(( content_tag(:span, '',:class => 'ui-icon ui-icon-extlink')+'Editar').html_safe,  edit_tarifa_path(tarifa),  {:class => "ui-state-default ui-corner-all botones_servicio", :title => "Editar tarifa #{tarifa.desde} - #{tarifa.hasta}"})
+          - if UsuariosAlcance.verificar_alcance(session[:perfil], session[:gerencia], 'Eliminar Usuario')
+            %td= link_to(( content_tag(:span, '',:class => 'ui-icon ui-icon-extlink')+'Eliminar').html_safe,  tarifa, method: :delete, data: { confirm: 'Desea ELIMINAR esta tarifa?'}, :class => "ui-state-default ui-corner-all botones_servicio", :title => "Eliminar tarifa  #{tarifa.desde} - #{tarifa.hasta}")
+
+
+  %br
+  %br
+  %a.ui-state-default.ui-corner-all.regresar_empresas{:href => "/empresas", :title => "Regresar listado general de empresas"}
+    %span.ui-icon.ui-icon.ui-icon-circle-plus
+    Regresar
+
+    
+
+  
+  
