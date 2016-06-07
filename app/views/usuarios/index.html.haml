@@ -18,7 +18,6 @@
 				%th
 			- if UsuariosAlcance.verificar_alcance(session[:perfil], session[:gerencia],'Eliminar Usuario')
 				%th
-			
 		%tbody
 			- @usuarios.each do |usuario|
 				%tr

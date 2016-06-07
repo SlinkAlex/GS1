@@ -25,13 +25,11 @@
           %td
             Clave
           %td
-           
             =f.password_field(:password, :class => "clave")
         %tr
           %td
             Confirmación Clave
           %td
-           
             =f.password_field(:password_confirmation,  :class => "clave")
         %tr
           %td
@@ -53,7 +51,6 @@
             Perfil
           %td
             =f.collection_select :id_perfil, Perfil.order("descripcion asc"), :id, :descripcion, :prompt => "-Seleccione-"
-        
         / %tr
         /   %td
         /     Cargo
