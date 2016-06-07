@@ -34,6 +34,7 @@ class EtiquetasController < ApplicationController
   # GET /empresa/:empresa_id/correspondencia/:id_correspondencia/edit
   def edit
 
+    puts "Entro en editar empresa"
     @empresa = Empresa.find(:first, :conditions => ["prefijo = ?", params[:empresa_id]])
     
   end
