@@ -11,7 +11,6 @@ class EmpresasController < ApplicationController
 
     respond_to do |format|
       format.html{
-        puts "AQUI 1"
 
                   cookies.clear if params[:eliminar_cookie]
                   
@@ -143,6 +142,7 @@ class EmpresasController < ApplicationController
     respond_to do |format|
       
       @empresa = Empresa.find(:first, :conditions => ["prefijo = ?", params[:id]], :include => [:tipo_usuario_empresa])
+      puts "EMPRESAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa  "+@empresa.inspect
 
       format.html {
 
@@ -186,13 +186,10 @@ class EmpresasController < ApplicationController
         @telefono3_mercadeo = Empresa.telefono3_mercadeo(@empresa)
         @fax_mercadeo = Empresa.fax_mercadeo(@empresa)
 
-        puts "ENTRA AQUI"
 
         @clasificacion = Clasificacion.find(:first, :conditions => ["categoria = ? and division = ? and grupo = ? and clase = ?", @empresa.categoria, @empresa.division, @empresa.grupo, @empresa.clase])
 
       }
-
-      
       
       
       format.json {
@@ -226,9 +223,8 @@ class EmpresasController < ApplicationController
     @empresa = Empresa.find(params[:id])
     @nuevo_prefijo_asociado = Empresa.busqueda_exhaustiva_prefijo if params[:asociar_prefijo] == 'true'
     @clasificacion = Clasificacion.where("categoria = '#{@empresa.categoria}' and division = #{@empresa.division} and grupo = #{@empresa.grupo} and clase = #{@empresa.clase}").first
+    @tarifa = Tarifa.find(:all, :conditions => ["usuario = ? and tipo_aporte = ?",@empresa.id_tipo_usuario, "Mantenimiento"])
 
-    
-    
   end
 
   # POST /empresas
@@ -278,6 +274,7 @@ class EmpresasController < ApplicationController
       else # Se esta editando la empresa
         
         ############################ LOS DATOS SE CAMBIA A MAYUSCULA    ##########################################
+        params[:empresa][:ventas_brutas_anuales] = params[:ventas_brutas_anuales]
 
         params[:empresa][:nombre_empresa] = params[:empresa][:nombre_empresa].upcase if params[:empresa][:nombre_empresa]
         params[:empresa][:nombre_comercial] =  params[:empresa][:nombre_comercial].upcase if params[:empresa][:nombre_comercial]
