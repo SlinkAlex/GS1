@@ -1,0 +1,47 @@
+%section.contexto
+  %label.contexto
+    -if @tarifa.new_record?
+      Crear tarifa
+    -else
+      Editar tarifa
+  %hr.contexto{:size => "1"}
+
+  %section.formulario
+    = form_for(@tarifa) do |f|
+      - if @tarifa.errors.any?
+        #error_explanation
+          %h2
+            = pluralize(@tarifa.errors.count, "errore")
+          %ul
+            - @tarifa.errors.full_messages.each do |msg|
+              %li= msg
+      %table
+        %tr
+          %td
+            Desde
+          %td
+            = f.number_field :desde, :class => "inicio"
+        %tr
+          %td
+            Hasta
+          %td
+            = f.number_field :hasta, :class => "fin"
+        %tr
+          %td
+            Aporte de Mantenimiento
+          %td
+            = f.number_field :aporte_bs, :class => "aporte_mantenimiento" 
+        %tr
+          %td
+            Tipo de Aporte
+          %td
+            =f.select(:tipo_aporte, options_for_select(['Mantenimiento', 'Inscripcion'], @tarifa.tipo_aporte), :prompt => "- Seleccione -")
+      .actions
+        %button#submit.ui-state-default.ui-corner-all.crear_empresa{:type => "submit", :title => "Guardar tarifa"}
+          %span.ui-icon.ui-icon-disk
+          Guardar
+
+        %a.ui-state-default.ui-corner-all.nuevo_contacto{:href => "#{tarifas_path}", :title => "Regresar al listado de tarifas"}
+          %span.ui-icon.ui-icon-arrowreturnthick-1-w
+          Regresar
+
