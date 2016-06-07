@@ -115,7 +115,10 @@
         Ventas Brutas Anuales
       %td
         %b
-          =@empresa_registrada.try(:ventas_brutas_anuales)
+        - if (@tarifa)
+          = "De "+@tarifa.try(:desde).to_s+" Hasta "+@tarifa.try(:hasta).to_s
+        - else 
+          = @empresa_registrada.try(:ventas_brutas_anuales) 
     %tr
       %td
         Aporte Mantenimiento

@@ -1,3 +1,10 @@
+:javascript
+  $(document).ready(function() {
+    $("#empresa_registrada_id_tarifa").change(function () {
+      $("#ventas_brutas_anuales").val($('#empresa_registrada_id_tarifa').children(':selected').text())
+    });          
+
+  } );
 %section.contexto
   
   %label.contexto.titulo_contrato
@@ -218,7 +225,23 @@
             VENTAS BRUTAS ANUALES
           %td
           %td
-            =f.select(:ventas_brutas_anuales, options_for_select(['0 a 100.000', 'De 100.001,00 a 2.000.000,00', 'De 2.000.001,00 a 6.500.000,00', 'De 6.500.001,00 a 8.000.000,00', 'De 8.000.0001,00 o más'], @empresa_registrada.ventas_brutas_anuales), {}, {:prompt => "- Seleccione -", :disabled => :true})
+            -if @empresa_registrada.new_record?
+                =f.select(:id_tarifa, options_for_select(Tarifa.all.map{|p| ["De "+p.desde.to_s+" Hasta "+p.hasta.to_s,p.id]}, @empresa_registrada.id_tarifa), :prompt => "- Seleccione -")
+
+              - else          
+                - if (@empresa_registrada.id_tarifa)              
+                  - x = 0
+                  - @tarifa.each do |t|
+                    - if (("De "+t.desde.to_s+" Hasta "+t.hasta.to_s) == @empresa_registrada.ventas_brutas_anuales)
+                      - x = 1  
+                  - if (x == 1)      
+                    =f.select(:id_tarifa, options_for_select(@tarifa.map{|p| ["De "+p.desde.to_s+" Hasta "+p.hasta.to_s,p.id]}, @empresa_registrada.id_tarifa), :prompt => "- Seleccione -")
+                  - else
+                    =f.select(:id_tarifa, options_for_select(@tarifa.map{|p| ["De "+p.desde.to_s+" Hasta "+p.hasta.to_s,p.id]}+[[@empresa_registrada.ventas_brutas_anuales,0]], 0), :prompt => "- Seleccione -")                   
+                - else
+                  =f.select(:id_tarifa, options_for_select(@tarifa.map{|p| ["De "+p.desde.to_s+" Hasta "+p.hasta.to_s,p.id]}+[[@empresa_registrada.ventas_brutas_anuales,0]], 0), :prompt => "- Seleccione -")
+              = hidden_field_tag :ventas_brutas_anuales
+       
         %tr
           %td
             Aporte Mantenimiento
