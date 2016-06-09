@@ -1,7 +1,12 @@
 class TarifasController < ApplicationController
   def index
     @tarifas = Tarifa.all
-    @tarifa = Tarifa.where(usuario: params[:usuario]) if params[:usuario]
+    @tarifa = Tarifa.where("id_tipo_usuario = ?", params[:usuario]) if (params[:usuario])
+    #@tarifa = Tarifa.where("id_tipo_usuario = ?", "No Usuario") if ((params[:usuario]) and (params[:usuario]=='2'))
+
+    puts "TIPO USUAIRIO "+params[:usuario].inspect
+    puts "USUARIO "+@tarifa.inspect
+
     @tarifa = Tarifa.find(params[:id]) if params[:id]
     respond_to do |format|
       format.html # index.html.erb
@@ -36,7 +41,8 @@ class TarifasController < ApplicationController
   end
 
   def show
-    @tarifa = Tarifa.find( :conditions =>["usuario = ?", params[:usuario]])
+    @tarifa = Tarifa.find( :conditions =>["id_tipo_usuario = ?", params[:tipo_usuario]]) if (params[:tipo_usuario])
+    puts "USUARIOooo "+@tarifa.inspect
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @tarifa }
