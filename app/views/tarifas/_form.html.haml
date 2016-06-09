@@ -15,27 +15,37 @@
           %ul
             - @tarifa.errors.full_messages.each do |msg|
               %li= msg
+      %label{:style => " font-size:17; color:#545454;" }
+        Ventas Brutas Anuales
+      %br
+      %br
       %table
         %tr
           %td
             Desde
           %td
-            = f.number_field :desde, :class => "inicio"
+            = f.text_field :desde, :class => "inicio"
         %tr
           %td
             Hasta
           %td
-            = f.number_field :hasta, :class => "fin"
+            = f.text_field :hasta, :class => "fin"
         %tr
           %td
-            Aporte de Mantenimiento
+            Aporte Bfs.
           %td
-            = f.number_field :aporte_bs, :class => "aporte_mantenimiento" 
+            = f.text_field :aporte_bs, :class => "aporte_mantenimiento"
         %tr
           %td
             Tipo de Aporte
           %td
             =f.select(:tipo_aporte, options_for_select(['Mantenimiento', 'Inscripcion'], @tarifa.tipo_aporte), :prompt => "- Seleccione -")
+        %tr
+          %td
+            Tipo de Usuario
+          %td
+            =f.collection_select :id_tipo_usuario, TipoUsuarioEmpresa.find(:all, :conditions => ["descripcion in (?)", ['Usuario', 'No Usuario']]),:id_tipo_usu_empresa, :descripcion, :prompt => "-Seleccione Usuario-"
+
       .actions
         %button#submit.ui-state-default.ui-corner-all.crear_empresa{:type => "submit", :title => "Guardar tarifa"}
           %span.ui-icon.ui-icon-disk
