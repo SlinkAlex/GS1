@@ -223,7 +223,7 @@ class EmpresasController < ApplicationController
     @empresa = Empresa.find(params[:id])
     @nuevo_prefijo_asociado = Empresa.busqueda_exhaustiva_prefijo if params[:asociar_prefijo] == 'true'
     @clasificacion = Clasificacion.where("categoria = '#{@empresa.categoria}' and division = #{@empresa.division} and grupo = #{@empresa.grupo} and clase = #{@empresa.clase}").first
-    @tarifa = Tarifa.find(:all, :conditions => ["usuario = ? and tipo_aporte = ?",@empresa.id_tipo_usuario, "Mantenimiento"])
+    @tarifa = Tarifa.find(:all, :conditions => ["id_tipo_usuario = ? and tipo_aporte = ?",@empresa.id_tipo_usuario, "Mantenimiento"])
 
   end
 
