@@ -4,8 +4,7 @@ class CreateTarifas < ActiveRecord::Migration
       t.decimal :desde
       t.decimal :hasta
       t.decimal :aporte_bs
-      t.decimal :aporte_ut
-      t.integer :usuario
+      t.integer :id_tipo_usuario
       t.string :tipo_aporte
       t.timestamps
     end
