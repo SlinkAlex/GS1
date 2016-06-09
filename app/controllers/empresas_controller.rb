@@ -225,6 +225,7 @@ class EmpresasController < ApplicationController
     @clasificacion = Clasificacion.where("categoria = '#{@empresa.categoria}' and division = #{@empresa.division} and grupo = #{@empresa.grupo} and clase = #{@empresa.clase}").first
     @tarifa = Tarifa.find(:all, :conditions => ["id_tipo_usuario = ? and tipo_aporte = ?",@empresa.id_tipo_usuario, "Mantenimiento"])
 
+
   end
 
   # POST /empresas
@@ -257,9 +258,14 @@ class EmpresasController < ApplicationController
 
     @empresa = Empresa.find(params[:id])
     @clasificacion = Clasificacion.where("categoria = '#{@empresa.categoria}' and division = #{@empresa.division} and grupo = #{@empresa.grupo} and clase = #{@empresa.clase}").first
-    
+
     params[:empresa][:rif_completo] = params[:empresa][:tipo_rif] + "-" + params[:empresa][:rif]
 
+    if(params[:empresa][:ventas_brutas_anuales].nil? and params[:empresa][:aporte_mantenimiento_bs])
+      params[:empresa][:ventas_brutas_anuales] = @empresa.ventas_brutas_anuales
+      params[:ventas_brutas_anuales] = @empresa.ventas_brutas_anuales
+
+    end
     respond_to do |format|
        
       if params[:asociar_prefijo] == 'true'# Opcion para asignar nuevos prefijos a las empresas
