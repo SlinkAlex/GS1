@@ -61,7 +61,7 @@
           %td
             -if @empresa_registrada.new_record?
 
-              =f.collection_select :id_tipo_usuario, TipoUsuarioEmpresa.find(:all, :conditions => ["descripcion in (?)", ['Usuario', 'No Usuario']]),:id_tipo_usu_empresa, :descripcion, :prompt => "-Seleccione Usuario-"
+              =f.collection_select :id_tipo_usuario, TipoUsuarioEmpresa.find(:all, :conditions => ["descripcion in (?)", ['Usuario', 'No Usuario']]),:id_tipo_usu_empresa, :descripcion, {:prompt => "-Seleccione Usuario-"}
             -else
               =f.collection_select :id_tipo_usuario, TipoUsuarioEmpresa.all, :id_tipo_usu_empresa, :descripcion
       
