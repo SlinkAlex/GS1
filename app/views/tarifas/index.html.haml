@@ -8,11 +8,12 @@
       %tr
       %th Desde
       %th Hasta 
-      %th Aporte de Mantenimiento
-      %th Tipo de Aporte       
-      - if UsuariosAlcance.verificar_alcance(session[:perfil], session[:gerencia], 'Modificar Usuario')
+      %th Aporte Bs.
+      %th Tipo de Aporte
+      %th Tipo de Usuario
+      - if UsuariosAlcance.verificar_alcance(session[:perfil], session[:gerencia], 'Editar Tarifas')
         %th
-      - if UsuariosAlcance.verificar_alcance(session[:perfil], session[:gerencia],'Eliminar Usuario')
+      - if UsuariosAlcance.verificar_alcance(session[:perfil], session[:gerencia],'Eliminar Tarifas')
         %th
     %tbody
       - @tarifas.each do |tarifa|
@@ -20,12 +21,12 @@
           %td= tarifa.desde
           %td= tarifa.hasta
           %td= tarifa.aporte_bs
-          %td= tarifa.tipo_aporte          
-          
-          - if UsuariosAlcance.verificar_alcance(session[:perfil], session[:gerencia], 'Modificar Usuario')
+          %td= tarifa.tipo_aporte
+          %td= (TipoUsuarioEmpresa.where(["id_tipo_usu_empresa = ?",tarifa.id_tipo_usuario]).first).descripcion
+          - if UsuariosAlcance.verificar_alcance(session[:perfil], session[:gerencia], 'Editar Tarifas')
             %td= link_to(( content_tag(:span, '',:class => 'ui-icon ui-icon-extlink')+'Editar').html_safe,  edit_tarifa_path(tarifa),  {:class => "ui-state-default ui-corner-all botones_servicio", :title => "Editar tarifa #{tarifa.desde} - #{tarifa.hasta}"})
-          - if UsuariosAlcance.verificar_alcance(session[:perfil], session[:gerencia], 'Eliminar Usuario')
-            %td= link_to(( content_tag(:span, '',:class => 'ui-icon ui-icon-extlink')+'Eliminar').html_safe,  tarifa, method: :delete, data: { confirm: 'Desea ELIMINAR esta tarifa?'}, :class => "ui-state-default ui-corner-all botones_servicio", :title => "Eliminar tarifa  #{tarifa.desde} - #{tarifa.hasta}")
+          - if UsuariosAlcance.verificar_alcance(session[:perfil], session[:gerencia], 'Eliminar Tarifas')
+            %td= link_to(( content_tag(:span, '',:class => 'ui-icon.ui-icon-circle-close')+'Eliminar').html_safe,  tarifa, method: :delete, data: { confirm: 'Desea ELIMINAR esta tarifa?'}, :class => "ui-state-default ui-corner-all botones_servicio", :title => "Eliminar tarifa  #{tarifa.desde} - #{tarifa.hasta}")
 
 
   %br
