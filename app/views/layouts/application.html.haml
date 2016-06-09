@@ -101,9 +101,9 @@
 						%span.ui-icon.ui-icon-person
 						&nbsp;Usuarios
 
-				- if UsuariosAlcance.verificar_alcance(session[:perfil], session[:gerencia],'Ver Usuarios')
+				- if UsuariosAlcance.verificar_alcance(session[:perfil], session[:gerencia],'Ver Tarifas')
 					%a.opcion{:href => "#{tarifas_path}", :title => "Opción para editar las Tarifas Vigentes",:class => "ui-state-default ui-corner-all botones_menu"}
-						%span.ui-icon.ui-icon-circle-plus
+						%span.ui-icon.ui-icon-cart
 						&nbsp;Tarifas Vigentes
 
 				- if UsuariosAlcance.verificar_alcance(session[:perfil], session[:gerencia],'Listado GTIN-8')
