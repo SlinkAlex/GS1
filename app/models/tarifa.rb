@@ -8,10 +8,10 @@ class Tarifa < ActiveRecord::Base
   validates_numericality_of :aporte_bs, :on => :create , :message =>" - Debe ingresar un monto"
 
   validate do |tarifa|
-    tarifa.errors[:base] <<("Campo DESDE es requerido") if tarifa.desde.nil?
-    tarifa.errors[:base] <<("Campo HASTA es requerido") if  tarifa.hasta.nil?
-    tarifa.errors[:base] <<("Campo APORTE DE MANTENIMIENTO es requerido") if  tarifa.aporte_bs.nil?
-    tarifa.errors[:base] <<("Campo TIPO DE USUARIO es requerido") if  tarifa.id_tipo_usuario.nil?
+    tarifa.errors[:base] <<("El Campo DESDE es requerido") if tarifa.desde.nil?
+    tarifa.errors[:base] <<("El Campo HASTA es requerido") if  tarifa.hasta.nil?
+    tarifa.errors[:base] <<("El Campo APORTE DE MANTENIMIENTO es requerido") if  tarifa.aporte_bs.nil?
+    tarifa.errors[:base] <<("El Campo TIPO DE USUARIO es requerido") if  tarifa.id_tipo_usuario.nil?
 
   end
 
