@@ -53,19 +53,19 @@
                 %li='NOMBRE RESPONSABLE LEGAL no puede estar en blanco.'
               -elsif msg == 'Cargo rep legal No puede estar en blanco'
                 %li='CARGO Rep. Legal no puede estar en blanco.'
-              
-             
               -else
                 %li=msg + '.'
-
+      %br
+      %br
+      %br
       %table
         %tr
           %td.prefijo
             Prefijo Asignado
           %td.prefijo
-           
+
             =f.text_field :prefijo, :value => "#{@prefijo}"
-            
+
           %td
             =link_to "Reasignar Prefijo", "#", :id => "boton_abrir_ventana_prefijo_manual"
       =hidden_field_tag "activar", "true"
@@ -112,7 +112,7 @@
           %td
           %td         
             =f.text_field :direccion_empresa, {:size => "105", :disabled => :true}
-            
+
         %tr
           %td
             Teléfono 1 (58)
@@ -121,7 +121,7 @@
           %td
             =f.text_field :contacto_tlf1,  { :disabled => :true}
           %td
-            
+
         %tr
           %td
             Teléfono 2 (58)
@@ -161,10 +161,10 @@
             =f.text_field :circunscripcion_judicial, { :disabled => :true}
         %tr
           %td
-            
+
           %td
           %td
-            
+
         %tr
           %td
             Nº
@@ -184,8 +184,8 @@
             =f.select "tipo_rif", ['J', 'G', 'E', 'V'].map{|opcion|[opcion,opcion]},{}, {:prompt => "--", :select => @empresa_registrada , :disabled => 'disabled'}
           %td
             = f.text_field :rif,  { :disabled => :true}
-        
-     
+
+
         %tr
           %td
             NOMBRE RESPONSABLE LEGAL
@@ -208,7 +208,7 @@
           %td
             Cédula Representante Legal
           %td
-            
+
           %td
             =f.text_field :cedula_responsable_legal, { :disabled => :true}
 
@@ -226,22 +226,22 @@
           %td
           %td
             -if @empresa_registrada.new_record?
-                =f.select(:id_tarifa, options_for_select(Tarifa.all.map{|p| ["De "+p.desde.to_s+" Hasta "+p.hasta.to_s,p.id]}, @empresa_registrada.id_tarifa), :prompt => "- Seleccione -")
+              =f.select(:id_tarifa, options_for_select(Tarifa.all.map{|p| ["De "+p.desde.to_s+" Hasta "+p.hasta.to_s,p.id]}, @empresa_registrada.id_tarifa), :prompt => "- Seleccione -")
 
-              - else          
-                - if (@empresa_registrada.id_tarifa)              
-                  - x = 0
-                  - @tarifa.each do |t|
-                    - if (("De "+t.desde.to_s+" Hasta "+t.hasta.to_s) == @empresa_registrada.ventas_brutas_anuales)
-                      - x = 1  
-                  - if (x == 1)      
-                    =f.select(:id_tarifa, options_for_select(@tarifa.map{|p| ["De "+p.desde.to_s+" Hasta "+p.hasta.to_s,p.id]}, @empresa_registrada.id_tarifa), :prompt => "- Seleccione -")
-                  - else
-                    =f.select(:id_tarifa, options_for_select(@tarifa.map{|p| ["De "+p.desde.to_s+" Hasta "+p.hasta.to_s,p.id]}+[[@empresa_registrada.ventas_brutas_anuales,0]], 0), :prompt => "- Seleccione -")                   
+            - else
+              - if (@empresa_registrada.id_tarifa)
+                - x = 0
+                - @tarifa.each do |t|
+                  - if (("De "+t.desde.to_s+" Hasta "+t.hasta.to_s) == @empresa_registrada.ventas_brutas_anuales)
+                    - x = 1
+                - if (x == 1)
+                  =f.select(:id_tarifa, options_for_select(@tarifa.map{|p| ["De "+p.desde.to_s+" Hasta "+p.hasta.to_s,p.id]}, @empresa_registrada.id_tarifa), :prompt => "- Seleccione -")
                 - else
                   =f.select(:id_tarifa, options_for_select(@tarifa.map{|p| ["De "+p.desde.to_s+" Hasta "+p.hasta.to_s,p.id]}+[[@empresa_registrada.ventas_brutas_anuales,0]], 0), :prompt => "- Seleccione -")
-              = hidden_field_tag :ventas_brutas_anuales
-       
+              - else
+                =f.select(:id_tarifa, options_for_select(@tarifa.map{|p| ["De "+p.desde.to_s+" Hasta "+p.hasta.to_s,p.id]}+[[@empresa_registrada.ventas_brutas_anuales,0]], 0), :prompt => "- Seleccione -")
+            = hidden_field_tag :ventas_brutas_anuales , @empresa_registrada.ventas_brutas_anuales
+
         %tr
           %td
             Aporte Mantenimiento
@@ -266,14 +266,12 @@
           %td
 
             =f.text_field :rep_ean, { :disabled => :true}
-          
         %tr
           %td
             CARGO
           %td
           %td
             =f.text_field :rep_ean_cargo, {:disabled => :true}
-            
         %tr
           %td
             =f.select(:tipo_galpon_edificio_quinta, options_for_select(['GALPON', 'EDIFICIO', 'QUINTA'], @empresa_registrada.tipo_galpon_edificio_quinta), {}, {:prompt => "GALPON/EDIFICIO/QUINTA", :disabled => 'disabled'})
@@ -307,14 +305,12 @@
           %td
           %td
             =f.text_field :urbanizacion_barrio_sector, {:disabled => :true}
-            
         %tr
           %td
             ESTADO
           %td
           %td
             =f.collection_select :id_estado_ean, Estado.find(:all, :order => "nombre ASC"), :id, :nombre, {}, {:prompt => "-Seleccione-", :disabled => 'disabled'}
-            
         %tr
           %td
             CIUDAD
@@ -322,8 +318,6 @@
           %td
             
             =f.collection_select :id_ciudad_ean, Ciudad.find(:all, :order => "nombre ASC"), :id, :nombre, {}, {:prompt => "-Seleccione-", :disabled => 'disabled'}
-            
-            
         %tr
           %td
             MUNICIPIO
@@ -331,7 +325,6 @@
           %td
             
             =f.collection_select :id_municipio_ean, Municipio.find(:all, :order => "nombre ASC"), :id, :nombre,{}, {:prompt => "-Seleccione-", :disabled => 'disabled'}
-            
         %tr
           %td
             PARROQUIA
@@ -339,7 +332,6 @@
           %td
             
             =f.text_field :parroquia_ean,  {:disabled => :true}
-            
         %tr
           %td
             Punto Referencia
@@ -395,7 +387,6 @@
           %td
             
             =f.text_field :email1_ean, { :class => "email", :disabled => :true}
-          
       
       %br
       %label.contexto
@@ -449,7 +440,6 @@
             %td
             %td
               =f.text_field :urbanizacion_barrio_sector_sincronet, {:disabled => :true}
-             
           %tr
             %td
               ESTADO
@@ -457,28 +447,24 @@
             %td
               
               =f.collection_select :id_estado_edi, Estado.find(:all, :order => "nombre ASC"), :id, :nombre, {},{ :prompt => "-Seleccione-", :disabled => 'disabled'}
-                
           %tr
             %td
               CIUDAD
             %td
             %td
               = f.collection_select :id_ciudad_edi, Ciudad.find(:all, :order => "nombre ASC"), :id, :nombre,  {}, {:prompt => "-Seleccione-", :disabled => 'disabled'}
-              
           %tr
             %td
               MUNICIPIO
             %td
             %td
               = f.collection_select :id_municipio_edi, Municipio.find(:all, :order => "nombre ASC"), :id, :nombre, {}, {:prompt => "-Seleccione-", :disabled => 'disabled'}
-              
           %tr
             %td
               PARROQUIA
             %td
             %td
               =f.text_field :parroquia_edi, {:disabled => :true}
-              
           %tr
             %td
               Punto Referencia
@@ -526,7 +512,6 @@
             %td
             %td
               =f.text_field :email1_edi, {:class => "email", :disabled => :true}
-         
       
       %br/
 
@@ -568,7 +553,6 @@
             %td
             %td
               =f.text_field :email1_recursos, {:class => "email", :disabled => :true}
-          
       %br
       %label.contexto
         d. DIRECCION PARA ENVIO DE INVITACIONES A EVENTOS ESPECIALES (MERCADEO)
@@ -601,7 +585,6 @@
               =f.text_field :cod_fax_mercadeo, { :size => "3", :disabled => :true}
             %td
               =f.text_field :fax_mercadeo, {:class => "formato_telefono", :disabled => :true}
-              
           %tr
             %td
               E-mail 1
@@ -622,7 +605,6 @@
               =f.collection_select(:id_clasificacion, Clasificacion.find(:all), :id, :clasificacion, {:prompt => "-Seleccione Clasificación"}, { :style => "width:600px;"})
             -else
               =f.collection_select(:id_clasificacion, Clasificacion.find(:all), :id, :clasificacion,  { :selected => @clasificacion_empresa.id,:style => "width:600px;"})
-            
         %tr
           %td
             Categoría 
@@ -649,11 +631,9 @@
       %button#submit.ui-state-default.ui-corner-all.crear_empresa{:type => "submit"}
         %span.ui-icon.ui-icon-circle-plus
         Guardar
- 
       %a.ui-state-default.ui-corner-all.nuevo_contacto{:href => "/empresa_registradas", :title => "Regresar al listado de nuevas empresas"}
         %span.ui-icon.ui-icon-arrowreturnthick-1-w
         Regresar
-        
 
     #asignar_prefijo_manual
       -if params[:activar_empresa]
