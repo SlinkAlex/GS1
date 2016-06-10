@@ -100,7 +100,7 @@ class EmpresaRegistradasController < ApplicationController
 
     @empresa_registrada = EmpresaRegistrada.find(params[:id])
     @clasificacion = Clasificacion.where("categoria = '#{@empresa_registrada.categoria}' and division = #{@empresa_registrada.division} and grupo = #{@empresa_registrada.grupo} and clase = #{@empresa_registrada.clase}").first if (@empresa_registrada.categoria and @empresa_registrada.division and @empresa_registrada.grupo and @empresa_registrada.clase)
-    @tarifa = Tarifa.find(:all, :conditions => ["usuario = ? and tipo_aporte = ?",@empresa_registrada.id_tipo_usuario, "Mantenimiento"])
+    @tarifa = Tarifa.find(:all, :conditions => ["id_tipo_usuario = ? and tipo_aporte = ?",@empresa_registrada.id_tipo_usuario, "Mantenimiento"])
          
     respond_to do |format|
 
