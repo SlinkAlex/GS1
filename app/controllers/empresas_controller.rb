@@ -261,11 +261,6 @@ class EmpresasController < ApplicationController
 
     params[:empresa][:rif_completo] = params[:empresa][:tipo_rif] + "-" + params[:empresa][:rif]
 
-    if(params[:empresa][:ventas_brutas_anuales].nil? and params[:empresa][:aporte_mantenimiento_bs])
-      params[:empresa][:ventas_brutas_anuales] = @empresa.ventas_brutas_anuales
-      params[:ventas_brutas_anuales] = @empresa.ventas_brutas_anuales
-
-    end
     respond_to do |format|
        
       if params[:asociar_prefijo] == 'true'# Opcion para asignar nuevos prefijos a las empresas
