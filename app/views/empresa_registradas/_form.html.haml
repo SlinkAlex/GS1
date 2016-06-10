@@ -218,7 +218,7 @@
                   =f.select(:id_tarifa, options_for_select(@tarifa.map{|p| ["De "+p.desde.to_s+" Hasta "+p.hasta.to_s,p.id]}+[[@empresa_registrada.ventas_brutas_anuales,0]], 0), :prompt => "- Seleccione -")                   
               - else
                 =f.select(:id_tarifa, options_for_select(@tarifa.map{|p| ["De "+p.desde.to_s+" Hasta "+p.hasta.to_s,p.id]}+[[@empresa_registrada.ventas_brutas_anuales,0]], 0), :prompt => "- Seleccione -")
-            = hidden_field_tag :ventas_brutas_anuales
+            = hidden_field_tag :ventas_brutas_anuales , @empresa_registrada.ventas_brutas_anuales
 
         %tr
           %td
