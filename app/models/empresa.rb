@@ -22,7 +22,7 @@
 	
 	belongs_to :tipo_usuario_empresa, :foreign_key => "id_tipo_usuario"
 	
-	validates :tipo_rif, :rif,  :id_tipo_usuario, :id_clasificacion, :presence => {:message => "No puede estar en blanco"}
+	validates :tipo_rif, :rif,  :id_tipo_usuario, :id_clasificacion, :fecha_inscripcion, :presence => {:message => "No puede estar en blanco"}
 
 	validates :rif_completo, :uniqueness => {:message => "La aplicacion detecto que el RIF que esta ingresando ya esta registrado en el listado de las Empresas. Por favor verifique."}, on: :create, unless: "no_rif_validation == true"
 
@@ -625,15 +625,14 @@
 
  	
 
-  def self.importar_gtin_13(ruta, original_filename, tipo_gtin, prefijo, usuario)
+  def self.importar_gtin_13(ruta, original_filename, tipo_gtin, prefijo, usuario, fecha )
   		
-  		find(prefijo).importar_importar_gtin_13_proceso(ruta, original_filename, tipo_gtin, prefijo, usuario)
+  		find(prefijo).importar_importar_gtin_13_proceso(ruta, original_filename, tipo_gtin, prefijo, usuario, fecha)
   		
   end
 
  
- def importar_importar_gtin_13_proceso(ruta, original_filename, tipo_gtin, prefijo, usuario) #Importar Producto GTIN 13, este metodo se coloca aqui para hacer una una instancia de empresa y utilizar DELAY_JOB
-
+ def importar_importar_gtin_13_proceso(ruta, original_filename, tipo_gtin, prefijo, usuario, fecha) #Importar Producto GTIN 13, este metodo se coloca aqui para hacer una una instancia de empresa y utilizar DELAY_JOB
     spreadsheet = Empresa.open_spreadsheet(ruta, original_filename)
 
     
@@ -664,6 +663,7 @@
       producto.marca =   spreadsheet.empty?(fila,1) ? spreadsheet.row(fila)[0] :  spreadsheet.row(fila)[1] 
       producto.id_estatus = 3
       producto.fecha_creacion = Time.now
+			producto.fecha_creacion = fecha[0]
 
       if prefijo.to_s.size == 7 or prefijo.to_s.size == 5
 
