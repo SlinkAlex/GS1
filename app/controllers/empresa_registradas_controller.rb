@@ -18,9 +18,10 @@ class EmpresaRegistradasController < ApplicationController
           
           if params[:activar_empresa]
 
-            
+            puts "Aqui 1"
             @ruta = "/empresa_registradas.json?activar_empresa=true"
           else
+            puts "Aqui 2"
               @ruta = "/empresa_registradas.json"
           end
 
@@ -107,16 +108,17 @@ class EmpresaRegistradasController < ApplicationController
       format.html{
         
         if params[:activar_empresa]
+
           
-          @prefijo = Empresa.generar_prefijo_valido
-          @clasificacion_empresa = Clasificacion.find(:first, :conditions => ["categoria = ? and division = ? and grupo = ? and clase = ?", @empresa_registrada.categoria, @empresa_registrada.division, @empresa_registrada.grupo, @empresa_registrada.clase])
+         # @prefijo = Empresa.generar_prefijo_valido
+          #@clasificacion_empresa = Clasificacion.find(:first, :conditions => ["categoria = ? and division = ? and grupo = ? and clase = ?", @empresa_registrada.categoria, @empresa_registrada.division, @empresa_registrada.grupo, @empresa_registrada.clase])
           
-          @prefijos_disponibles = EmpresaEliminada.find(:all, :include => [:estatus], :conditions => ["(categoria = ? or division = ? or grupo = ? or clase = ?) and no_elegible is ? and prefijo >= 7590000 and prefijo <= 7599999", @empresa_registrada.categoria, @empresa_registrada.division, @empresa_registrada.grupo, @empresa_registrada.clase, nil], :select => "empresa.prefijo, empresa.nombre_empresa, clasificacion.descripcion, estatus.descripcion")
+          #@prefijos_disponibles = EmpresaEliminada.find(:all, :include => [:estatus], :conditions => ["(categoria = ? or division = ? or grupo = ? or clase = ?) and no_elegible is ? and prefijo >= 7590000 and prefijo <= 7599999", @empresa_registrada.categoria, @empresa_registrada.division, @empresa_registrada.grupo, @empresa_registrada.clase, nil], :select => "empresa.prefijo, empresa.nombre_empresa, clasificacion.descripcion, estatus.descripcion")
 
           # Se busca el prefijo encontrado contra el sistema adminsitrativo para asegurarse que este disponible
-          @prefijo_asignado_administrativo = Empresa.find_by_sql " Select * from [BDGS1DTS.MDF].dbo.CC_Clientes where codigo = #{@prefijo}"
+          #@prefijo_asignado_administrativo = Empresa.find_by_sql " Select * from [BDGS1DTS.MDF].dbo.CC_Clientes where codigo = #{@prefijo}"
 
-          flash[:warning] = "La Aplicación detectó que el prefijo disponible en Sistema de Gestión #{@prefijo} se encuentra asignado en la Base de Datos del Sistema Administrativo. De continuar se producirá un error. Se sugiere que asigne el prefijo manual, y verifique que no se encuentre ya asignado en Sistema Administrativo." if !(@prefijo_asignado_administrativo.empty?)
+          #flash[:warning] = "La Aplicación detectó que el prefijo disponible en Sistema de Gestión #{@prefijo} se encuentra asignado en la Base de Datos del Sistema Administrativo. De continuar se producirá un error. Se sugiere que asigne el prefijo manual, y verifique que no se encuentre ya asignado en Sistema Administrativo." if !(@prefijo_asignado_administrativo.empty?)
 
           # Este template no permite la edicion de la empresa. Respetando el alcance del usuario segun privilegio
           render :template => '/empresa_registradas/activar_empresa.html.haml'
@@ -135,7 +137,7 @@ class EmpresaRegistradasController < ApplicationController
     params[:empresa_registrada][:ventas_brutas_anuales] = params[:ventas_brutas_anuales]
     params[:empresa_registrada][:id_estatus] = 5 # NO VALIDADA (SIN PREFIJO)
     params[:empresa_registrada][:id_subestatus] = 2 # NO SOLVENTE
-    params[:empresa_registrada][:fecha_inscripcion] = Time.now
+    #params[:empresa_registrada][:fecha_inscripcion] = Time.now
     
     # DATOS BASICOS EMPRESA SE LLEVAN A MAYUSCULAS
 
@@ -353,5 +355,6 @@ class EmpresaRegistradasController < ApplicationController
       format.json { head :no_content }
     end
   end
+
 end
 
