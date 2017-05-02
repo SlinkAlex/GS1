@@ -162,7 +162,7 @@ class ProductosController < ApplicationController
   # POST /productos
   # POST /productos.json
   def create
-
+    puts "AQUI PRODUCTOSSSSSSSSSSSSSSSSSS"
     @empresa = Empresa.find(:first, :conditions => ["prefijo = ?", params[:empresa_id]])
     
     @gtin = params[:gtin]  if params[:gtin] != ''
@@ -247,16 +247,18 @@ class ProductosController < ApplicationController
           format.html{
 
             tipo_gtin = TipoGtin.find(params[:tipo_gtin])
+            #CAmbio Plan de contingencia
+            fecha_c = params[:fecha_creacion]
 
             if (params[:tipo_gtin] == '6') or (params[:tipo_gtin] == '4') or (params[:tipo_gtin] == '5')  # Gtin14 base 8  /  GTIN14 base 13 / GTIN14 base 12
-              codigo_invalido = Producto.import_gtin_14(params[:file].path, params[:file].original_filename, params[:tipo_gtin], params[:empresa_id], session[:usuario]) 
+              codigo_invalido = Producto.import_gtin_14(params[:file].path, params[:file].original_filename, params[:tipo_gtin], params[:empresa_id], session[:usuario],  fecha_c)
               mensaje = "Los #{tipo_gtin.tipo} base #{tipo_gtin.base} fueron importados." 
             else # Importar GTIN-13
               
               # EL proceso de importar se ejecuta en background
 
               #Empresa.delay.importar_gtin_13(params[:file].path, params[:file].original_filename, params[:tipo_gtin], params[:empresa_id], session[:usuario])
-              Empresa.importar_gtin_13(params[:file].path, params[:file].original_filename, params[:tipo_gtin], params[:empresa_id], session[:usuario])
+              Empresa.importar_gtin_13(params[:file].path, params[:file].original_filename, params[:tipo_gtin], params[:empresa_id], session[:usuario], fecha_c)
              
             end
 
