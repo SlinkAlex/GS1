@@ -1,5 +1,6 @@
 :javascript
   $(document).ready(function() {
+    $("#empresa_registrada_fecha_inscripcion").addClass("hasDatepicker");
     $("#empresa_registrada_id_tarifa").change(function () {
       $("#ventas_brutas_anuales").val($('#empresa_registrada_id_tarifa').children(':selected').text())
     });          
@@ -67,6 +68,12 @@
       
         %tr
           %td
+            FECHA DE INSCRIPCIÓN
+          %td
+          %td
+            =f.text_field(:fecha_inscripcion)
+        %tr
+          %td
             NOMBRE DE LA EMPRESA
           %td
           %td
@@ -94,7 +101,7 @@
             DIRECCION FISCAL
           %td
           %td         
-            =f.text_field :direccion_empresa, {:size => "105"}
+            =f.text_field :direccion_empresa, {:size => "100"}
         %tr
           %td
             Teléfono 1 (58)
