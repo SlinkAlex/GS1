@@ -41,7 +41,12 @@
               Automático
               =radio_button_tag 'tipo_creacion', 'automatica'
             %td
-            
+          %tr
+            %td
+              Fecha de Creación
+            %td
+              =f.date_field :fecha_creacion
+            %td
             
         %tr
           %td
@@ -50,7 +55,7 @@
 
             -if @producto.new_record?
               
-              =params[:descripcion] ? f.text_field(:descripcion, :value => @producto_.descripcion, :size => 60)   : f.text_field(:descripcion, :autocomplete => "off", :size => 60)
+              =params[:descripcion] ? f.text_field(:descripcion, :value => @producto_.descripcion, :size => 60)  : f.text_field(:descripcion, :autocomplete => "off", :size => 60)
             -else
               
               =params[:descripcion] ? f.text_field(:descripcion, :value => @producto_.descripcion, :size => 60) : f.text_field(:descripcion, :autocomplete => "off", :size => 60)
