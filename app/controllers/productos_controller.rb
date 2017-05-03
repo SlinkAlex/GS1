@@ -162,14 +162,11 @@ class ProductosController < ApplicationController
   # POST /productos
   # POST /productos.json
   def create
-    puts "AQUI PRODUCTOSSSSSSSSSSSSSSSSSS"
     @empresa = Empresa.find(:first, :conditions => ["prefijo = ?", params[:empresa_id]])
-    
     @gtin = params[:gtin]  if params[:gtin] != ''
 
-
-    params[:producto][:gtin] = Producto.crear_gtin(params[:producto][:id_tipo_gtin], params[:empresa_id], params[:gtin], params[:producto][:codigo_prod]) 
-    params[:producto][:fecha_creacion] = Time.now
+    params[:producto][:gtin] = Producto.crear_gtin(params[:producto][:id_tipo_gtin], params[:empresa_id], params[:gtin], params[:producto][:codigo_prod])
+    #params[:producto][:fecha_creacion] = Time.now
     params[:producto][:id_estatus] = 3
     
     # Se asigna el codigo de producto
@@ -181,14 +178,12 @@ class ProductosController < ApplicationController
     params[:producto][:codigo_prod] = params[:producto][:gtin][8..12] if params[:producto][:id_tipo_gtin] == '5'  # GTIN 14 base 12 
     params[:producto][:codigo_prod] = params[:producto][:gtin][8..12] if params[:producto][:id_tipo_gtin] == '6' and (@empresa.prefijo.to_s.size == 7  or @empresa.prefijo.to_s.size == 5)
     params[:producto][:codigo_prod] = params[:producto][:gtin][10..12] if params[:producto][:id_tipo_gtin] == '6' and @empresa.prefijo.to_s.size == 9 and @empresa.prefijo.to_s[3..5] == "400"
-
     params[:producto][:prefijo] = params[:empresa_id]
 
     @producto = Producto.new(params[:producto])
 
     respond_to do |format|
       if @producto.save
-
           Auditoria.registrar_evento(session[:usuario],"producto", "Crear", Time.now, "GTIN:#{@producto.gtin} DESCRIPCION:#{@producto.descripcion} TIPO GTIN:#{@producto.tipo_gtin.tipo}")
           format.html { redirect_to empresa_productos_path, notice: "EL #{@producto.tipo_gtin.tipo} #{@producto.gtin} fue creado correctamente." }        
 
