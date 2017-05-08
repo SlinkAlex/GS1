@@ -47,7 +47,13 @@
             %td
               =f.date_field :fecha_creacion
             %td
-            
+        - else
+          %tr
+            %td
+              Fecha de Creación
+            %td
+              =f.date_field :fecha_creacion
+            %td
         %tr
           %td
             Descripción
