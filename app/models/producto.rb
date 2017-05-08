@@ -134,7 +134,7 @@ class Producto < ActiveRecord::Base
 
         producto =  Producto.find(:first, :conditions => ["id_tipo_gtin = ? and prefijo = ?", tipo_gtin, prefijo], :order => "codigo_prod desc")
 
-        if (producto) 
+        if (producto)
 
           if producto.codigo_prod == '99999' and (prefijo.to_s.size == 7 or prefijo.to_s.size == 5)
             
@@ -149,7 +149,6 @@ class Producto < ActiveRecord::Base
           end
 
         else # La empresa no tiene productos
-
           if prefijo.to_s.size == 7 or prefijo.to_s.size == 5
             secuencia = "00001"
           elsif prefijo.to_s.size == 9 and prefijo.to_s[3..5] == "400" # GTIN artesanal
