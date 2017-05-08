@@ -662,7 +662,7 @@
       producto.descripcion =   spreadsheet.empty?(fila,1) ? spreadsheet.row(fila)[1] :  spreadsheet.row(fila)[2]
       producto.marca =   spreadsheet.empty?(fila,1) ? spreadsheet.row(fila)[0] :  spreadsheet.row(fila)[1] 
       producto.id_estatus = 3
-      producto.fecha_creacion = Time.now
+      #producto.fecha_creacion = Time.now
 			producto.fecha_creacion = fecha[0]
 
       if prefijo.to_s.size == 7 or prefijo.to_s.size == 5
