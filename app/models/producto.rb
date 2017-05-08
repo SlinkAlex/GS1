@@ -329,7 +329,7 @@ class Producto < ActiveRecord::Base
   
 
 
-  def self.import_gtin_14(file, original_file_name, tipo_gtin_, prefijo, usuario) #Importar GTIN 14
+  def self.import_gtin_14(file, original_file_name, tipo_gtin_, prefijo, usuario, fecha) #Importar GTIN 14
 
     tipo_gtin = TipoGtin.find(tipo_gtin_)
     spreadsheet = Empresa.open_spreadsheet(file, original_file_name)
@@ -351,7 +351,8 @@ class Producto < ActiveRecord::Base
         producto.descripcion = spreadsheet.row(fila)[3]
         producto.marca = spreadsheet.row(fila)[2]
         producto.id_estatus = 3
-        producto.fecha_creacion = Time.now 
+        #producto.fecha_creacion = Time.now
+        producto.fecha_creacion = fecha[0]
         
 
         if (tipo_gtin.base == "GTIN-13" and prefijo.to_s.size == 7)
