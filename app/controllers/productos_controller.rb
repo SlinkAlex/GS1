@@ -166,7 +166,7 @@ class ProductosController < ApplicationController
     @gtin = params[:gtin]  if params[:gtin] != ''
 
     params[:producto][:gtin] = Producto.crear_gtin(params[:producto][:id_tipo_gtin], params[:empresa_id], params[:gtin], params[:producto][:codigo_prod])
-    #params[:producto][:fecha_creacion] = Time.now
+    params[:producto][:fecha_creacion] = Time.parse(params[:producto][:fecha_creacion]) if !params[:producto][:fecha_creacion].empty?
     params[:producto][:id_estatus] = 3
     
     # Se asigna el codigo de producto
@@ -243,7 +243,7 @@ class ProductosController < ApplicationController
 
             tipo_gtin = TipoGtin.find(params[:tipo_gtin])
             #CAmbio Plan de contingencia
-            fecha_c = params[:fecha_creacion]
+            fecha_c = Time.parse(params[:fecha_creacion][0]) if !params[:fecha_creacion][0].empty?
 
             if (params[:tipo_gtin] == '6') or (params[:tipo_gtin] == '4') or (params[:tipo_gtin] == '5')  # Gtin14 base 8  /  GTIN14 base 13 / GTIN14 base 12
               codigo_invalido = Producto.import_gtin_14(params[:file].path, params[:file].original_filename, params[:tipo_gtin], params[:empresa_id], session[:usuario],  fecha_c)

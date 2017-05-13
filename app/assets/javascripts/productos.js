@@ -190,6 +190,11 @@ $(document).ready(function(){
                 alert('Estimado usuario, debe seleccionar el TIPO GTIN asociado a los productos que se van a importar. Por favor verifique');
                 return false;                 
             }
+            if ($('#fecha_creacion_').val() == '')
+            {
+                alert('Estimado usuario, debe seleccionar la FECHA DE CREACION asociado a los productos que se van a importar. Por favor verifique');
+                return false;
+            }
             
             $('.importar_producto').dialog('close');
             $('#loader_importar_producto').css('visibility', 'visible');
@@ -233,7 +238,7 @@ $(document).ready(function(){
                return false;
            }
 
-           if (($('#producto_descripcion').val() == '') || ($('#producto_marca').val() == '') || ($('#producto_gpc').val() == ''))
+           if (($('#producto_descripcion').val() == '') || ($('#producto_marca').val() == '') || ($('#producto_gpc').val() == '') || ($('#producto_fecha_creacion').val() == ''))
            {
                alert('Estimado usuario, todos los campos son obligatorios para poder continuar.');
                return false;

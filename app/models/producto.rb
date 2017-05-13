@@ -130,6 +130,8 @@ class Producto < ActiveRecord::Base
 
     elsif tipo_gtin.tipo == "GTIN-13"
 
+      puts "----------------->A PROCESAR UN GTIN 13"
+
       if (codigo_producto.nil?) #No estan pasando el codigo de producto tipo de creacion automatica
 
         producto =  Producto.find(:first, :conditions => ["id_tipo_gtin = ? and prefijo = ?", tipo_gtin, prefijo], :order => "codigo_prod desc")
@@ -159,17 +161,17 @@ class Producto < ActiveRecord::Base
         end
         
       else # ASignacion manual del codigo de producto
-        
         secuencia = codigo_producto
+        puts "----------------->SECUENCIA ASIGNADA #{secuencia}"
       end
 
       
       if prefijo.to_s.size == 7
-
+        puts "----------------->TAMAÑO = 7"
         gtin = completar_secuencia(secuencia, tipo_gtin.tipo) 
 
         gtin = prefijo.to_s + gtin.to_s
-
+        puts "----------------->TAMAÑO = 7, GTIN = #{gtin}"
       elsif prefijo.to_s.size == 9 and prefijo.to_s[3..5] == "400" # GTIN artesanal
         
         gtin = prefijo.to_s + secuencia.to_s
@@ -195,6 +197,8 @@ class Producto < ActiveRecord::Base
         codigo_asignado = Producto.find(:first, :conditions => [" gtin = ? ", gtin_generado])
        
       end
+
+      puts "----------------->gtin_generado = #{gtin_generado}"
       
     elsif tipo_gtin.tipo == "GTIN-14"  
 
@@ -329,8 +333,9 @@ class Producto < ActiveRecord::Base
   
 
 
-  def self.import_gtin_14(file, original_file_name, tipo_gtin_, prefijo, usuario) #Importar GTIN 14
+  def self.import_gtin_14(file, original_file_name, tipo_gtin_, prefijo, usuario, fecha) #Importar GTIN 14
 
+    puts "POR AQUI VOY 14\n\n\n\n\n\n\n"
     tipo_gtin = TipoGtin.find(tipo_gtin_)
     spreadsheet = Empresa.open_spreadsheet(file, original_file_name)
 
@@ -342,7 +347,10 @@ class Producto < ActiveRecord::Base
 
       gtin_existente =  verificar_gtin_existente(tipo_gtin.base, prefijo,spreadsheet.row(fila)[0].to_i )
 
+      puts "CODIGO EXISTENTE = #{gtin_existente}"
       if (gtin_existente)
+
+        puts "ENTRO CON codigio_existente = true = #{spreadsheet.row(fila)[0].to_i}"
 
         gtin = crear_gtin_14(spreadsheet.row(fila)[1].to_i, gtin_existente.gtin, tipo_gtin.base)
 
@@ -351,7 +359,7 @@ class Producto < ActiveRecord::Base
         producto.descripcion = spreadsheet.row(fila)[3]
         producto.marca = spreadsheet.row(fila)[2]
         producto.id_estatus = 3
-        producto.fecha_creacion = Time.now 
+        producto.fecha_creacion = fecha
         
 
         if (tipo_gtin.base == "GTIN-13" and prefijo.to_s.size == 7)
@@ -379,13 +387,21 @@ class Producto < ActiveRecord::Base
 
         producto_verificado = Producto.find(:first, :conditions => ["prefijo = ? and gtin = ?", prefijo, producto.gtin])
         codigo_invalido += " "+  producto_verificado.gtin if producto_verificado 
-        producto.save  
+        if !producto.save
+          puts "ERROR CREANDO PRODUCTO #{producto.gtin}"
+
+          producto.errors.full_messages.each do |m|
+            puts m
+          end
+
+          puts "\n\n\n\n\n"
+        end
 
         Auditoria.registrar_evento(usuario,"producto", "Importar", Time.now, "GTIN:#{producto.gtin} DESCRIPCION:#{producto.descripcion} TIPO:GTIN-14")
         
       else
-        
-        
+
+        puts "ENTRO CON codigio_existente = false = #{spreadsheet.row(fila)[0].to_i}"
         codigo_invalido += " "+  spreadsheet.row(fila)[0].to_i.to_s
        
       end

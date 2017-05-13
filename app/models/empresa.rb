@@ -626,6 +626,7 @@
  	
 
   def self.importar_gtin_13(ruta, original_filename, tipo_gtin, prefijo, usuario, fecha )
+			puts "POR AQUI VOY 13\n\n\n\n\n\n\n"
   		
   		find(prefijo).importar_importar_gtin_13_proceso(ruta, original_filename, tipo_gtin, prefijo, usuario, fecha)
   		
@@ -652,9 +653,10 @@
         gtin = Producto.crear_gtin(tipo_gtin,prefijo,nil, nil)
         
       else
-
+				puts "\n\n\n\n\n\n----------------->ENTRANDO A CREACR GTIN [tipo_gtin = #{tipo_gtin}, prefijo = #{prefijo}, valor = #{spreadsheet.row(fila)[0].to_i}]"
         gtin = Producto.crear_gtin(tipo_gtin, prefijo, nil, spreadsheet.row(fila)[0].to_i)
-        
+				puts "----------------->GTIN ES >= #{gtin}\n\n\n\n\n\n"
+
       end
 
       producto = Producto.new
@@ -662,8 +664,7 @@
       producto.descripcion =   spreadsheet.empty?(fila,1) ? spreadsheet.row(fila)[1] :  spreadsheet.row(fila)[2]
       producto.marca =   spreadsheet.empty?(fila,1) ? spreadsheet.row(fila)[0] :  spreadsheet.row(fila)[1] 
       producto.id_estatus = 3
-      producto.fecha_creacion = Time.now
-			producto.fecha_creacion = fecha[0]
+			producto.fecha_creacion = fecha
 
       if prefijo.to_s.size == 7 or prefijo.to_s.size == 5
 
@@ -677,7 +678,18 @@
 
       producto.id_tipo_gtin = tipo_gtin.to_i
       producto.prefijo = prefijo
-      producto.save
+
+      if !producto.save
+				puts "ERROR CREANDO PRODUCTO #{producto.gtin}"
+
+				producto.errors.full_messages.each do |m|
+					puts m
+				end
+
+				puts "\n\n\n\n\n"
+			else
+				puts "PRODUCTO CREADO"
+			end
 
       Auditoria.registrar_evento(usuario,"producto", "Importar", Time.now, "GTIN:#{producto.gtin} DESCRIPCION:#{producto.descripcion} TIPO:GTIN-13")
 

@@ -269,6 +269,10 @@ $( document ).ready(function() {
         // Datepicker los ultimos 100 anhos
         $("#empresa_registrada_fecha_registro_mercantil").datepicker({yearRange: "-100:+0",
             changeYear: true});
+
+        // Datepicker los ultimos 100 anhos
+        $("#empresa_registrada_fecha_inscripcion").datepicker({yearRange: "-100:+0",
+            changeYear: true});
         
 
         
