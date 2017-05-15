@@ -181,6 +181,7 @@ class ProductosController < ApplicationController
     params[:producto][:prefijo] = params[:empresa_id]
 
     @producto = Producto.new(params[:producto])
+    puts "PRODUCTO A ALMACENAR "+@producto.inspect
 
     respond_to do |format|
       if @producto.save
