@@ -114,6 +114,10 @@
 				
 					=link_to(( content_tag(:span, '')+'Clasificación').html_safe, classifications_path, {:class => "ui-state-default ui-corner-all botones_menu", :title => "Listado de Clasificaciones"})
 
+				- if UsuariosAlcance.verificar_alcance(session[:perfil], session[:gerencia],'Listado medidas')
+				
+					=link_to(( content_tag(:span, '')+'Medidas').html_safe, medidas_path, {:class => "ui-state-default ui-corner-all botones_menu", :title => "Listado de Medidas"})
+
 				%a.opcion{:href => "/reportes?reporte_empresa=true&eliminar_cookie=true", :title => "Opciones de Reportes", :class => "ui-state-default ui-corner-all botones_menu"}
 					%span.ui-icon.ui-icon-document
 					&nbsp;Reportes
