@@ -36,7 +36,7 @@ $( document ).ready(function() {
         bServerSide: true,
         sDom: 'T<"clear">lfrtip',
         sAjaxSource: $('#data_table_empresa_registradas').data('source')
-    }).columnFilter({ aoColumns: [{ type: "text"}, { type: "text"}, {type: "text"}, {type: "text" }, {type: "text"}, {type: "text"}, {type: "text"} , {type: "text"}]});;
+    }).columnFilter({ aoColumns: [{ type: "text"}, { type: "text"}, {type: "text"}, {type: "text" }, {type: "text"}, {type: "text"}, {type: "text"} , {type: "text"}, {type: "text"}]});;
 
 
 	$('#empresa_registrada_ventas_brutas_anuales').change(function() {
@@ -67,14 +67,14 @@ $( document ).ready(function() {
 
 	$("#data_table_empresa_registradas_activar_solvencia").dataTable({
         sPaginationType: "full_numbers",
-        aoColumns: [ { "bSortable": false }, null,null, null, null, null, null],
+        aoColumns: [ { "bSortable": false }, null,null, null, null, null, null, null],
         bJQueryUI: true,
         aaSorting: [[ 3, "desc" ]],
         bProcessing: true,
         bServerSide: true,
         sDom: 'T<"clear">lfrtip',
         sAjaxSource: $('#data_table_empresa_registradas_activar_solvencia').data('source')
-    }).columnFilter({ aoColumns: [null, { type: "text"}, {type: "text"}, {type: "text" }, {type: "text"}, {type: "text"}, {type: "text"}]});
+    }).columnFilter({ aoColumns: [null, { type: "text"}, {type: "text"}, {type: "text" }, {type: "text"}, {type: "text"}, {type: "text"}, {type: "text"}]});
 
     $('.nuevo_registro_activar_solvencia').hover(
       function() { $(this).addClass('ui-state-hover'); },

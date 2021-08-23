@@ -6,8 +6,9 @@ class CartaAfiliacionPdf < Prawn::Document
 		super(:top_margin => 10, :page_layout => :portrait)
 
 		font("Helvetica", :size => 10)
-
-		draw_text "Caracas #{Time.now.strftime("%d-%m-%Y")}", :at => [390,655]
+		image "#{Prawn::DATADIR}/LOGO 1.png", :size => 10, :at => [0,720], :height => 62, :width => 200
+		image "#{Prawn::DATADIR}/LOGO 2.png", :size => 10, :at => [350,740], :height => 130, :width => 200
+		draw_text "Caracas #{Time.now.strftime("%d-%m-%Y")}", :at => [390,620]
 		draw_text "#{empresa.nombre_empresa}",  :at => [0,620], :styles => [:bold]
 		draw_text "Presente.-", :at => [0,605]
 		draw_text "Atn: #{empresa.rep_legal}", :at => [320,590]
@@ -22,9 +23,10 @@ class CartaAfiliacionPdf < Prawn::Document
 		text_box "La Gerencia de Administración, en atención al Art. 3 del Régimen de Contribuciones y el Art. 12 de los Estatutos de GS1, le enviara en el 1er. Trimestre de cada año una factura correspondiente al aporte de mantenimiento para #{empresa.nombre_empresa.strip} el cual se ajustara anualmente de acuerdo al INDICE DE PRECIOS AL CONSUMIDOR (I.P.C), calculado conforme a la metodología usada por el BANCO CENTRAL DE VENEZUELA (B.C.V), según lo establecido en la clausula Séptima del contrato de afiliación GS1 Venezuela.", :at => [0,350], :height => 50, :width => 500, :align => :justify
 		text_box "Es importante señalar que cualquier cambio que se realice en su empresa, bien sea de nombre o razón social , dirección, teléfonos, persona contacto, representante legal y cualquier solicitud para la asignación de nuevos códigos para sus productos, deben enviarse vía fax a la atención de la Gerencia Técnica de GS1 Venezuela.", :at => [0,290], :height => 40, :width => 500, :align => :justify
 		text_box "Sin otro particular y quedando a su entera disposición para apoyarle en el manejo y aplicación de los estándares GS1.", :at => [0,250], :height => 40, :width => 500, :align => :justify
-		text_box "José Luis Mejía Núñez", :at => [10,190], :height => 10, :width => 500
-		text_box "Presidente Ejecutivo", :at => [10,178], :height => 10, :width => 500
-		text_box "GS1 Venezuela", :size => 10, :at => [10,166], :height => 10, :width => 500
+		#text_box "Alberto Delgado", :at => [10,190], :height => 10, :width => 500
+		#text_box "Gerente General", :at => [10,178], :height => 10, :width => 500
+		#text_box "GS1 Venezuela", :size => 10, :at => [10,166], :height => 10, :width => 500
+		image "#{Prawn::DATADIR}/LOGO 3.png", :size => 10, :at => [0,190], :height => 181, :width => 138
 
 		
 	end

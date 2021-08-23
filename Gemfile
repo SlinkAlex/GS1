@@ -7,8 +7,8 @@ gem 'rails', '4.0.0'
 gem 'tiny_tds'
 
 # Ojo este adpatador solo funciona con arel 4.0.0
-gem 'activerecord-sqlserver-adapter', github: 'rnhurt/activerecord-sqlserver-adapter', branch: '4.0.0' 
-gem 'arel', '4.0.0'
+gem 'activerecord-sqlserver-adapter', '~> 4.0.0'
+gem 'arel', '4.0.1'
 
 gem 'sqlite3'
 
@@ -59,7 +59,7 @@ gem "delayed_job_web" # Herramienta Web que permite monitorear la cola de proces
 # Estas Gemas son necesarias mientras se hace la migracion del codigo proctected_attributes, model.finders ya no se utiliza
 
 gem 'protected_attributes'
-gem 'rails-observers'
+gem 'rails-observers', '0.1.2'
 gem 'actionpack-page_caching'
 gem 'actionpack-action_caching'
 gem 'activerecord-deprecated_finders'
@@ -69,10 +69,18 @@ gem 'activerecord-deprecated_finders'
 # gem 'jbuilder'
 
 # Use unicorn as the app server
- gem 'unicorn'
+ gem 'unicorn' 
+ gem 'nokogiri', '~> 1.6.1'
 
 # Deploy with Capistrano
 # gem 'capistrano'
 
 # To use debugger
 # gem 'debugger'
+
+gem 'json', '>= 1.8'
+gem 'bundler', '1.17.3' 
+gem 'axlsx', '~> 2.0.1'
+
+gem 'mini_portile', '= 0.6.2'
+gem 'rb-inotify', '= 0.9.7'

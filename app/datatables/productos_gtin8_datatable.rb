@@ -22,23 +22,20 @@ private
   def data
 
     productos.map do |producto|
-     
-      
-      
-      
-      [ 
-       producto.nombre_empresa,
-       producto.prefijo,
-       producto.tipo_gtin_,
-       producto.gtin,
-       producto.descripcion,
-       producto.marca,
-       producto.estatus_,
-       producto.codigo_producto,
-       (producto.fecha_creacion) ? producto.fecha_creacion.strftime("%Y-%m-%d") : "",
-       (producto.fecha_ultima_modificacion) ?  producto.fecha_ultima_modificacion.strftime("%Y-%m-%d") : ""
-      
 
+      [ 
+        producto.try(:empresa).try(:nombre_empresa),
+        producto.prefijo,
+        producto.try(:tipo_gtin).try(:tipo),
+        producto.gtin,
+        producto.descripcion,
+        producto.marca,
+        producto.try(:estatus).try(:descripcion),
+        producto.codigo_prod,
+        producto.try(:classification_description),
+        producto.try(:countries),
+        (producto.fecha_creacion) ? producto.fecha_creacion.strftime("%Y-%m-%d") : "",
+        (producto.fecha_ultima_modificacion) ? producto.fecha_ultima_modificacion.strftime("%Y-%m-%d") : ""
       ]
       
     end
@@ -51,11 +48,11 @@ private
   end
 
   def fetch_productos
-    
-    productos = Producto.where("id_tipo_gtin = 1").joins(:estatus, :tipo_gtin, :empresa).select("empresa.nombre_empresa as nombre_empresa, empresa.prefijo as prefijo, tipo_gtin.tipo as tipo_gtin_, producto.descripcion as descripcion, producto.marca as marca, estatus.descripcion as estatus_, producto.codigo_prod as codigo_producto, producto.fecha_creacion as fecha_creacion, producto.fecha_ultima_modificacion as fecha_ultima_modificacion, producto.gtin as gtin").order("#{sort_column} #{sort_direction}") 
+
+    productos = Producto.where("id_tipo_gtin = 1").includes(:estatus, :tipo_gtin, :empresa, :classification, :has_country, :country).order("#{sort_column} #{sort_direction}") 
     productos = productos.page(page).per_page(per_page)
 
-    productos = productos.where("empresa.nombre_empresa like :search or  empresa.prefijo  like :search or  tipo_gtin.tipo like :search or producto.gtin like :search or producto.descripcion like :search or producto.marca like :search or estatus.descripcion like :search or  producto.codigo_prod like :search or CONVERT(varchar(255),  producto.fecha_creacion ,126) like :search or CONVERT(varchar(255),  producto.fecha_ultima_modificacion ,126) like :search", search: "%#{params[:sSearch]}%") if params[:sSearch].present? # Filtro de busqueda general
+    productos = productos.where("empresa.nombre_empresa like :search  or empresa.prefijo like :search or tipo_gtin.tipo like :search or producto.gtin like :search or producto.descripcion like :search or producto.marca like :search or estatus.descripcion like :search or  producto.codigo_prod like :search or classifications.name like :search or countries.name like :search or producto.fecha_creacion like :search or producto.fecha_ultima_modificacion like :search", search: "%#{params[:sSearch]}%")
     productos = productos.where("empresa.nombre_empresa like :search0", search0: "%#{params[:sSearch_0]}%" ) if params[:sSearch_0].present? # Filtro de busqueda por nombre empresa
     
     productos = productos.where("empresa.prefijo like :search1", search1: "%#{params[:sSearch_1]}%" ) if params[:sSearch_1].present? # Filtro PREFIJO
@@ -71,8 +68,12 @@ private
     
     productos = productos.where("producto.codigo_prod like :search7", search7: "%#{params[:sSearch_7]}%" )     if params[:sSearch_7].present? # codigo producto
    
-    productos = productos.where("CONVERT(varchar(255),  producto.fecha_creacion ,126) like :search8", search8: "%#{params[:sSearch_8]}%")  if params[:sSearch_8].present? # fecha creacion
-    productos = productos.where("CONVERT(varchar(255),  producto.fecha_ultima_modificacion ,126) like :search9", search9: "%#{params[:sSearch_9]}%") if params[:sSearch_9].present? # fecha modificacion
+    productos = productos.where("classifications.name like :search8", search8: "%#{params[:sSearch_8]}%" )     if params[:sSearch_8].present? # classification
+
+    productos = productos.where("countries.name like :search9", search9: "%#{params[:sSearch_9]}%")
+
+    productos = productos.where("CONVERT(varchar(255),  producto.fecha_creacion ,126) like :search10", search10: "%#{params[:sSearch_10]}%")  if params[:sSearch_10].present? # fecha creacion
+    productos = productos.where("CONVERT(varchar(255),  producto.fecha_ultima_modificacion ,126) like :search11", search11: "%#{params[:sSearch_11]}%") if params[:sSearch_11].present? # fecha modificacion
     
 
     productos
@@ -90,7 +91,7 @@ private
 
   def sort_column
 
-     columns = %w[empresa.nombre_empresa empresa.prefijo tipo_gtin.tipo producto.gtin producto.descripcion producto.marca estatus.descripcion producto.codigo_prod producto.fecha_creacion producto.fecha_ultima_modificacion]
+     columns = %w[empresa.nombre_empresa empresa.prefijo tipo_gtin.tipo producto.gtin producto.descripcion producto.marca estatus.descripcion producto.codigo_prod classifications.name countries.name producto.fecha_creacion producto.fecha_ultima_modificacion]
      columns[params[:iSortCol_0].to_i]
 
   end

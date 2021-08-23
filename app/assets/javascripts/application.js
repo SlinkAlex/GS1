@@ -11,6 +11,7 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 //= require jquery
+//= require jquery.multi-select
 //= require_tree .
 //= require jquery_ujs
 

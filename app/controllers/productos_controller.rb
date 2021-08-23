@@ -1,6 +1,8 @@
 # encoding: UTF-8
 class ProductosController < ApplicationController
   before_filter :require_authentication
+  before_action :set_product, only: [:new, :show, :edit, :update, :destroy]
+  before_action :set_countries, only: [:new, :edit, :update]
   
   # GET /productos
   # GET /productos.json
@@ -137,12 +139,16 @@ class ProductosController < ApplicationController
 
     end
 
-    @producto = @empresa.producto.build  # Se crea el form_for
-    
-    @gtin = params[:gtin] if params[:gtin] != ''# SI esta gtin  es para crear gtin tipo 14 base 8 o gtin 14 base 13
-    
+    @producto = @empresa.producto.build  # Se crea el form_for    
+    @gtin = params[:gtin] if params[:gtin] != ''# SI esta gtin  es para crear gtin tipo 14 base 8 o gtin 14 base 13    
 
     @producto_ = Producto.find(:first, :conditions => ["gtin like ?", params[:gtin]]) if params[:gtin]
+    
+    if params[:classification_id]
+      @producto.classification_id = params[:classification_id]
+      @producto.country_ids =  @producto_.country_ids
+    end
+
     @base = TipoGtin.find(:first, :conditions =>["tipo like ? and base like ?", "GTIN-14", @producto_.tipo_gtin.tipo]) if @producto_
     
 
@@ -182,7 +188,11 @@ class ProductosController < ApplicationController
 
     @producto = Producto.new(params[:producto])
     puts "PRODUCTO A ALMACENAR "+@producto.inspect
-
+    @producto.countries = params[:countries]
+    puts "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    puts params[:countries]
+    puts "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    
     respond_to do |format|
       if @producto.save
           Auditoria.registrar_evento(session[:usuario],"producto", "Crear", Time.now, "GTIN:#{@producto.gtin} DESCRIPCION:#{@producto.descripcion} TIPO GTIN:#{@producto.tipo_gtin.tipo}")
@@ -199,10 +209,12 @@ class ProductosController < ApplicationController
   # PUT /productos/1.json
   def update
     
-
+    
     @producto = Producto.find(:first, :conditions => ["gtin like ?", params[:id]])
-    params[:producto][:fecha_ultima_modificacion] = Time.now 
-
+    @producto.countries = params[:countries]
+   puts "YYYYYYYYYYYYYYYYYYYYYYYYYYYYY"
+   puts params[:countries]
+    params[:producto][:fecha_ultima_modificacion] = Time.now
     respond_to do |format|
       if @producto.update_attributes(params[:producto])
         format.html { redirect_to empresa_productos_path, notice: "GTIN #{@producto.gtin} ACTUALIZADO." }
@@ -288,4 +300,80 @@ class ProductosController < ApplicationController
       format.json { head :no_content }
     end
   end
+  private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_product      
+      #@producto = Producto.where("gtin = ?", params[:id])
+      @empresa = Empresa.find(:first, :conditions => ["prefijo = ?", params[:empresa_id]])
+      @producto = Producto.find(:first, :conditions => ["gtin like ?", params[:id]? params[:id]:params[:gtin]])
+      if @producto
+         @selected = HasCountry.where("producto_id = ?", @producto.id)
+      end
+    end
+
+    def set_countries
+      @countries = Country.all.order(:name).to_a
+    end
+
+    private
+
+    def registrar_gtin(empresa, producto)
+
+      if producto.origen == 1
+        origen = 'GTIN'
+      else
+        origen = 'GCP'
+      end
+
+      if producto.has_country.blank?
+        languague = "es-VE"
+      else
+        languague = producto.has_country[0].country.lang_code
+      end
+      
+
+      uri = "https://grp.gs1.org/grp-st/v3/gtins"
+      body = [{
+        "gtin": producto.gtin,
+        "licenceKey": producto.prefijo,
+        "licenceType": origen,
+        "gtinStatus": productos.estatus.descripcion.upcase,
+        "brandName": [{
+          "language": languague,
+          "value": producto.descripcion.split[0]
+        }],
+        "gpcCategoryCode": producto.classification.code,
+        "countryOfSaleCode": [
+          languague.split(/-/)[1]
+        ],
+        "productDescription": [
+          {
+            "language": languague,
+            "value": producto.descripcion
+          }
+        ],
+        "productImageUrl": [{
+          "language": languague,
+          "value": ""
+        }],
+        "netContent": [{
+          "value": "150.0",
+          "unitCode": "MLT"
+        }]
+      }]
+
+      res = make_post_request(uri,body)
+      data = JSON.parse(res)
+
+      if data["status"] == 200
+
+          if candidate.save
+              json_response "Created successfully", true, {candidate: candidate}, :ok
+          else
+              json_response "Something wrong", false, {}, :unprocessable_entity
+          end
+      else
+          json_response data["message"], false, {}, :unauthorized
+      end
+    end
 end

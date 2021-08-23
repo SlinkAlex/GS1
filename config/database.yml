@@ -1,20 +1,20 @@
 development:
  adapter: sqlserver
- host: 192.168.1.14
  database: GS1_New
+ host: 162.252.57.64
  username: sa
- password: Sc4nnv3n
- port: 1434
+ password: Zeven123
+ port: 2451
  pool: 5
- timeout: 5000
+ timeout: 10000000
 
 production:
  adapter: sqlserver
  database: GS1_New
- host: 192.168.1.14
+ host: 192.168.1.10
  username: sa
- password: Sc4nnv3n
- port: 1434
+ password: Gs1vzla
+ port: 1433
  pool: 5
  timeout: 5000
 

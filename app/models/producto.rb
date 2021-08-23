@@ -1,15 +1,21 @@
 class Producto < ActiveRecord::Base
   self.table_name = "producto"  # El nombre de la tabla que se esta mapeando
-  attr_accessible :codigo_prod, :descripcion, :fecha_creacion, :gpc, :gtin, :id_estatus, :id_tipo_gtin, :marca, :prefijo, :codigo_upc, :fecha_retiro, :fecha_ultima_modificacion
+  attr_accessible :codigo_prod, :descripcion, :fecha_creacion, :gpc, :gtin, :id_estatus, :id_tipo_gtin, :marca, :prefijo, :codigo_upc, :fecha_retiro, :fecha_ultima_modificacion, :classification_id, :countries, :img_url
   
   belongs_to :empresa , :foreign_key => "prefijo"
   belongs_to :estatus, :foreign_key => "id_estatus"
   belongs_to :tipo_gtin, :foreign_key => "id_tipo_gtin"
+  belongs_to :classification , :foreign_key => "classification_id"
+  has_many :has_country, :foreign_key => "producto_id"
+  has_many :country, through: :has_country
+  has_many :cantidades, :foreign_key => "producto_id"
+  has_many :medida, through: :cantidades
   
   validates :descripcion, :marca, :id_tipo_gtin, :presence => {:message => "No puede estar en blanco"}, :on => :create
   validates :gtin, :uniqueness => {:message => "El codigo de Producto que esta ingresando ya  se encuentra asociado a un GTIN"}
 
-
+  after_create :save_countries
+  after_update :save_countries
   
   # Exportar CSV formato auditoria Service Retail
 
@@ -360,6 +366,10 @@ class Producto < ActiveRecord::Base
         producto.marca = spreadsheet.row(fila)[2]
         producto.id_estatus = 3
         producto.fecha_creacion = fecha
+        @classification = Classification.find(:first, :conditions => ["code = ?", spreadsheet.row(fila)[4]? spreadsheet.row(fila)[4] :  '99999999'])
+	      producto.img_url = spreadsheet.row(fila)[5]
+	      producto.classification_id = @classification ? @classification.id : 2712
+	      producto.countries = [1]
         
 
         if (tipo_gtin.base == "GTIN-13" and prefijo.to_s.size == 7)
@@ -519,6 +529,51 @@ class Producto < ActiveRecord::Base
 
 
  end
+
+ def countries=(value)
+  @countries = value
+end
+def save_countries
+  HasCountry.where("producto_id = ?", self.gtin).destroy_all 
+    puts "|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
+    puts @countries
+    puts self.gtin
+
+  if @countries
+    @countries.each do |country_id|
+      country = HasCountry.create(country_id: country_id, producto_id: self.id)
+      country.save()
+    end
+  end
+end
+
+def classification_description
+  puts ":::::::::::::::::::::::::::::::::::::::::::::::"
+  puts self.classification_id
+  if self.classification_id
+    begin
+        @classification = Classification.find(self.classification_id)
+        @classification.name
+    rescue ActiveRecord::RecordNotFound => e
+        'Clasificación Inválida'
+    end
+  else
+    ''
+  end
+end
+
+def countries
+  @countries = HasCountry.where("producto_id = ?", self.id)
+  names = ''
+  if @countries
+    @countries.each do |country|
+      
+      @country = Country.find(country.country_id)
+      names += @country.name + ', '
+    end
+  end
+  names
+end
 
 
 end

@@ -4,7 +4,7 @@
 	self.primary_key = "prefijo" # Se establece la clave primaria
 	
 	
-	attr_accessible :cargo_rep_legal, :categoria, :clase, :direccion_empresa, :division, :fecha_inscripcion, :grupo, :id_ciudad, :id_clasificacion, :id_estado, :id_estatus, :id_tipo_usuario, :nombre_comercial, :nombre_empresa, :rep_legal, :rif, :prefijo,  :numero_registro_mercantil, :tomo_registro_mercantil, :nit_registro_mercantil, :nacionalidad_responsable_legal, :domicilio_responsable_legal, :cedula_responsable_legal, :circunscripcion_judicial, :ventas_brutas_anuales, :fecha_registro_mercantil, :contacto_tlf1, :contacto_tlf2, :contacto_tlf3, :contacto_fax, :contacto_email1, :contacto_email2, :rep_ean, :rep_ean_cargo, :direccion_ean1, :direccion_ean3, :direccion_ean4, :id_estado_ean, :id_ciudad_ean, :id_municipio_ean, :parroquia_ean, :punto_ref_ean, :cod_postal_ean, :telefono1_ean, :telefono2_ean, :telefono3_ean, :fax_ean, :email1_ean, :email2_ean, :rep_edi, :rep_edi_cargo, :direccion_edi1, :direccion_edi2, :direccion_edi3, :id_estado_edi, :id_ciudad_edi, :id_municipio_edi, :parroquia_edi, :punto_ref_edi, :codigo_postal_edi, :telefono1_edi, :telefono2_edi, :telefono3_edi, :fax_edi, :email1_edi, :rep_recursos, :rep_recursos_cargo, :telefono1_recursos, :fax_recursos, :email_recursos, :rep_mercadeo, :rep_mercadeo_cargo, :telefono1_mercadeo, :fax_mercadeo,  :direccion_ean, :direccion_edi, :direccion_recursos, :direccion_mercadeo, :fecha_activacion, :id_subestatus, :administrativo, :aporte_mantenimiento_bs, :tipo_rif, :rif_completo, :tipo_galpon_edificio_quinta, :galpon_edificio_quinta, :tipo_oficina_apartamento, :oficina_apartamento, :tipo_avenida_calle, :avenida_calle, :tipo_urbanizacion_barrio_sector, :urbanizacion_barrio_sector, :tipo_piso_numero, :piso_numero, :tipo_galpon_edificio_quinta_sincronet, :galpon_edificio_quinta_sincronet, :tipo_oficina_apartamento_sincronet, :oficina_apartamento_sincronet, :tipo_avenida_calle_sincronet, :avenida_calle_sincronet, :tipo_urbanizacion_barrio_sector_sincronet, :urbanizacion_barrio_sector_sincronet, :tipo_piso_numero_sincronet, :piso_numero_sincronet, :tipo_galpon_edificio_quinta_seminarios, :galpon_edificio_quinta_seminarios, :tipo_oficina_apartamento_seminarios, :oficina_apartamento_seminarios, :tipo_avenida_calle_seminarios, :avenida_calle_seminarios, :tipo_urbanizacion_barrio_sector_seminarios, :urbanizacion_barrio_sector_seminarios, :tipo_piso_numero_seminarios, :piso_numero_seminarios, :tipo_galpon_edificio_quinta_mercadeo, :galpon_edificio_quinta_mercadeo, :tipo_oficina_apartamento_mercadeo, :oficina_apartamento_mercadeo, :tipo_avenida_calle_mercadeo, :avenida_calle_mercadeo, :tipo_urbanizacion_barrio_sector_mercadeo, :urbanizacion_barrio_sector_mercadeo, :tipo_piso_numero_mercadeo, :piso_numero_mercadeo, :id_estado_mercadeo, :parroquia_mercadeo, :punto_ref_mercadeo, :telefono3_mercadeo, :email2_edi, :email2_recursos, :email2_mercadeo, :email1_recursos, :email1_mercadeo, :telefono3_recursos, :id_estado_recursos, :punto_ref_recursos, :cod_contacto_tlf1, :cod_contacto_tlf3, :cod_contacto_fax, :cod_tlf1_ean, :cod_tlf2_ean, :cod_tlf3_ean, :cod_fax_ean, :cod_tlf1_sincronet, :cod_tlf2_sincronet, :cod_tlf3_sincronet, :cod_fax_sincronet, :cod_tlf1_seminarios, :cod_tlf2_seminarios, :cod_tlf3_seminarios, :cod_fax_seminarios, :cod_tlf1_mercadeo, :cod_tlf2_mercadeo, :cod_tlf3_mercadeo, :cod_fax_mercadeo, :contacto_tlf1_completo, :contacto_tlf2_completo, :contacto_tlf3_completo, :contacto_fax_completo, :telefono1_ean_completo, :telefono2_ean_completo, :telefono3_ean_completo, :fax_ean_completo, :id_ciudad_recursos, :id_municipio_recursos, :parroquia_recursos, :codigo_postal_recursos, :telefono2_recursos, :cod_contacto_tlf2, :codigo_postal_mercadeo, :telefono2_mercadeo, :id_municipio_mercadeo, :id_ciudad_mercadeo, :fecha_reactivacion, :no_rif_validation
+	attr_accessible :cargo_rep_legal, :categoria, :clase, :direccion_empresa, :division, :fecha_inscripcion, :grupo, :id_ciudad, :id_clasificacion, :id_estado, :id_estatus, :id_tipo_usuario, :nombre_comercial, :nombre_empresa, :rep_legal, :rif, :prefijo,  :numero_registro_mercantil, :tomo_registro_mercantil, :nit_registro_mercantil, :nacionalidad_responsable_legal, :domicilio_responsable_legal, :cedula_responsable_legal, :circunscripcion_judicial, :ventas_brutas_anuales, :fecha_registro_mercantil, :contacto_tlf1, :contacto_tlf2, :contacto_tlf3, :contacto_fax, :contacto_email1, :contacto_email2, :rep_ean, :rep_ean_cargo, :direccion_ean1, :direccion_ean3, :direccion_ean4, :id_estado_ean, :id_ciudad_ean, :id_municipio_ean, :parroquia_ean, :punto_ref_ean, :cod_postal_ean, :telefono1_ean, :telefono2_ean, :telefono3_ean, :fax_ean, :email1_ean, :email2_ean, :rep_edi, :rep_edi_cargo, :direccion_edi1, :direccion_edi2, :direccion_edi3, :id_estado_edi, :id_ciudad_edi, :id_municipio_edi, :parroquia_edi, :punto_ref_edi, :codigo_postal_edi, :telefono1_edi, :telefono2_edi, :telefono3_edi, :fax_edi, :email1_edi, :rep_recursos, :rep_recursos_cargo, :telefono1_recursos, :fax_recursos, :email_recursos, :rep_mercadeo, :rep_mercadeo_cargo, :telefono1_mercadeo, :fax_mercadeo,  :direccion_ean, :direccion_edi, :direccion_recursos, :direccion_mercadeo, :fecha_activacion, :id_subestatus, :administrativo, :aporte_mantenimiento_bs, :tipo_rif, :rif_completo, :tipo_galpon_edificio_quinta, :galpon_edificio_quinta, :tipo_oficina_apartamento, :oficina_apartamento, :tipo_avenida_calle, :avenida_calle, :tipo_urbanizacion_barrio_sector, :urbanizacion_barrio_sector, :tipo_piso_numero, :piso_numero, :tipo_galpon_edificio_quinta_sincronet, :galpon_edificio_quinta_sincronet, :tipo_oficina_apartamento_sincronet, :oficina_apartamento_sincronet, :tipo_avenida_calle_sincronet, :avenida_calle_sincronet, :tipo_urbanizacion_barrio_sector_sincronet, :urbanizacion_barrio_sector_sincronet, :tipo_piso_numero_sincronet, :piso_numero_sincronet, :tipo_galpon_edificio_quinta_seminarios, :galpon_edificio_quinta_seminarios, :tipo_oficina_apartamento_seminarios, :oficina_apartamento_seminarios, :tipo_avenida_calle_seminarios, :avenida_calle_seminarios, :tipo_urbanizacion_barrio_sector_seminarios, :urbanizacion_barrio_sector_seminarios, :tipo_piso_numero_seminarios, :piso_numero_seminarios, :tipo_galpon_edificio_quinta_mercadeo, :galpon_edificio_quinta_mercadeo, :tipo_oficina_apartamento_mercadeo, :oficina_apartamento_mercadeo, :tipo_avenida_calle_mercadeo, :avenida_calle_mercadeo, :tipo_urbanizacion_barrio_sector_mercadeo, :urbanizacion_barrio_sector_mercadeo, :tipo_piso_numero_mercadeo, :piso_numero_mercadeo, :id_estado_mercadeo, :parroquia_mercadeo, :punto_ref_mercadeo, :telefono3_mercadeo, :email2_edi, :email2_recursos, :email2_mercadeo, :email1_recursos, :email1_mercadeo, :telefono3_recursos, :id_estado_recursos, :punto_ref_recursos, :cod_contacto_tlf1, :cod_contacto_tlf3, :cod_contacto_fax, :cod_tlf1_ean, :cod_tlf2_ean, :cod_tlf3_ean, :cod_fax_ean, :cod_tlf1_sincronet, :cod_tlf2_sincronet, :cod_tlf3_sincronet, :cod_fax_sincronet, :cod_tlf1_seminarios, :cod_tlf2_seminarios, :cod_tlf3_seminarios, :cod_fax_seminarios, :cod_tlf1_mercadeo, :cod_tlf2_mercadeo, :cod_tlf3_mercadeo, :cod_fax_mercadeo, :contacto_tlf1_completo, :contacto_tlf2_completo, :contacto_tlf3_completo, :contacto_fax_completo, :telefono1_ean_completo, :telefono2_ean_completo, :telefono3_ean_completo, :fax_ean_completo, :id_ciudad_recursos, :id_municipio_recursos, :parroquia_recursos, :codigo_postal_recursos, :telefono2_recursos, :cod_contacto_tlf2, :codigo_postal_mercadeo, :telefono2_mercadeo, :id_municipio_mercadeo, :id_ciudad_mercadeo, :fecha_reactivacion, :no_rif_validation, :escala
 	belongs_to :estado, :foreign_key =>  "id_estado"  # Se establece la clave foranea por la cual va a buscar la asociacion
 	belongs_to :ciudad, :foreign_key =>  "id_ciudad"
 	belongs_to :estatus, :foreign_key =>  "id_estatus"
@@ -223,7 +223,7 @@
 	empresa = Empresa.new
 	empresa.prefijo = prefijo
 	empresa.nombre_empresa = empresa_registrada.nombre_empresa
-	empresa.fecha_inscripcion = Time.now
+	empresa.fecha_inscripcion = empresa_registrada.fecha_inscripcion
 	empresa.direccion_empresa = empresa_registrada.direccion_empresa
 	empresa.id_estado = empresa_registrada.id_estado
 	empresa.id_ciudad = empresa_registrada.id_ciudad
@@ -272,6 +272,7 @@
 	empresa.contacto_tlf2_completo = empresa.cod_contacto_tlf2 +  " " + empresa.contacto_tlf2
 	empresa.contacto_tlf3_completo = empresa.cod_contacto_tlf3 + " " + empresa.contacto_tlf3
 	empresa.contacto_fax_completo = empresa.cod_contacto_fax + " " + empresa.contacto_fax
+	empresa.escala = empresa_registrada.escala
 	
 	# DATOS EAN
 
@@ -400,7 +401,7 @@
 	
 	
 	empresa.id_subestatus = empresa_registrada.id_subestatus
-	empresa.fecha_activacion = Time.now
+	empresa.fecha_activacion = empresa_registrada.fecha_inscripcion
 
 	
 
@@ -663,8 +664,12 @@
       producto.gtin = gtin.to_s
       producto.descripcion =   spreadsheet.empty?(fila,1) ? spreadsheet.row(fila)[1] :  spreadsheet.row(fila)[2]
       producto.marca =   spreadsheet.empty?(fila,1) ? spreadsheet.row(fila)[0] :  spreadsheet.row(fila)[1] 
-      producto.id_estatus = 3
-			producto.fecha_creacion = fecha
+	  producto.id_estatus = 3
+	  @classification = Classification.find(:first, :conditions => ["code = ?", spreadsheet.row(fila)[3]? spreadsheet.row(fila)[3] :  '99999999'])
+	  producto.img_url = spreadsheet.row(fila)[4]
+	  producto.classification_id = @classification ? @classification.id : 2712
+	  producto.countries = [1]
+	  producto.fecha_creacion = fecha
 
       if prefijo.to_s.size == 7 or prefijo.to_s.size == 5
 

@@ -8,13 +8,14 @@
         %thead
             %tr 
                 %th RIF
-                %th Nombre Empresa
+                %th Nombre Empresa               
                 %th Fecha Registro
                 %th Ciudad
                 %th Sub-Estatus
                 %th Tipo Usuario
                 %th Ventas Brutas Anuales
                 %th Clasificación
+                %th Escala
                 %th Detalle
                 -if UsuariosAlcance.verificar_alcance(session[:perfil], session[:gerencia], 'Modificar Empresa Registrada') and params[:activar_empresa].nil?
                     %th Editar Empresa 

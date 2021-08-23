@@ -1,0 +1,29 @@
+%section.contexto
+  %label.contexto 
+    =@classification.new_record? ? ("Nuevo Clasificación") : ("Editar clasificación > #{@classification.name}")  
+  %hr.contexto{:size => "1"}
+
+  %section.formulario
+    = form_for @classification do |f|
+      - if @classification.errors.any?
+        #error_explanation
+          %h2= "#{pluralize(@classification.errors.count, "error")} prohibited this classification from being saved:"
+          %ul
+            - @classification.errors.full_messages.each do |msg|
+              %li= msg
+
+      .field
+        = f.label :code, "Código"
+        %br
+        = f.text_field :code
+      .field
+        = f.label :name, "Nombre de la Clasificación"
+        %br
+        = f.text_field :name
+      .actions
+        %button#submit.ui-state-default.ui-corner-all.guardar_producto{:type => "submit", :title => "Guardar Clasificación"}
+          %span.ui-icon.ui-icon-disk
+          Guardar Clasificación
+        %a.ui-state-default.ui-corner-all.regresar_empresas{:href => "/classifications", :title => "Regresar listado general de Clasificaciones"}
+          %span.ui-icon.ui-icon.ui-icon-arrowreturnthick-1-w
+          Regresar

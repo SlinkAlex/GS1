@@ -69,7 +69,25 @@
               =params[:marca] ? f.text_field(:marca, :value => params[:marca], :size => 60): f.text_field(:marca, :autocomplete => "off",  :size => 60)
             -else
               =params[:marca] ? f.text_field(:marca, :value => params[:marca], :size => 60): f.text_field(:marca, :autocomplete => "off", :size => 60)
-        
+        %tr
+          %td
+            URL
+          %td
+            -if @producto.new_record?
+              =params[:img_url] ? f.text_field(:img_url, :value => params[:img_url], :size =>60): f.text_field(:img_url, :autocomplete => "off", :size => 60)
+            -else
+              =params[:img_url] ? f.text_field(:img_url, :value => params[:img_url], :size => 60): f.text_field(:img_url, :autocomplete => "off", :size => 60)
+        %tr
+          %td
+            Clasificación
+          %td
+            /= f.text_field :classification_id, :size => 60
+            = f.collection_select(:classification_id, Classification.all.order(:name), :id, :code_name, :prompt => "-Seleccione-", :size => 60)
+        %tr
+          %td
+            Paises
+          %td
+            =select_tag "countries[]",options_from_collection_for_select(@countries,:id, :name ,{:selected => @producto.country_ids}), multiple: true
         %tr
           %td.codigo_producto
             -if !@producto.new_record? or (@producto.errors.messages[:gtin])
@@ -89,6 +107,144 @@
         Guardar Producto
 
       =render '/empresas/regresar'
+:javascript
+    $( function() {
+    $.widget( "custom.combobox", {
+      _create: function() {
+        this.wrapper = $( "<span>" )
+          .addClass( "custom-combobox" )
+          .insertAfter( this.element );
+ 
+        this.element.hide();
+        this._createAutocomplete();
+        this._createShowAllButton();
+      },
+ 
+      _createAutocomplete: function() {
+        var selected = this.element.children( ":selected" ),
+          value = selected.val() ? selected.text() : "";
+ 
+        this.input = $( "<input>" )
+          .appendTo( this.wrapper )
+          .val( value )
+          .attr( "title", "" )
+          .addClass( "custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left" )
+          .autocomplete({
+            delay: 0,
+            minLength: 0,
+            source: $.proxy( this, "_source" )
+          })
+          .tooltip({
+            classes: {
+              "ui-tooltip": "ui-state-highlight"
+            }
+          });
+ 
+        this._on( this.input, {
+          autocompleteselect: function( event, ui ) {
+            ui.item.option.selected = true;
+            this._trigger( "select", event, {
+              item: ui.item.option
+            });
+          },
+ 
+          autocompletechange: "_removeIfInvalid"
+        });
+      },
+ 
+      _createShowAllButton: function() {
+        var input = this.input,
+          wasOpen = false;
+ 
+        $( "<a>" )
+          .attr( "tabIndex", -1 )
+          .attr( "title", "Mostrar todas las clasificaciones" )
+          .tooltip()
+          .appendTo( this.wrapper )
+          .button({
+            icons: {
+              primary: "ui-icon-triangle-1-s"
+            },
+            text: false
+          })
+          .removeClass( "ui-corner-all" )
+          .addClass( "custom-combobox-toggle ui-corner-right" )
+          .on( "mousedown", function() {
+            wasOpen = input.autocomplete( "widget" ).is( ":visible" );
+          })
+          .on( "click", function() {
+            input.trigger( "focus" );
+ 
+            // Close if already visible
+            if ( wasOpen ) {
+              return;
+            }
+ 
+            // Pass empty string as value to search for, displaying all results
+            input.autocomplete( "search", "" );
+          });
+      },
+ 
+      _source: function( request, response ) {
+        var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
+        response( this.element.children( "option" ).map(function() {
+          var text = $( this ).text();
+          if ( this.value && ( !request.term || matcher.test(text) ) )
+            return {
+              label: text,
+              value: text,
+              option: this
+            };
+        }) );
+      },
+ 
+      _removeIfInvalid: function( event, ui ) {
+ 
+        // Selected an item, nothing to do
+        if ( ui.item ) {
+          return;
+        }
+ 
+        // Search for a match (case-insensitive)
+        var value = this.input.val(),
+          valueLowerCase = value.toLowerCase(),
+          valid = false;
+        this.element.children( "option" ).each(function() {
+          if ( $( this ).text().toLowerCase() === valueLowerCase ) {
+            this.selected = valid = true;
+            return false;
+          }
+        });
+ 
+        // Found a match, nothing to do
+        if ( valid ) {
+          return;
+        }
+ 
+        // Remove invalid value
+        this.input
+          .val( "" )
+          .attr( "title", value + " No se encontro ninguna clasificación" )
+          .tooltip( "open" );
+        this.element.val( "" );
+        this._delay(function() {
+          this.input.tooltip( "close" ).attr( "title", "" );
+        }, 2500 );
+        this.input.autocomplete( "instance" ).term = "";
+      },
+ 
+      _destroy: function() {
+        this.wrapper.remove();
+        this.element.show();
+      }
+    });
+ 
+    $( "#producto_classification_id" ).combobox();
+    $( "#toggle" ).on( "click", function() {
+      $( "#producto_classification_id" ).toggle();
+    });
+  } );
+  $('#countries_').multiSelect();
         
         
       

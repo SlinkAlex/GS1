@@ -40,13 +40,14 @@ private
      
       [ 
         empresa.rif_completo,
-        empresa.nombre_empresa,
+        empresa.nombre_empresa,        
         (empresa.fecha_inscripcion)  ? empresa.fecha_inscripcion.strftime("%Y-%m-%d")  : "",
         empresa.ciudad_,
         empresa.sub_estatus_,
         empresa.tipo_usuario_empresa_,
         empresa.ventas_brutas_anuales,
         empresa.clasificacion_,
+        empresa.escala,
         link_to(( content_tag(:span, '',:class => 'ui-icon ui-icon-extlink')+'Detalle').html_safe, "/empresa_registradas/#{empresa.id}", {:class => "ui-state-default ui-corner-all botones_servicio", :title => "Detalle de la empresa #{empresa.nombre_empresa}"}),
         boton 
       ]
@@ -64,9 +65,9 @@ private
 
     if params[:activar_empresa] 
       
-      empresas = EmpresaRegistrada.where("rif IS NOT NULL and sub_estatus.descripcion = 'SOLVENTE'").joins(:ciudad, :clasificacion, :tipo_usuario_empresa, :sub_estatus).select("empresas_registradas.id, empresas_registradas.rif_completo, empresas_registradas.nombre_empresa, empresas_registradas.fecha_inscripcion, ciudad.nombre as ciudad_, sub_estatus.descripcion as sub_estatus_, tipo_usuario_empresa.descripcion as tipo_usuario_empresa_, empresas_registradas.ventas_brutas_anuales, empresa_clasificacion.descripcion as clasificacion_").order("#{sort_column} #{sort_direction}") 
+      empresas = EmpresaRegistrada.where("rif IS NOT NULL and sub_estatus.descripcion = 'SOLVENTE'").joins(:ciudad, :clasificacion, :tipo_usuario_empresa, :sub_estatus).select("empresas_registradas.id, empresas_registradas.rif_completo, empresas_registradas.nombre_empresa,empresas_registradas.escala, empresas_registradas.fecha_inscripcion, ciudad.nombre as ciudad_, sub_estatus.descripcion as sub_estatus_, tipo_usuario_empresa.descripcion as tipo_usuario_empresa_, empresas_registradas.ventas_brutas_anuales, empresa_clasificacion.descripcion as clasificacion_").order("#{sort_column} #{sort_direction}") 
     else
-      empresas = EmpresaRegistrada.where("rif IS NOT NULL").joins(:ciudad, :clasificacion, :tipo_usuario_empresa, :sub_estatus).select("empresas_registradas.id, empresas_registradas.rif_completo, empresas_registradas.nombre_empresa, empresas_registradas.fecha_inscripcion, ciudad.nombre as ciudad_, sub_estatus.descripcion as sub_estatus_, tipo_usuario_empresa.descripcion as tipo_usuario_empresa_, empresas_registradas.ventas_brutas_anuales, empresa_clasificacion.descripcion as clasificacion_").order("#{sort_column} #{sort_direction}") 
+      empresas = EmpresaRegistrada.where("rif IS NOT NULL").joins(:ciudad, :clasificacion, :tipo_usuario_empresa, :sub_estatus).select("empresas_registradas.id, empresas_registradas.rif_completo, empresas_registradas.nombre_empresa, empresas_registradas.escala, empresas_registradas.fecha_inscripcion, ciudad.nombre as ciudad_, sub_estatus.descripcion as sub_estatus_, tipo_usuario_empresa.descripcion as tipo_usuario_empresa_, empresas_registradas.ventas_brutas_anuales, empresa_clasificacion.descripcion as clasificacion_").order("#{sort_column} #{sort_direction}") 
       
     end
 
@@ -110,7 +111,9 @@ private
      if params[:sSearch_7].present?
        empresas = empresas.where("empresa_clasificacion.descripcion like :search7", search7: "%#{params[:sSearch_7]}%" )
      end
-
+     if params[:sSearch_8].present?
+      empresas = empresas.where("empresas_registradas.escala = :search8", search8: params[:sSearch_8] )
+    end
 
 
   
@@ -128,7 +131,7 @@ private
 
   def sort_column
 
-     columns = %w[empresas_registradas.rif empresas_registradas.nombre_empresa empresas_registradas.fecha_inscripcion ciudad.nombre tipo_usuario_empresa.descripcion sub_estatus.descripcion empresas_registradas.ventas_brutas_anuales empresa_clasificacion.descripcion]
+     columns = %w[empresas_registradas.rif empresas_registradas.nombre_empresa empresas_registradas.escala empresas_registradas.fecha_inscripcion ciudad.nombre tipo_usuario_empresa.descripcion sub_estatus.descripcion empresas_registradas.ventas_brutas_anuales empresa_clasificacion.descripcion]
      columns[params[:iSortCol_0].to_i]
   end
 

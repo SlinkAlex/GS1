@@ -54,7 +54,7 @@ class ReportesController < ApplicationController
 
 	      	if params[:reporte_producto]
 
-                pdf = ReporteProductosPdf.new(params[:nombre_empresa], params[:prefijo],params[:tipo_gtin], params[:gtin], params[:descripcion], params[:marca], params[:codigo_producto], params[:fecha_creacion], params[:fecha_modificacion], params[:estatus], params[:filtro_general])
+                pdf = ReporteProductosPdf.new(params[:nombre_empresa], params[:prefijo],params[:tipo_gtin], params[:gtin], params[:descripcion], params[:marca], params[:codigo_producto], params[:clasificacion], params[:pais], params[:fecha_creacion], params[:fecha_modificacion], params[:estatus], params[:filtro_general])
                 send_data pdf.render, filename: "reporte_productos_#{Time.now}.pdf", type: "application/pdf", disposition: "inline"
 
             end 

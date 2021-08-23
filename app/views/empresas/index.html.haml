@@ -11,12 +11,13 @@
         %thead
             %tr
                 %th Prefijo
-                %th Nombre Empresa
+                %th Nombre Empresa               
                 %th Fecha Activación
                 %th Ciudad
                 %th RIF
                 %th Estatus
                 %th Sub Estatus
+                %th Escala
                 %th Detalle
                 - if UsuariosAlcance.verificar_alcance(session[:perfil], session[:gerencia], 'Modificar Empresa')
                     %th Editar Empresa 

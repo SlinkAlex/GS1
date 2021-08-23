@@ -144,7 +144,12 @@
       %td
         %b
           =@empresa.try(:aporte_mantenimiento_bs)
-  
+    %tr
+      %td
+        Escala
+      %td
+        %b
+          =@empresa.try(:escala)
     %tr
       %td
         Clasificación

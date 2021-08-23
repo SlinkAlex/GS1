@@ -8,6 +8,8 @@
  * You're free to add application-wide styles to this file and they'll appear at the top of the
  * compiled file, but it's generally better to create a new file per style scope.
  *
+ *= require jquery-ui
+ *= require jquery.multi-select
  *= require_self
  *= require_tree .
 
@@ -210,6 +212,18 @@ label.actor{
 
 }
 
+.custom-combobox-input{
+	width: 90%;
+}
+
+.ui-button-text{
+	padding: .65em;
+    padding-top: 0.65em;
+    padding-right: 0.65em;
+    padding-bottom: 0.65em;
+    padding-left: 0.65em;
+text-indent: -9999999px;
+}
 
 /*
 a.botones_servicio{

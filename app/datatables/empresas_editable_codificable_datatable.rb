@@ -37,7 +37,6 @@ private
         end
 
 
-
           [ 
             empresa.prefijo,
             empresa.nombre_empresa,
@@ -46,6 +45,7 @@ private
             empresa.rif_completo,
             empresa.estatus_.upcase,
             estatus_administrativo,
+            empresa.escala,
             link_to(( content_tag(:span, '',:class => 'ui-icon ui-icon-extlink')+'Detalle').html_safe, empresa_path(empresa), {:class => "ui-state-default ui-corner-all botones_servicio", :title => "Detalle de la empresa #{empresa.nombre_empresa}"}),
             link_to(( content_tag(:span, '',:class => 'ui-icon ui-icon-extlink')+'Editar').html_safe, edit_empresa_path(empresa.prefijo, :editar => "true"), {:class => "ui-state-default ui-corner-all botones_servicio", :title => "Editar la empresa #{empresa.nombre_empresa}"}),
             boton_productos,
@@ -67,7 +67,7 @@ private
 
   def fetch_empresas
    
-    empresas = Empresa.where("estatus.descripcion = ?", 'Activa').joins("inner join ciudad on empresa.id_ciudad = ciudad.id inner join estatus on empresa.id_estatus = estatus.id LEFT OUTER JOIN [BDGS1DTS.MDF].dbo.fnc_CltSlv () ON empresa.prefijo = [BDGS1DTS.MDF].dbo.fnc_CltSlv.codigo").select("empresa.prefijo as prefijo, empresa.nombre_empresa as nombre_empresa, empresa.fecha_activacion as fecha_activacion, ciudad.nombre as ciudad_, empresa.rif_completo as rif_completo, estatus.descripcion as estatus_, isnull([BDGS1DTS.MDF].dbo.fnc_CltSlv.codigo, 2)  AS solv").order("#{sort_column} #{sort_direction}")
+    empresas = Empresa.where("estatus.descripcion = ?", 'Activa').joins("inner join ciudad on empresa.id_ciudad = ciudad.id inner join estatus on empresa.id_estatus = estatus.id LEFT OUTER JOIN [BDGS1DTS.MDF].dbo.fnc_CltSlv () ON empresa.prefijo = [BDGS1DTS.MDF].dbo.fnc_CltSlv.codigo").select("empresa.prefijo as prefijo, empresa.nombre_empresa as nombre_empresa, empresa.escala as escala, empresa.fecha_activacion as fecha_activacion, ciudad.nombre as ciudad_, empresa.rif_completo as rif_completo, estatus.descripcion as estatus_, isnull([BDGS1DTS.MDF].dbo.fnc_CltSlv.codigo, 2)  AS solv").order("#{sort_column} #{sort_direction}")
     empresas = empresas.page(page).per_page(per_page)
 
     if params[:sSearch].present? # Filtro de busqueda general
@@ -107,6 +107,9 @@ private
       end 
     
     end
+    if params[:sSearch_7].present?
+      empresas = empresas.where("empresa.escala = :search7", search7: params[:sSearch_7] )
+    end
   
 
     empresas
@@ -125,7 +128,7 @@ private
 
   def sort_column
 
-     columns = %w[empresa.prefijo empresa.nombre_empresa empresa.fecha_activacion ciudad.nombre empresa.rif estatus.descripcion empresa.solv]
+     columns = %w[empresa.prefijo empresa.nombre_empresa empresa.escala empresa.fecha_activacion ciudad.nombre empresa.rif estatus.descripcion empresa.solv]
      columns[params[:iSortCol_0].to_i]
 
   end

@@ -25,11 +25,12 @@ private
       [ 
         check_box_tag("activar_solvencias[]", "#{empresa.id}", false, :class => "activar_solvencia"),
         empresa.rif_completo,
-        empresa.nombre_empresa,
+        empresa.nombre_empresa,        
         (empresa.fecha_inscripcion) ?  empresa.fecha_inscripcion.strftime("%Y-%m-%d") : "",
         empresa.ciudad_,
         empresa.sub_estatus_,
         empresa.ventas_brutas_anuales,
+        empresa.escala,
         link_to(( content_tag(:span, '',:class => 'ui-icon ui-icon-extlink')+'Editar').html_safe, "/empresa_registradas/#{empresa.id}/edit", {:class => "ui-state-default ui-corner-all botones_servicio", :title => "Editar la empresa #{empresa.nombre_empresa}"}),
         
       ]
@@ -44,7 +45,7 @@ private
 
   def fetch_empresas
    
-    empresas = EmpresaRegistrada.where("rif IS NOT NULL and sub_estatus.descripcion = 'NO SOLVENTE'").joins(:ciudad, :sub_estatus).select("empresas_registradas.id, empresas_registradas.rif_completo, empresas_registradas.nombre_empresa, empresas_registradas.fecha_inscripcion, ciudad.nombre as ciudad_, sub_estatus.descripcion as sub_estatus_, empresas_registradas.ventas_brutas_anuales").order("#{sort_column} #{sort_direction}") 
+    empresas = EmpresaRegistrada.where("rif IS NOT NULL and sub_estatus.descripcion = 'NO SOLVENTE'").joins(:ciudad, :sub_estatus).select("empresas_registradas.id, empresas_registradas.rif_completo, empresas_registradas.nombre_empresa, empresas_registradas.escala, empresas_registradas.fecha_inscripcion, ciudad.nombre as ciudad_, sub_estatus.descripcion as sub_estatus_, empresas_registradas.ventas_brutas_anuales").order("#{sort_column} #{sort_direction}") 
     empresas = empresas.page(page).per_page(per_page)
     
      if params[:sSearch].present? # Filtro de busqueda general
@@ -78,6 +79,10 @@ private
        empresas = empresas.where("empresas_registradas.ventas_brutas_anuales like :search6", search6: "%#{params[:sSearch_6]}%" )
      end
 
+     if params[:sSearch_7].present?
+      empresas = empresas.where("empresas_registradas.escala = :search7", search7: params[:sSearch_7] )
+     end
+
     empresas
   end
 
@@ -91,7 +96,7 @@ private
 
   def sort_column
 
-     columns = %w[nil empresas_registradas.rif empresas_registradas.nombre_empresa empresas_registradas.fecha_inscripcion ciudad.nombre sub_estatus.descripcion empresas_registradas.ventas_brutas_anuales]
+     columns = %w[nil empresas_registradas.rif empresas_registradas.nombre_empresa empresas_registradas.escala empresas_registradas.fecha_inscripcion ciudad.nombre sub_estatus.descripcion empresas_registradas.ventas_brutas_anuales]
      columns[params[:iSortCol_0].to_i]
   end
 

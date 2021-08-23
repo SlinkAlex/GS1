@@ -12,7 +12,7 @@ $(document).ready(function(){
             sAjaxSource: $('#data_table_productos').data('source')
         });
        
-        oTable.columnFilter({ aoColumns: [{ type: "text"},{ type: "text"}, {type: "text" }, {type: "text"},  null, {type: "text"}, {type: "text"}, {type: "text"}, null]});
+        oTable.columnFilter({ aoColumns: [{ type: "text"},{ type: "text"}, {type: "text" }, {type: "text"},  null, {type: "text"}, {type: "text"},{type: "text"}, {type: "text"}, {type: "text"}, null]});
 
         
         /*
@@ -95,13 +95,13 @@ $(document).ready(function(){
         $("#data_table_productos_gtin_8").dataTable({
             sPaginationType: "full_numbers",
             aaSorting: [[ 0, "asc" ]],
-            aoColumns: [{ "bSortable": true}, { "bSortable": true}, { "bSortable": true}, { "bSortable": true}, { "bSortable": true},{ "bSortable": true}, { "bSortable": true}, { "bSortable": true}, { "bSortable": true}, { "bSortable": true}],
+            aoColumns: [{ "bSortable": true}, { "bSortable": true}, { "bSortable": true}, { "bSortable": true}, { "bSortable": true},{ "bSortable": true}, { "bSortable": true}, { "bSortable": true}, { "bSortable": true}, { "bSortable": true}, { "bSortable": true}, { "bSortable": true}],
             bJQueryUI: true,
             bProcessing: true,
             bServerSide: true,
             sDom: 'T<"clear">lfrtip',            
             sAjaxSource: $('#data_table_productos_gtin_8').data('source')
-        }).columnFilter({ aoColumns: [{type: "text" }, {type: "text" },  null,  {type: "text"}, {type: "text"}, {type: "text"},  {type: "text"} , {type: "text"}, {type: "text"}, {type: "text"}]});
+        }).columnFilter({ aoColumns: [{type: "text" }, {type: "text" },  null,  {type: "text"}, {type: "text"}, {type: "text"},  {type: "text"} , {type: "text"}, {type: "text"}, {type: "text"}, {type: "text"}, {type: "text"}]});
         $('#data_table_productos_general input').attr("placeholder", "Buscar");
 
 
@@ -306,8 +306,10 @@ $(document).ready(function(){
                 '<input name="descripcion" type="hidden" value="'+$('tfoot tr th:nth-child(3) span input').val()+'">'+
                 '<input name="marca" type="hidden" value="'+$('tfoot tr th:nth-child(4) span input').val()+'">'+
                 '<input name="codigo_producto" type="hidden" value="'+$('tfoot tr th:nth-child(6) span input').val()+'">'+
-                '<input name="fecha_creacion" type="hidden" value="'+$('tfoot tr th:nth-child(7) span input').val()+'">'+
-                '<input name="fecha_modificacion" type="hidden" value="'+$('tfoot tr th:nth-child(8) span input').val()+'">'
+                '<input name="classification" type="hidden" value="'+$('tfoot tr th:nth-child(7) span input').val()+'">'+
+                '<input name="country" type="hidden" value="'+$('tfoot tr th:nth-child(8) span input').val()+'">' +
+                '<input name="fecha_creacion" type="hidden" value="'+$('tfoot tr th:nth-child(9) span input').val()+'">'+
+                '<input name="fecha_modificacion" type="hidden" value="'+$('tfoot tr th:nth-child(10) span input').val()+'">'
             );
         });
 

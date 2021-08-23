@@ -65,7 +65,7 @@ private
 
           descripcion_codificada = producto.descripcion.gsub(/%/, '')
           marca_codificada = producto.marca.gsub(/%/, '')
-          boton_gtin_14 = link_to(( content_tag(:span, '',:class => 'ui-icon ui-icon-extlink')+"GTIN14").html_safe, "/empresas/#{params[:empresa_id]}/productos/new?gtin=#{producto.gtin}&base=#{base}&descripcion=#{descripcion_codificada}&marca=#{marca_codificada}&gpc=#{producto.gpc}&generar_gtin_14=true",{:class => "ui-state-default ui-corner-all botones_servicio", :title => "Generar GTIN-14"})
+          boton_gtin_14 = link_to(( content_tag(:span, '',:class => 'ui-icon ui-icon-extlink')+"GTIN14").html_safe, "/empresas/#{params[:empresa_id]}/productos/new?gtin=#{producto.gtin}&base=#{base}&descripcion=#{descripcion_codificada}&marca=#{marca_codificada}&gpc=#{producto.gpc}&generar_gtin_14=true&classification_id=#{producto.classification_id}",{:class => "ui-state-default ui-corner-all botones_servicio", :title => "Generar GTIN-14"})
         
         end
 
@@ -86,6 +86,8 @@ private
        producto.marca,
        producto.try(:estatus).try(:descripcion),
        producto.codigo_prod,
+       producto.try(:classification_description),
+       producto.try(:countries),
        (producto.fecha_creacion) ? producto.fecha_creacion.strftime("%Y-%m-%d") : "",
        (producto.fecha_ultima_modificacion) ? producto.fecha_ultima_modificacion.strftime("%Y-%m-%d") : "",
        boton_gtin_14,
@@ -103,12 +105,12 @@ private
 
   def fetch_productos
     
-    productos = Producto.includes(:estatus, :tipo_gtin).where("prefijo" => params[:empresa_id]).order("#{sort_column} #{sort_direction}").load 
+    productos = Producto.includes(:estatus, :tipo_gtin, :classification, :has_country, :country).where("prefijo" => params[:empresa_id]).order("#{sort_column} #{sort_direction}").load 
     productos = productos.page(page).per_page(per_page)
 
 
     if params[:sSearch].present? # Filtro de busqueda general
-      productos = productos.where("tipo_gtin.tipo like :search or producto.gtin like :search or producto.descripcion like :search or producto.marca like :search or estatus.descripcion like :search or estatus.descripcion like :search or producto.codigo_prod like :search or producto.fecha_creacion like :search", search: "%#{params[:sSearch]}%")
+      productos = productos.where("tipo_gtin.tipo like :search or producto.gtin like :search or producto.descripcion like :search or producto.marca like :search or estatus.descripcion like :search or estatus.descripcion like :search or producto.codigo_prod like :search or classifications.name like :search or producto.fecha_creacion like :search", search: "%#{params[:sSearch]}%")
     end
     
     
@@ -133,15 +135,22 @@ private
     end
 
     if params[:sSearch_6].present?
+      productos = productos.where("classifications.name like :search6", search6: "%#{params[:sSearch_6]}%" )
+    end
+    
+    if params[:sSearch_7].present?
+      productos = productos.where("countries.name like :search7", search7: "%#{params[:sSearch_7]}%")
+    end
+    if params[:sSearch_8].present?
       
-      productos = productos.where("CONVERT(varchar(255),  producto.fecha_creacion ,126) like :search6", search6: "%#{params[:sSearch_6]}%")
+      productos = productos.where("CONVERT(varchar(255),  producto.fecha_creacion ,126) like :search8", search8: "%#{params[:sSearch_8]}%")
 
       
     end
 
-    if params[:sSearch_7].present?
+    if params[:sSearch_9].present?
       
-      productos = productos.where("CONVERT(varchar(255),  producto.fecha_ultima_modificacion ,126) like :search7", search7: "%#{params[:sSearch_7]}%")
+      productos = productos.where("CONVERT(varchar(255),  producto.fecha_ultima_modificacion ,126) like :search9", search9: "%#{params[:sSearch_9]}%")
       
     end
 
@@ -159,7 +168,7 @@ private
 
   def sort_column
 
-     columns = %w[tipo_gtin.tipo producto.gtin producto.descripcion producto.marca estatus.descripcion producto.codigo_prod producto.fecha_creacion producto.fecha_ultima_modificacion nil nil]
+     columns = %w[tipo_gtin.tipo producto.gtin producto.descripcion producto.marca estatus.descripcion producto.codigo_prod classifications.name countries.name producto.fecha_creacion producto.fecha_ultima_modificacion nil nil]
      columns[params[:iSortCol_0].to_i]
 
   end

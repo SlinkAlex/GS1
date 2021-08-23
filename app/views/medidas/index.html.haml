@@ -1,0 +1,32 @@
+%section.contexto
+	%label.contexto Medidas > Listado
+	%hr.contexto{:size => "1"}
+	
+%section#areaTrabajo.areaTrabajo
+	%a.ui-state-default.ui-corner-all.regresar_empresas{:href => "/medidas/new", :title => "Agregar una nueva unidad de medida"}
+		%span.ui-icon.ui-icon.ui-icon-circle-plus
+		Nueva Medida
+	%a.ui-state-default.ui-corner-all.regresar_empresas{:href => "/empresas", :title => "Regresar listado general de empresas"}
+		%span.ui-icon.ui-icon.ui-icon-arrowreturnthick-1-w
+		Regresar
+	%p#notice= notice
+	%table#usuarios.display
+		%thead
+			%tr
+				%th Nombre
+				%th Código
+				%th	Abreviatura
+				%th	
+				%th
+		%tbody
+			- @medidas.each do |medida|
+				%tr
+					%td= medida.nombre
+					%td= medida.codigo
+					%td= medida.abreviatura
+					%td= link_to(( content_tag(:span, '',:class => 'ui-icon ui-icon-extlink')+'Editar').html_safe,  edit_medida_path(medida),  {:class => "ui-state-default ui-corner-all botones_servicio", :title => "Editar segmento #{medida.nombre}"})					
+					%td= link_to(( content_tag(:span, '',:class => 'ui-icon ui-icon-trash')+'Eliminar').html_safe,  medida, method: :delete, data: { confirm: 'Desea ELIMINAR esta clasificación?'}, :class => "ui-state-default ui-corner-all botones_servicio", :title => "Eliminar clasificación #{medida.nombre}")
+
+	%br
+	%br
+= link_to 'New Medida', new_medida_path

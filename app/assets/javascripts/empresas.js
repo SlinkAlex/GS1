@@ -34,7 +34,7 @@
             bServerSide: true,
             sDom: 'T<"clear">lfrtip',
             sAjaxSource: $('#data_table_empresas').data('source')
-        }).columnFilter({ aoColumns: [{ type: "text"}, {type: "text"}, {type: "text" }, {type: "text"}, {type: "text"}, null, {type: "text"}]});
+        }).columnFilter({ aoColumns: [{ type: "text"}, {type: "text"}, {type: "text"}, {type: "text" }, {type: "text"}, {type: "text"}, null, {type: "text"}]});
 
         $('#data_table_empresas input').attr("placeholder", "Buscar");
 
@@ -97,7 +97,7 @@
             bServerSide: true,
             sDom: 'T<"clear">lfrtip',
             sAjaxSource: $('#data_table_empresas_retirar').data('source')
-        }).columnFilter({ aoColumns: [null, {type: "text"}, {type: "text" }, {type: "text"}, {type: "text"}, {type: "text"}, null, {type: "text"}]});
+        }).columnFilter({ aoColumns: [null, {type: "text"}, {type: "text" }, {type: "text"}, {type: "text"}, {type: "text"}, null, {type: "text"}, {type: "text"}]});
 
         $('#data_table_empresas_retirar input').attr("placeholder", "Buscar");
 
@@ -112,7 +112,7 @@
             bServerSide: true,
             sDom: 'T<"clear">lfrtip',
             sAjaxSource: $('#data_table_empresas_retiradas').data('source')
-        }).columnFilter({ aoColumns: [{type: "text"}, {type: "text" }, {type: "text"}, {type: "text"}, {type: "text"}, {type: "text"},{type: "text"}, null,null,null, null]});
+        }).columnFilter({ aoColumns: [{type: "text"}, {type: "text" }, {type: "text"}, {type: "text"}, {type: "text"}, {type: "text"},{type: "text"}, null,null,null, null, null]});
 
         $('#data_table_empresas_retiradas input').attr("placeholder", "Buscar");
 
@@ -121,14 +121,14 @@
         $("#data_table_reactivar_empresas").dataTable({
             bStateSave: true,
             sPaginationType: "full_numbers",
-            aoColumns: [ { "bSortable": false }, { "bSortable": true }, { "bSortable": true }, { "bSortable": true },{ "bSortable": true },{ "bSortable": true }, { "bSortable": true },{ "bSortable": true },{ "bSortable": false },{ "bSortable": false }, { "bSortable": false },{ "bSortable": false }  ],
+            aoColumns: [ { "bSortable": false }, { "bSortable": true }, { "bSortable": true }, { "bSortable": true },{ "bSortable": true },{ "bSortable": true }, { "bSortable": true },{ "bSortable": true },{ "bSortable": false },{ "bSortable": false }, { "bSortable": false },{ "bSortable": false },{ "bSortable": false }  ],
             aaSorting: [[ 6, "desc" ]],
             bJQueryUI: true,
             bProcessing: true,
             bServerSide: true,
             sDom: 'T<"clear">lfrtip',
             sAjaxSource: $('#data_table_reactivar_empresas').data('source')
-        }).columnFilter({ aoColumns: [null, {type: "text"}, {type: "text" }, {type: "text"}, {type: "text"}, {type: "text"}, {type: "text"},{type: "text"}, null,null,null, null]});
+        }).columnFilter({ aoColumns: [null, {type: "text"}, {type: "text" }, {type: "text"}, {type: "text"}, {type: "text"}, {type: "text"},{type: "text"},{type: "text"}, null,null,null, null]});
 
         $('#data_table_reactivar_empresas input').attr("placeholder", "Buscar");
 
@@ -143,7 +143,7 @@
             bServerSide: true,
             sDom: 'T<"clear">lfrtip',
             sAjaxSource: $('#data_table_empresas_eliminar').data('source')
-        }).columnFilter({ aoColumns: [null, {type: "text"}, {type: "text" }, {type: "text"}, {type: "text"}, {type: "text"}, {type: "text"},{type: "text"}, null,null,null, null]});
+        }).columnFilter({ aoColumns: [null, {type: "text"}, {type: "text" }, {type: "text"}, {type: "text"}, {type: "text"}, {type: "text"},{type: "text"},{type: "text"}, null,null,null, null]});
 
         $('#data_table_empresas_eliminar input').attr("placeholder", "Buscar");
 

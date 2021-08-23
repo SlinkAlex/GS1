@@ -32,6 +32,7 @@ private
         empresa.tipo_usuario_empresa_,
         (empresa.fecha_retiro) ? empresa.fecha_retiro.strftime("%Y-%m-%d") : "",
         empresa.motivo_retiro_,
+        empresa.escala,
         link_to(( content_tag(:span, '',:class => 'ui-icon ui-icon-extlink')+'Detalle').html_safe, empresa_path(empresa, :retirar => true), {:class => "ui-state-default ui-corner-all botones_servicio", :title => "Detalle de la empresa #{empresa.nombre_empresa}"}),
         link_to(( content_tag(:span, '',:class => 'ui-icon ui-icon-extlink')+'Productos').html_safe, "/empresas/#{empresa.prefijo}/productos?empresa_retirada=true", {:class => "ui-state-default ui-corner-all botones_servicio", :title => "Productos asociados a la empresa #{empresa.nombre_empresa}"}),
         link_to(( content_tag(:span, '',:class => 'ui-icon ui-icon-extlink')+'Servicios').html_safe, "/empresas/#{empresa.prefijo}/empresa_servicios", {:class => "ui-state-default ui-corner-all botones_servicio", :title => "Servicios asociados a la empresa #{empresa.nombre_empresa}"}),
@@ -49,7 +50,7 @@ private
 
   def fetch_empresas
     
-    empresas = Empresa.joins("left join [empresa_clasificacion] ON [empresa_clasificacion].[id] = [empresa].[id_clasificacion] left JOIN [ciudad] ON [ciudad].[id] = [empresa].[id_ciudad] left JOIN [motivo_retiro] ON [motivo_retiro].[id] = [empresa].[id_motivo_retiro] left join tipo_usuario_empresa on tipo_usuario_empresa.id_tipo_usu_empresa = empresa.id_tipo_usuario left join estatus on empresa.id_estatus = estatus.id").select("empresa.prefijo, empresa.nombre_empresa, empresa.fecha_activacion, ciudad.nombre as ciudad_,  empresa.fecha_retiro, motivo_retiro.descripcion as motivo_retiro_,  empresa_clasificacion.descripcion as clasificacion_, tipo_usuario_empresa.descripcion as tipo_usuario_empresa_").where("estatus.descripcion like ? and alcance like ?", 'Retirada', 'Empresa').order("#{sort_column} #{sort_direction}") 
+    empresas = Empresa.joins("left join [empresa_clasificacion] ON [empresa_clasificacion].[id] = [empresa].[id_clasificacion] left JOIN [ciudad] ON [ciudad].[id] = [empresa].[id_ciudad] left JOIN [motivo_retiro] ON [motivo_retiro].[id] = [empresa].[id_motivo_retiro] left join tipo_usuario_empresa on tipo_usuario_empresa.id_tipo_usu_empresa = empresa.id_tipo_usuario left join estatus on empresa.id_estatus = estatus.id").select("empresa.prefijo, empresa.nombre_empresa, empresa.escala, empresa.fecha_activacion, ciudad.nombre as ciudad_,  empresa.fecha_retiro, motivo_retiro.descripcion as motivo_retiro_,  empresa_clasificacion.descripcion as clasificacion_, tipo_usuario_empresa.descripcion as tipo_usuario_empresa_").where("estatus.descripcion like ? and alcance like ?", 'Retirada', 'Empresa').order("#{sort_column} #{sort_direction}") 
     empresas = empresas.page(page).per_page(per_page)
     
     if params[:sSearch].present? # Filtro de busqueda general
@@ -64,6 +65,7 @@ private
     empresas = empresas.where("tipo_usuario_empresa.descripcion like :search5", search5: "%#{params[:sSearch_5]}%" ) if params[:sSearch_5].present?
     empresas = empresas.where("empresa.fecha_retiro like :search6", search6: "%#{params[:sSearch_6]}%" ) if params[:sSearch_6].present?
     empresas = empresas.where("motivo_retiro.descripcion like :search7", search7: "%#{params[:sSearch_7]}%" ) if params[:sSearch_7].present?
+    empresas = empresas.where("empresa.escala = :search8", search8: params[:sSearch_8] )  if params[:sSearch_8].present? 
     
     empresas
 
@@ -79,7 +81,7 @@ private
 
   def sort_column
 
-     columns = %w[nil empresa.prefijo empresa.nombre_empresa empresa_clasificacion.descripcion ciudad.nombre tipo_usuario_empresa.descripcion empresa.fecha_retiro motivo_retiro.descripcion]
+     columns = %w[nil empresa.prefijo empresa.nombre_empresa, empresa.escala empresa_clasificacion.descripcion ciudad.nombre tipo_usuario_empresa.descripcion empresa.fecha_retiro motivo_retiro.descripcion]
      columns[params[:iSortCol_0].to_i]
   end
 

@@ -6,11 +6,13 @@ class RetiroVoluntarioPdf < Prawn::Document
 		super(:top_margin => 10, :page_layout => :portrait)
 
 		font("Helvetica", :size => 10)
-
-		image "#{Rails.root}/app/assets/images/Gs1Vzla.png", :at => [0, 720], :height => 50
-		draw_text "Caracas #{Time.now.strftime("%d-%m-%Y")}", :at => [390,655]
-		draw_text "Señores.-", :at => [0,640]
-		draw_text "#{empresa.nombre_empresa.strip}", :at => [0,625]
+		image "#{Prawn::DATADIR}/LOGO 1.png", :size => 10, :at => [0,720], :height => 62, :width => 200
+		image "#{Prawn::DATADIR}/LOGO 2.png", :size => 10, :at => [350,740], :height => 130, :width => 200
+		#image "#{Rails.root}/app/assets/images/Gs1Vzla.png", :at => [0, 720], :height => 50
+		#draw_text "#{Prawn::DATADIR}", :at => [300,660]
+		draw_text "Caracas #{Time.now.strftime("%d-%m-%Y")}", :at => [390,630]
+		draw_text "Señores.-", :at => [0,630]
+		draw_text "#{empresa.nombre_empresa.strip}", :at => [0,615]
 		draw_text "Presente.-", :at => [0,580]
 		draw_text "Estimado Sr(a).   #{empresa.rep_legal}", :at => [0,565]
 
@@ -25,20 +27,20 @@ class RetiroVoluntarioPdf < Prawn::Document
 		draw_text "Atentamente",  :at => [10,200]
 
 
-		draw_text "Jose Luis Mejia N.",  :at => [10,150]
-		draw_text "Presidente Ejecutivo",  :at => [10,135]
-		draw_text "GS1 Venezuela",  :at => [10,120]
-
-		font("Helvetica", :size => 7)
-		draw_text "Avenida Francisco de Miranda Calle", :at => [350,120]
-		draw_text "Los Laboratorios Centro Empresarial",  :at => [350,110]
-		draw_text "Quorum, piso 1, Ofic. J y K,",  :at => [350,100] 
-		draw_text "Los Ruices, Caracas - 1071 ", :at => [350,90] 
-		draw_text "Venezuela", :at => [350,80] 
-		draw_text "T +58 (212) 237 87 77", :at => [350,70] 
-		draw_text "  +58 (212) 237 95 20", :at => [350,60] 
-		draw_text "F +58 (212) 237 72 50", :at => [350,50]
-		draw_text "E info@gs1ve.org",  :at => [350,40]
+		#draw_text "Jose Luis Mejia N.",  :at => [10,150]
+		#draw_text "Presidente Ejecutivo",  :at => [10,135]
+		#draw_text "GS1 Venezuela",  :at => [10,120]
+		image "#{Prawn::DATADIR}/LOGO 3.png", :size => 10, :at => [0,190], :height => 181, :width => 138
+		#font("Helvetica", :size => 7)
+		#draw_text "Avenida Francisco de Miranda Calle", :at => [350,120]
+		#draw_text "Los Laboratorios Centro Empresarial",  :at => [350,110]
+		#draw_text "Quorum, piso 1, Ofic. J y K,",  :at => [350,100] 
+		#draw_text "Los Ruices, Caracas - 1071 ", :at => [350,90] 
+		#draw_text "Venezuela", :at => [350,80] 
+		#draw_text "T +58 (212) 237 87 77", :at => [350,70] 
+		#draw_text "  +58 (212) 237 95 20", :at => [350,60] 
+		#draw_text "F +58 (212) 237 72 50", :at => [350,50]
+		#draw_text "E info@gs1ve.org",  :at => [350,40]
 		
 		start_new_page
 
@@ -46,7 +48,9 @@ class RetiroVoluntarioPdf < Prawn::Document
 		draw_text "PRODUCTOS CODIFICADOS", :size => 10, :at => [200,700], :style => :bold
 		draw_text "Empresa: #{empresa.nombre_empresa}",  :at => [150,685]
 		draw_text "Código Empresa: #{empresa.prefijo}",  :at => [150,675]
-		image "#{Rails.root}/app/assets/images/Gs1Vzla.png", :at => [0, 725], :height => 50
+		#image "#{Rails.root}/app/assets/images/Gs1Vzla.png", :at => [0, 725], :height => 50
+		image "#{Prawn::DATADIR}/LOGO 1.png", :size => 10, :at => [0,720], :height => 62, :width => 200
+		image "#{Prawn::DATADIR}/LOGO 2.png", :size => 10, :at => [350,740], :height => 130, :width => 200
 		
 		tabla_productos = [["MARCA", "DESCRIPCION", "CODIGO", "Tipo de GTIN"]]
 
@@ -57,7 +61,7 @@ class RetiroVoluntarioPdf < Prawn::Document
 		 table(tabla_productos,  :row_colors => ["FFFFFF", "DDDDDD"], :cell_style => { size: 8, :align => :center }, :column_widths => [150,190,100,100], :header => true, :position => :center)
 		 move_down 10
 		 text "<b>Total productos: #{productos.size}</b>", :size => 10, :align => :left, :inline_format => :true
-		
+		 #image "#{Prawn::DATADIR}/LOGO 3.png", :size => 10, :at => [0,190], :height => 181, :width => 138
 	end
 
 end

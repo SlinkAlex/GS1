@@ -1,4 +1,4 @@
-@productos = Producto.where("prefijo = ? and estatus.descripcion = ?", params[:empresa_id], 'Activo').includes(:estatus, :tipo_gtin).order("producto.fecha_creacion desc") 
+@productos = Producto.where("prefijo = ? and estatus.descripcion = ?", params[:empresa_id], 'Activo').includes(:estatus, :tipo_gtin, :classification, :has_country, :country).order("producto.fecha_creacion desc") 
 
 if params[:tipo_gtin] != ''
   @productos = @productos.where("tipo_gtin.tipo like :search", search: "%#{params[:tipo_gtin]}%" )
@@ -16,14 +16,24 @@ if params[:marca] != ''
   @productos = @productos.where("producto.marca like :search", search: "%#{params[:marca]}%" )
 end
 
-
 if params[:codigo_producto] != ''
     @productos = @productos.where("producto.codigo_prod like :search", search: "%#{params[:codigo_producto]}%" )
 end
 
+if params[:classification] != ''
+  	@productos = @productos.where("CONVERT(varchar(255), classifications.name ,126) like :search", search: "%#{params[:classification]}%")
+end
+
+if params[:country] != ''
+  	@productos = @productos.where("CONVERT(varchar(255), countries.name ,126) like :search", search: "%#{params[:country]}%")
+end
 
 if params[:fecha_creacion] != ''
   	@productos = @productos.where("CONVERT(varchar(255),  producto.fecha_creacion ,126) like :search", search: "%#{params[:fecha_creacion]}%")
+end
+
+if params[:fecha_modificacion] != ''
+  	@productos = @productos.where("CONVERT(varchar(255),  producto.fecha_ultima_modificacion ,126) like :search", search: "%#{params[:fecha_modificacion]}%")
 end
 
 
@@ -43,11 +53,11 @@ wb.add_worksheet(name: "GS1") do |sheet|
 			sheet.add_row ['Productos Activos']
 			sheet.add_row ['']
 
-			sheet.add_row ["Tipo GTIN", "GTIN", "Descripción", "Marca"], :style => [black_cell,black_cell,black_cell,black_cell]
+			sheet.add_row ["Tipo GTIN", "GTIN", "Descripción", "Marca", "Clasificación", "Paises de Comercialización", "URL"], :style => [black_cell,black_cell,black_cell,black_cell, black_cell, black_cell]
 			@productos.each do |producto|
 
-  				sheet.add_row [ producto.try(:tipo_gtin).try(:tipo), producto.gtin,producto.descripcion, producto.marca], :style => [tomas, tomas,tomas,tomas],    :types =>  [:string, :string, :string, :string]		
+  				sheet.add_row [ producto.try(:tipo_gtin).try(:tipo), producto.gtin,producto.descripcion, producto.marca, producto.try(:classification_description), producto.try(:countries), producto.img_url], :style => [tomas, tomas,tomas,tomas, tomas, tomas],    :types =>  [:string, :string, :string, :string, :string, :string]		
 			end
-			sheet.column_widths 15,25,90,30,13,20,30
+			sheet.column_widths 15,25,90,30,90,60,30,60
 	end 
 end

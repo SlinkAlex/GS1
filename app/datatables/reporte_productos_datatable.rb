@@ -21,18 +21,19 @@ private
 
     productos.map do |producto|
       
-      
         [ 
-          producto.nombre_empresa,
+          producto.try(:empresa).try(:nombre_empresa),
           producto.prefijo,
-          producto.tipo_gtin_,
+          producto.try(:tipo_gtin).try(:tipo),
           producto.gtin,
           producto.descripcion,
           producto.marca,
-          producto.estatus_,
-          producto.codigo_producto,
+          producto.try(:estatus).try(:descripcion),
+          producto.codigo_prod,
+          producto.try(:classification_description),
+          producto.try(:countries),
           (producto.fecha_creacion) ? producto.fecha_creacion.strftime("%Y-%m-%d") : "",
-          (producto.fecha_ultima_modificacion) ?  producto.fecha_ultima_modificacion.strftime("%Y-%m-%d") : ""
+          (producto.fecha_ultima_modificacion) ? producto.fecha_ultima_modificacion.strftime("%Y-%m-%d") : ""
         ]
       
     end
@@ -45,12 +46,13 @@ private
 
   def fetch_productos
     
-    productos = Producto.joins(:estatus, :tipo_gtin, :empresa).select("empresa.nombre_empresa as nombre_empresa, empresa.prefijo as prefijo, tipo_gtin.tipo as tipo_gtin_, producto.gtin as gtin, producto.marca as marca,  producto.descripcion as descripcion, producto.codigo_prod as codigo_producto, producto.fecha_creacion as fecha_creacion, producto.fecha_ultima_modificacion as fecha_ultima_modificacion, estatus.descripcion as estatus_").order("#{sort_column} #{sort_direction}") 
+    productos = Producto.includes(:estatus, :tipo_gtin, :empresa, :classification, :has_country, :country).order("#{sort_column} #{sort_direction}") 
     productos = productos.page(page).per_page(per_page)
     
     if params[:sSearch].present? # Filtro de busqueda general
-      productos = productos.where("empresa.nombre_empresa like :search  or empresa.prefijo like :search or tipo_gtin.tipo like :search or producto.gtin like :search or producto.descripcion like :search or producto.marca like :search or estatus.descripcion like :search or  producto.codigo_prod like :search or producto.fecha_creacion like :search or producto.fecha_ultima_modificacion like :search", search: "%#{params[:sSearch]}%")
+      productos = productos.where("empresa.nombre_empresa like :search  or empresa.prefijo like :search or tipo_gtin.tipo like :search or producto.gtin like :search or producto.descripcion like :search or producto.marca like :search or estatus.descripcion like :search or  producto.codigo_prod like :search or classifications.name like :search or countries.name like :search or producto.fecha_creacion like :search or producto.fecha_ultima_modificacion like :search", search: "%#{params[:sSearch]}%")
     end
+
     
     if params[:sSearch_0].present? # Filtro de busqueda por Tipo GTIN
       productos = productos.where("empresa.nombre_empresa like :search0", search0: "%#{params[:sSearch_0]}%" )
@@ -91,8 +93,16 @@ private
     end
 
     if params[:sSearch_9].present?
+      productos = productos.where("classifications.name like :search9", search9: "%#{params[:sSearch_9]}%" )
+    end
 
-      productos = productos.where("CONVERT(varchar(255),  producto.fecha_ultima_modificacion ,126) like :search9", search9: "%#{params[:sSearch_9]}%")
+    if params[:sSearch_10].present?
+      productos = productos.where("countries.name like :search10", search10: "%#{params[:sSearch_10]}%")
+    end
+
+    if params[:sSearch_11].present?
+
+      productos = productos.where("CONVERT(varchar(255),  producto.fecha_ultima_modificacion ,126) like :search11", search11: "%#{params[:sSearch_11]}%")
       
     end
 
@@ -110,7 +120,7 @@ private
 
   def sort_column
 
-     columns = %w[empresa.nombre_empresa empresa.prefijo tipo_gtin.tipo producto.gtin producto.descripcion producto.marca producto.gpc estatus.descripcion producto.codigo_prod producto.fecha_creacion]
+     columns = %w[empresa.nombre_empresa empresa.prefijo tipo_gtin.tipo producto.gtin producto.descripcion producto.marca producto.gpc estatus.descripcion producto.codigo_prod classifications.name countries.name producto.fecha_creacion]
      columns[params[:iSortCol_0].to_i]
   end
 

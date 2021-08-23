@@ -32,6 +32,7 @@ private
           empresa.ciudad_,
           empresa.estatus_.upcase,
           (empresa.solv == 2) ? "SOLVENTE" : "DEUDOR" ,
+          empresa.escala,
           link_to(( content_tag(:span, '',:class => 'ui-icon ui-icon-extlink')+'Detalle').html_safe, empresa_path(empresa, :retirar => true), {:class => "ui-state-default ui-corner-all botones_servicio", :title => "Detalle de la empresa #{empresa.nombre_empresa}"}),
           link_to(( content_tag(:span, '',:class => 'ui-icon ui-icon-extlink')+'Productos').html_safe, "/empresas/#{empresa.prefijo}/productos", {:class => "ui-state-default ui-corner-all botones_servicio", :title => "Productos asociados a la empresa #{empresa.nombre_empresa}"}),
           link_to(( content_tag(:span, '',:class => 'ui-icon ui-icon-extlink')+'Servicios').html_safe,  "/empresas/#{empresa.prefijo}/empresa_servicios",  {:class => "ui-state-default ui-corner-all botones_servicio", :title => "Servicios asociados a la empresa #{empresa.nombre_empresa}"}),
@@ -49,7 +50,7 @@ private
 
   def fetch_empresas
     
-    empresas = Empresa.where("estatus.descripcion = ?", 'Activa').joins("left join empresa_clasificacion on empresa_clasificacion.id = empresa.id_clasificacion left join ciudad on empresa.id_ciudad = ciudad.id left join estatus on empresa.id_estatus = estatus.id LEFT OUTER JOIN [BDGS1DTS.MDF].dbo.fnc_CltSlv () ON empresa.prefijo = [BDGS1DTS.MDF].dbo.fnc_CltSlv.codigo left join tipo_usuario_empresa on tipo_usuario_empresa.id_tipo_usu_empresa = empresa.id_tipo_usuario").order("#{sort_column} #{sort_direction}").select("empresa.prefijo as prefijo, empresa.nombre_empresa as nombre_empresa, ciudad.nombre as ciudad_, estatus.descripcion as estatus_, isnull([BDGS1DTS.MDF].dbo.fnc_CltSlv.codigo, 2)  AS solv, empresa_clasificacion.descripcion as clasificacion_, tipo_usuario_empresa.descripcion as tipo_usuario_").order("#{sort_column} #{sort_direction}") 
+    empresas = Empresa.where("estatus.descripcion = ?", 'Activa').joins("left join empresa_clasificacion on empresa_clasificacion.id = empresa.id_clasificacion left join ciudad on empresa.id_ciudad = ciudad.id left join estatus on empresa.id_estatus = estatus.id LEFT OUTER JOIN [BDGS1DTS.MDF].dbo.fnc_CltSlv () ON empresa.prefijo = [BDGS1DTS.MDF].dbo.fnc_CltSlv.codigo left join tipo_usuario_empresa on tipo_usuario_empresa.id_tipo_usu_empresa = empresa.id_tipo_usuario").order("#{sort_column} #{sort_direction}").select("empresa.prefijo as prefijo, empresa.nombre_empresa as nombre_empresa, empresa.escala as escala, ciudad.nombre as ciudad_, estatus.descripcion as estatus_, isnull([BDGS1DTS.MDF].dbo.fnc_CltSlv.codigo, 2)  AS solv, empresa_clasificacion.descripcion as clasificacion_, tipo_usuario_empresa.descripcion as tipo_usuario_").order("#{sort_column} #{sort_direction}") 
     empresas = empresas.page(page).per_page(per_page)
     
     if params[:sSearch].present? # Filtro de busqueda general

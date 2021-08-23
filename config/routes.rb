@@ -1,5 +1,11 @@
 GS1::Application.routes.draw do
 
+  resources :countries
+
+  resources :classifications
+
+  resources :medidas
+
   get "gerencia/index"
   get "cargo/index"
   get "perfil/index"

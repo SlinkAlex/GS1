@@ -233,6 +233,12 @@
           %td
           %td
             =f.text_field(:aporte_mantenimiento_bs)
+        %tr
+          %td
+            Escala
+          %td
+          %td
+            =f.select :escala, ["Emprendedor", "Escala 1", "Escala 2", "Escala 3"], { include_blank: true }
 
       %br
       %br

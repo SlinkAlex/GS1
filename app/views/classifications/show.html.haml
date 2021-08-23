@@ -1,0 +1,12 @@
+%p#notice= notice
+
+%p
+  %b Code:
+  = @classification.code
+%p
+  %b Name:
+  = @classification.name
+
+= link_to 'Edit', edit_classification_path(@classification)
+\|
+= link_to 'Back', classifications_path

@@ -1,0 +1,30 @@
+%section.contexto
+	%label.contexto Clasificación > Listado
+	%hr.contexto{:size => "1"}
+	
+%section#areaTrabajo.areaTrabajo
+	%a.ui-state-default.ui-corner-all.regresar_empresas{:href => "/classifications/new", :title => "Agregar un nuevo segmento"}
+		%span.ui-icon.ui-icon.ui-icon-circle-plus
+		Nueva Clasificación
+	%a.ui-state-default.ui-corner-all.regresar_empresas{:href => "/empresas", :title => "Regresar listado general de empresas"}
+		%span.ui-icon.ui-icon.ui-icon-arrowreturnthick-1-w
+		Regresar
+	%p#notice= notice
+	%table#usuarios.display
+		%thead
+			%tr
+				%th Código
+				%th Clasificación
+				%th
+				%th
+		%tbody
+			- @classifications.each do |classification|
+				%tr
+					%td= classification.code
+					%td= classification.name
+					%td= link_to(( content_tag(:span, '',:class => 'ui-icon ui-icon-extlink')+'Editar').html_safe,  edit_classification_path(classification),  {:class => "ui-state-default ui-corner-all botones_servicio", :title => "Editar segmento #{classification.name}"})					
+					%td= link_to(( content_tag(:span, '',:class => 'ui-icon ui-icon-trash')+'Eliminar').html_safe,  classification, method: :delete, data: { confirm: 'Desea ELIMINAR esta clasificación?'}, :class => "ui-state-default ui-corner-all botones_servicio", :title => "Eliminar clasificación #{classification.name}")
+
+	%br
+	%br
+= link_to 'New Classification', new_classification_path

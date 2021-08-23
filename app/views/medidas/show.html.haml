@@ -1,0 +1,15 @@
+%p#notice= notice
+
+%p
+  %b Nombre:
+  = @medida.nombre
+%p
+  %b Codigo:
+  = @medida.codigo
+%p
+  %b Abreviatura:
+  = @medida.abreviatura
+
+= link_to 'Edit', edit_medida_path(@medida)
+\|
+= link_to 'Back', medidas_path
