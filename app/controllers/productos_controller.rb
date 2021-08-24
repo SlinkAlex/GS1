@@ -12,7 +12,6 @@ class ProductosController < ApplicationController
 
     respond_to do |format|
       format.html { 
-                     
                     cookies.clear if params[:eliminar_cookie]
 
                     if params[:eliminar]  
@@ -314,8 +313,6 @@ class ProductosController < ApplicationController
     def set_countries
       @countries = Country.all.order(:name).to_a
     end
-
-    private
 
     def registrar_gtin(empresa, producto)
 
