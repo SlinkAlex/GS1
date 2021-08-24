@@ -1,5 +1,5 @@
 
-@productos = Producto.includes(:estatus, :tipo_gtin, :empresa, :classification, :has_country, :country).limit(5).order("empresa.prefijo")
+@productos = Producto.includes(:estatus, :tipo_gtin, :empresa, :classification, :has_country, :country).order("empresa.prefijo")
 
 @productos = @productos.where("empresa.nombre_empresa like '%#{params[:nombre_empresa]}%'") if params[:empresa] != ''
 @productos = @productos.where("empresa.prefijo = #{params[:prefijo]}") if params[:prefijo] != ''

@@ -6,20 +6,20 @@ class ReporteProductosPdf < Prawn::Document
 
 		super(:top_margin => 10, :page_layout => :landscape)
 		
-		productos = Producto.includes(:estatus, :tipo_gtin, :empresa, :classification, :has_country, :country).limit(5).order("empresa.prefijo")
+		productos = Producto.includes(:estatus, :tipo_gtin, :empresa, :classification, :has_country, :country).order("empresa.prefijo")
 
-		productos = productos.where("empresa.nombre_empresa like '%#{params[:nombre_empresa]}%'") if params[:empresa] != ''
-		productos = productos.where("empresa.prefijo = #{params[:prefijo]}") if params[:prefijo] != ''
-		productos = productos.where("tipo_gtin.tipo like '%#{params[:tipo_gtin]}%'") if params[:tipo_gtin] != ''
-		productos = productos.where("producto.gtin like '%#{params[:gtin]}%'") if params[:gtin]
-		productos = productos.where("producto.descripcion like '%#{params[:descripcion]}%'") if params[:descripcion] != ''
-		productos = productos.where("producto.marca like '%#{params[:marca]}%'" ) if params[:marca] != ''
-		productos = productos.where("estatus.descripcion like '%#{params[:estatus]}%'") if params[:estatus] != ''
-		productos = productos.where("producto.codigo_prod like '%#{params[:codigo_producto]}%'") if params[:codigo_producto] != ''
-		productos =productos.where("classifications.name like :search8", search8: "%#{params[:clasificacion]}%" )     if params[:clasificacion].present? # classification
-		productos =productos.where("classifications.name like :search8", search8: "%#{params[:pais]}%" )     if params[:pais].present? # Paises Comercialización
-		productos = productos.where("CONVERT(varchar(255),  producto.fecha_creacion ,126) like '%#{params[:fecha_creacion]}%'")  if params[:fecha_creacion] != ''
-		productos = productos.where("CONVERT(varchar(255),  producto.fecha_ultima_modificacion ,126) like '%#{params[:fecha_ultima_modificacion]}%'") if params[:fecha_ultima_modificacion] != ''
+		productos = productos.where("empresa.nombre_empresa like '%#{nombre_empresa}%'") if nombre_empresa != ''
+		productos = productos.where("empresa.prefijo = #{prefijo}") if prefijo != ''
+		productos = productos.where("tipo_gtin.tipo like '%#{tipo_gtin}%'") if tipo_gtin != ''
+		productos = productos.where("producto.gtin like '%#{gtin}%'") if gtin
+		productos = productos.where("producto.descripcion like '%#{descripcion}%'") if descripcion != ''
+		productos = productos.where("producto.marca like '%#{marca}%'" ) if marca != ''
+		productos = productos.where("estatus.descripcion like '%#{estatus}%'") if estatus != ''
+		productos = productos.where("producto.codigo_prod like '%#{codigo_producto}%'") if codigo_producto != ''
+		productos =productos.where("classifications.name like :search8", search8: "%#{clasificacion}%" )     if clasificacion.present? # classification
+		productos =productos.where("classifications.name like :search8", search8: "%#{pais}%" )     if pais.present? # Paises Comercialización
+		productos = productos.where("CONVERT(varchar(255),  producto.fecha_creacion ,126) like '%#{fecha_creacion}%'")  if fecha_creacion != ''
+		productos = productos.where("CONVERT(varchar(255),  producto.fecha_ultima_modificacion ,126) like '%#{fecha_modificacion}%'") if fecha_modificacion != ''
 
 
 		
