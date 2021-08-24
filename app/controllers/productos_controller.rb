@@ -1,9 +1,13 @@
+require "uri"
+require "json"
+require "net/http"
+
 # encoding: UTF-8
 class ProductosController < ApplicationController
   before_filter :require_authentication
   before_action :set_product, only: [:new, :show, :edit, :update, :destroy]
   before_action :set_countries, only: [:new, :edit, :update]
-  
+
   # GET /productos
   # GET /productos.json
   def index
@@ -193,10 +197,22 @@ class ProductosController < ApplicationController
     puts "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
     
     respond_to do |format|
-      if @producto.save
-          Auditoria.registrar_evento(session[:usuario],"producto", "Crear", Time.now, "GTIN:#{@producto.gtin} DESCRIPCION:#{@producto.descripcion} TIPO GTIN:#{@producto.tipo_gtin.tipo}")
-          format.html { redirect_to empresa_productos_path, notice: "EL #{@producto.tipo_gtin.tipo} #{@producto.gtin} fue creado correctamente." }        
-
+      if @producto.valid?
+        data = registrar_gtin(@producto)
+        if data.present?
+          puts "REQUEST TO API SUCCESS"
+          if @producto.save
+            Auditoria.registrar_evento(session[:usuario],"producto", "Crear", Time.now, "GTIN:#{@producto.gtin} DESCRIPCION:#{@producto.descripcion} TIPO GTIN:#{@producto.tipo_gtin.tipo}")
+            format.html { redirect_to empresa_productos_path, notice: "EL #{@producto.tipo_gtin.tipo} #{@producto.gtin} fue creado correctamente." }       
+          else
+            format.html { 
+              render action: "new" }
+          end 
+        else
+          puts "REQUEST FAILED TO API"
+          format.html { 
+            render action: "new" }
+        end
       else
         format.html { 
           render action: "new" }        
@@ -314,8 +330,8 @@ class ProductosController < ApplicationController
       @countries = Country.all.order(:name).to_a
     end
 
-    def registrar_gtin(empresa, producto)
-
+    def registrar_gtin(producto)
+      puts "REGISTRAR GTIN ENTRANDO"
       if producto.origen == 1
         origen = 'GTIN'
       else
@@ -334,7 +350,7 @@ class ProductosController < ApplicationController
         "gtin": producto.gtin,
         "licenceKey": producto.prefijo,
         "licenceType": origen,
-        "gtinStatus": productos.estatus.descripcion.upcase,
+        "gtinStatus": producto.estatus.descripcion.upcase,
         "brandName": [{
           "language": languague,
           "value": producto.descripcion.split[0]
@@ -359,18 +375,27 @@ class ProductosController < ApplicationController
         }]
       }]
 
+      puts body
+
       res = make_post_request(uri,body)
       data = JSON.parse(res)
-
-      if data["status"] == 200
-
-          if candidate.save
-              json_response "Created successfully", true, {candidate: candidate}, :ok
-          else
-              json_response "Something wrong", false, {}, :unprocessable_entity
-          end
-      else
-          json_response data["message"], false, {}, :unauthorized
-      end
+  
+      return data
     end
+
+    def make_post_request(uri, body)
+      url = URI(uri)
+
+      https = Net::HTTP.new(url.host, url.port)
+      https.use_ssl = true
+
+      request = Net::HTTP::Post.new(url)
+      # Request headers
+      request["Content-Type"] = "application/json"
+      request['Cache-Control'] = 'no-cache'
+      request['APIKey'] = '9f487becd353409c9ab8c711944ecb5e'
+      request.body = JSON.dump(body)
+
+      return https.request(request).body
+  end
 end

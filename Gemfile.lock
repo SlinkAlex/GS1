@@ -56,6 +56,7 @@ GEM
     bcrypt-ruby (3.1.5)
       bcrypt (>= 3.1.3)
     builder (3.1.4)
+    byebug (10.0.2)
     coffee-rails (4.2.2)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0)
@@ -203,6 +204,7 @@ DEPENDENCIES
   axlsx_rails
   bcrypt-ruby
   bundler (= 1.17.3)
+  byebug
   coffee-rails
   daemons
   delayed_job_active_record
