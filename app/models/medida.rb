@@ -1,4 +1,4 @@
 class Medida < ActiveRecord::Base
-    has_many :cantidades
-    has_many :producto, through: :cantidades
+    has_many :quantity
+    has_many :producto, through: :quantity
 end

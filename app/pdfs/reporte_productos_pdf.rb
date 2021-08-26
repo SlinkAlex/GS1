@@ -6,7 +6,7 @@ class ReporteProductosPdf < Prawn::Document
 
 		super(:top_margin => 10, :page_layout => :landscape)
 		
-		productos = Producto.includes(:estatus, :tipo_gtin, :empresa, :classification, :has_country, :country).order("empresa.prefijo")
+		productos = Producto.includes(:estatus, :tipo_gtin, :empresa, :classification, :has_country, :country).limit(20).order("empresa.prefijo")
 
 		productos = productos.where("empresa.nombre_empresa like '%#{nombre_empresa}%'") if nombre_empresa != ''
 		productos = productos.where("empresa.prefijo = #{prefijo}") if prefijo != ''

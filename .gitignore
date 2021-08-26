@@ -2,3 +2,4 @@ log/development.log
 tmp/pids/server.pid
 tmp/cache
 log/production.log
+config/database.yml

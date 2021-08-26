@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210818175627) do
+ActiveRecord::Schema.define(version: 20210826170852) do
 
   create_table "auditoria", force: true do |t|
     t.string   "usuario"
@@ -19,14 +19,6 @@ ActiveRecord::Schema.define(version: 20210818175627) do
     t.string   "tabla"
     t.datetime "fecha_accion"
     t.text     "descripcion"
-  end
-
-  create_table "cantidades", force: true do |t|
-    t.integer  "unidades"
-    t.integer  "producto_id"
-    t.integer  "medida_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   create_table "cargo", force: true do |t|
@@ -618,6 +610,12 @@ ActiveRecord::Schema.define(version: 20210818175627) do
 
   add_index "producto", ["classification_id"], name: "index_producto_on_classification_id"
   add_index "producto", ["prefijo"], name: "indice_prefijo"
+
+  create_table "quantities", force: true do |t|
+    t.string "units"
+    t.string "producto_id"
+    t.string "medida_id"
+  end
 
   create_table "servicios", force: true do |t|
     t.text    "nombre"

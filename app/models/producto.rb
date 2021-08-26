@@ -8,8 +8,8 @@ class Producto < ActiveRecord::Base
   belongs_to :classification , :foreign_key => "classification_id"
   has_many :has_country, :foreign_key => "producto_id"
   has_many :country, through: :has_country
-  has_many :cantidades, :foreign_key => "producto_id"
-  has_many :medida, through: :cantidades
+  has_many :quantity, :foreign_key => "producto_id"
+  has_many :medida, through: :quantity
   
   validates :descripcion, :marca, :id_tipo_gtin, :presence => {:message => "No puede estar en blanco"}, :on => :create
   validates :gtin, :uniqueness => {:message => "El codigo de Producto que esta ingresando ya  se encuentra asociado a un GTIN"}

@@ -79,6 +79,16 @@
               =params[:img_url] ? f.text_field(:img_url, :value => params[:img_url], :size => 60): f.text_field(:img_url, :autocomplete => "off", :size => 60)
         %tr
           %td
+            Cantidad
+          %td
+            -if @producto.new_record?
+              =params[:marca] ? f.text_field(:marca, :value => params[:marca], :size => 60): f.text_field(:marca, :autocomplete => "off",  :size => 60)
+            -else
+              =params[:marca] ? f.text_field(:marca, :value => params[:marca], :size => 60): f.text_field(:marca, :autocomplete => "off", :size => 60)
+          %td
+            = f.collection_select(:classification_id, Medida.all.order(:nombre), :id, :nombre, :prompt => "-Seleccione-", :size => 30)
+        %tr
+          %td
             Clasificación
           %td
             /= f.text_field :classification_id, :size => 60

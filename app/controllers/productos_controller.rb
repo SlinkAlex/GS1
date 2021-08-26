@@ -152,6 +152,7 @@ class ProductosController < ApplicationController
       @producto.country_ids =  @producto_.country_ids
     end
 
+    
     @base = TipoGtin.find(:first, :conditions =>["tipo like ? and base like ?", "GTIN-14", @producto_.tipo_gtin.tipo]) if @producto_
     
 
@@ -331,29 +332,22 @@ class ProductosController < ApplicationController
     end
 
     def registrar_gtin(producto)
-      puts "REGISTRAR GTIN ENTRANDO"
-      if producto.origen == 1
-        origen = 'GTIN'
-      else
-        origen = 'GCP'
-      end
 
       if producto.has_country.blank?
         languague = "es-VE"
       else
         languague = producto.has_country[0].country.lang_code
       end
-      
 
       uri = "https://grp.gs1.org/grp-st/v3/gtins"
       body = [{
-        "gtin": producto.gtin,
+        "gtin": "0" + producto.gtin,
         "licenceKey": producto.prefijo,
-        "licenceType": origen,
+        "licenceType": 'GCP',
         "gtinStatus": producto.estatus.descripcion.upcase,
         "brandName": [{
           "language": languague,
-          "value": producto.descripcion.split[0]
+          "value": producto.marca
         }],
         "gpcCategoryCode": producto.classification.code,
         "countryOfSaleCode": [
@@ -375,8 +369,6 @@ class ProductosController < ApplicationController
         }]
       }]
 
-      puts body
-
       res = make_post_request(uri,body)
       data = JSON.parse(res)
   
@@ -397,5 +389,5 @@ class ProductosController < ApplicationController
       request.body = JSON.dump(body)
 
       return https.request(request).body
-  end
+    end
 end
