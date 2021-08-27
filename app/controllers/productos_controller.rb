@@ -131,20 +131,21 @@ class ProductosController < ApplicationController
   # GET /productos/new
   # GET /productos/new.json
   def new
-
     
     @empresa =  Empresa.find(:first, :conditions => ["prefijo = ?", params[:empresa_id]] )
     @productos_gtin_13 = Producto.find(:all, :conditions => ["tipo_gtin.tipo = ? and prefijo = ?", "GTIN-13", params[:empresa_id]], :include => [:tipo_gtin]) if params[:empresa_id].size == 5
     
     if params[:empresa_id].size == 5
-
+      
       @excede_gtin13 = true if (@productos_gtin_13.size >= 10) 
-
+      
     end
-
-    @producto = @empresa.producto.build  # Se crea el form_for    
+    
+    @producto = @empresa.producto.build  # Se crea el form_for
+    
+    
     @gtin = params[:gtin] if params[:gtin] != ''# SI esta gtin  es para crear gtin tipo 14 base 8 o gtin 14 base 13    
-
+    
     @producto_ = Producto.find(:first, :conditions => ["gtin like ?", params[:gtin]]) if params[:gtin]
     
     if params[:classification_id]
@@ -166,6 +167,7 @@ class ProductosController < ApplicationController
   def edit
     @empresa = Empresa.find(:first, :conditions => ["prefijo = ?", params[:empresa_id]])
     @producto = Producto.find(:first, :conditions => ["gtin like ?", params[:id]])
+    
 
   end
 
@@ -204,7 +206,13 @@ class ProductosController < ApplicationController
           puts "REQUEST TO API SUCCESS"
           if @producto.save
             Auditoria.registrar_evento(session[:usuario],"producto", "Crear", Time.now, "GTIN:#{@producto.gtin} DESCRIPCION:#{@producto.descripcion} TIPO GTIN:#{@producto.tipo_gtin.tipo}")
-            format.html { redirect_to empresa_productos_path, notice: "EL #{@producto.tipo_gtin.tipo} #{@producto.gtin} fue creado correctamente." }       
+            format.html { redirect_to empresa_productos_path, notice: "EL #{@producto.tipo_gtin.tipo} #{@producto.gtin} fue creado correctamente." }
+
+            #CREACION DE RELACION PARA UNIDADES DE MEDIDA
+            cantidad = Quantity.new(units: params[:quantity][:units], producto_id: @producto, medida_id: params[:quantity][:medida_id])
+            if cantidad.valid?
+              cantidad.save
+            end
           else
             format.html { 
               render action: "new" }
@@ -225,12 +233,11 @@ class ProductosController < ApplicationController
   # PUT /productos/1.json
   def update
     
-    
     @producto = Producto.find(:first, :conditions => ["gtin like ?", params[:id]])
     @producto.countries = params[:countries]
-   puts "YYYYYYYYYYYYYYYYYYYYYYYYYYYYY"
-   puts params[:countries]
-    params[:producto][:fecha_ultima_modificacion] = Time.now
+    puts "YYYYYYYYYYYYYYYYYYYYYYYYYYYYY"
+    puts params[:countries]
+    
     respond_to do |format|
       if @producto.update_attributes(params[:producto])
         format.html { redirect_to empresa_productos_path, notice: "GTIN #{@producto.gtin} ACTUALIZADO." }
@@ -309,13 +316,16 @@ class ProductosController < ApplicationController
   # DELETE /productos/1.json
   def destroy
     @producto = Producto.find(params[:id])
+    @quantity = @producto.quantity
     @producto.destroy
+    @quantity.destroy
 
     respond_to do |format|
       format.html { redirect_to productos_url }
       format.json { head :no_content }
     end
   end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_product      

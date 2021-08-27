@@ -8,8 +8,12 @@ class Producto < ActiveRecord::Base
   belongs_to :classification , :foreign_key => "classification_id"
   has_many :has_country, :foreign_key => "producto_id"
   has_many :country, through: :has_country
-  has_many :quantity, :foreign_key => "producto_id"
+
+  
+  has_one :quantity, :foreign_key => "producto_id"
+  accepts_nested_attributes_for :quantity
   has_many :medida, through: :quantity
+  accepts_nested_attributes_for :medida
   
   validates :descripcion, :marca, :id_tipo_gtin, :presence => {:message => "No puede estar en blanco"}, :on => :create
   validates :gtin, :uniqueness => {:message => "El codigo de Producto que esta ingresando ya  se encuentra asociado a un GTIN"}
@@ -510,70 +514,70 @@ class Producto < ActiveRecord::Base
 
   def self.eliminar_productos_desde_excel # Procedimiento para eliminar Productos
 
-  spreadsheet = Roo::Excelx.new("#{Rails.root}/doc/PRODUCTOS_ELIMINAR.xlsx", nil, :ignore)
+    spreadsheet = Roo::Excelx.new("#{Rails.root}/doc/PRODUCTOS_ELIMINAR.xlsx", nil, :ignore)
 
-    no_se_encontro = []
+      no_se_encontro = []
 
-    (1..spreadsheet.last_row).each do |fila|
-       producto = Producto.find_by(gtin: spreadsheet.cell(fila,3).to_s)
+      (1..spreadsheet.last_row).each do |fila|
+        producto = Producto.find_by(gtin: spreadsheet.cell(fila,3).to_s)
+          
+          if producto.nil?
+            no_se_encontro << spreadsheet.cell(fila,3)
+          else
+            producto.destroy
+          end
+
+      end
+
+      raise no_se_encontro.to_yaml if no_se_encontro.any?
+
+
+  end
+
+  def countries=(value)
+    @countries = value
+  end
+
+  def save_countries
+    HasCountry.where("producto_id = ?", self.gtin).destroy_all 
+      puts "|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
+      puts @countries
+      puts self.gtin
+
+    if @countries
+      @countries.each do |country_id|
+        country = HasCountry.create(country_id: country_id, producto_id: self.id)
+        country.save()
+      end
+    end
+  end
+
+  def classification_description
+    puts ":::::::::::::::::::::::::::::::::::::::::::::::"
+    puts self.classification_id
+    if self.classification_id
+      begin
+          @classification = Classification.find(self.classification_id)
+          @classification.name
+      rescue ActiveRecord::RecordNotFound => e
+          'Clasificación Inválida'
+      end
+    else
+      ''
+    end
+  end
+
+  def countries
+    @countries = HasCountry.where("producto_id = ?", self.id)
+    names = ''
+    if @countries
+      @countries.each do |country|
         
-        if producto.nil?
-          no_se_encontro << spreadsheet.cell(fila,3)
-        else
-          producto.destroy
-        end
-
+        @country = Country.find(country.country_id)
+        names += @country.name + ', '
+      end
     end
-
-    raise no_se_encontro.to_yaml if no_se_encontro.any?
-
-
- end
-
- def countries=(value)
-  @countries = value
-end
-def save_countries
-  HasCountry.where("producto_id = ?", self.gtin).destroy_all 
-    puts "|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
-    puts @countries
-    puts self.gtin
-
-  if @countries
-    @countries.each do |country_id|
-      country = HasCountry.create(country_id: country_id, producto_id: self.id)
-      country.save()
-    end
+    names
   end
-end
-
-def classification_description
-  puts ":::::::::::::::::::::::::::::::::::::::::::::::"
-  puts self.classification_id
-  if self.classification_id
-    begin
-        @classification = Classification.find(self.classification_id)
-        @classification.name
-    rescue ActiveRecord::RecordNotFound => e
-        'Clasificación Inválida'
-    end
-  else
-    ''
-  end
-end
-
-def countries
-  @countries = HasCountry.where("producto_id = ?", self.id)
-  names = ''
-  if @countries
-    @countries.each do |country|
-      
-      @country = Country.find(country.country_id)
-      names += @country.name + ', '
-    end
-  end
-  names
-end
-
 
 end
