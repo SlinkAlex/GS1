@@ -12,8 +12,7 @@ class Producto < ActiveRecord::Base
   
   has_one :quantity, :foreign_key => "producto_id"
   accepts_nested_attributes_for :quantity
-  has_many :medida, through: :quantity
-  accepts_nested_attributes_for :medida
+  has_one :medida, through: :quantity
   
   validates :descripcion, :marca, :id_tipo_gtin, :presence => {:message => "No puede estar en blanco"}, :on => :create
   validates :gtin, :uniqueness => {:message => "El codigo de Producto que esta ingresando ya  se encuentra asociado a un GTIN"}
