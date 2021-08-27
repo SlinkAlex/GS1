@@ -201,24 +201,24 @@ class ProductosController < ApplicationController
     
     respond_to do |format|
       if @producto.valid?
-        data = registrar_gtin(@producto)
-        if data.present?
-          puts "REQUEST TO API SUCCESS"
-          if @producto.save
-            Auditoria.registrar_evento(session[:usuario],"producto", "Crear", Time.now, "GTIN:#{@producto.gtin} DESCRIPCION:#{@producto.descripcion} TIPO GTIN:#{@producto.tipo_gtin.tipo}")
-            format.html { redirect_to empresa_productos_path, notice: "EL #{@producto.tipo_gtin.tipo} #{@producto.gtin} fue creado correctamente." }
-
-            #CREACION DE RELACION PARA UNIDADES DE MEDIDA
-            cantidad = Quantity.new(units: params[:quantity][:units], producto_id: @producto, medida_id: params[:quantity][:medida_id])
-            if cantidad.valid?
-              cantidad.save
-            end
-          else
-            format.html { 
-              render action: "new" }
-          end 
+        if @producto.save
+          cantidad = Quantity.new(units: params[:quantity][:units], producto_id: @producto, medida_id: params[:quantity][:medida_id])
+          #CREACION DE RELACION PARA UNIDADES DE MEDIDA
+          if cantidad.valid?
+            cantidad.save
+            data = registrar_gtin(@producto)
+            if data.present?
+              puts "REQUEST TO API SUCCESS"
+              Auditoria.registrar_evento(session[:usuario],"producto", "Crear", Time.now, "GTIN:#{@producto.gtin} DESCRIPCION:#{@producto.descripcion} TIPO GTIN:#{@producto.tipo_gtin.tipo}")
+              format.html { redirect_to empresa_productos_path, notice: "EL #{@producto.tipo_gtin.tipo} #{@producto.gtin} fue creado correctamente." }
+  
+            else
+              puts "REQUEST FAILED TO API"
+              format.html { 
+                render action: "new" }
+            end 
+          end
         else
-          puts "REQUEST FAILED TO API"
           format.html { 
             render action: "new" }
         end
@@ -343,12 +343,6 @@ class ProductosController < ApplicationController
 
     def registrar_gtin(producto)
 
-      if producto.has_country.blank?
-        languague = "es-VE"
-      else
-        languague = producto.has_country[0].country.lang_code
-      end
-
       uri = "https://grp.gs1.org/grp-st/v3/gtins"
       body = [{
         "gtin": "0" + producto.gtin,
@@ -356,26 +350,26 @@ class ProductosController < ApplicationController
         "licenceType": 'GCP',
         "gtinStatus": producto.estatus.descripcion.upcase,
         "brandName": [{
-          "language": languague,
+          "language": producto.has_country[0].country.lang_code,
           "value": producto.marca
         }],
         "gpcCategoryCode": producto.classification.code,
         "countryOfSaleCode": [
-          languague.split(/-/)[1]
+          producto.has_country[0].country.lang_code.split(/-/)[1]
         ],
         "productDescription": [
           {
-            "language": languague,
+            "language": producto.has_country[0].country.lang_code,
             "value": producto.descripcion
           }
         ],
         "productImageUrl": [{
-          "language": languague,
+          "language": producto.has_country[0].country.lang_code,
           "value": ""
         }],
         "netContent": [{
-          "value": "150.0",
-          "unitCode": "MLT"
+          "value": producto.quantity.units,
+          "unitCode": producto.medida.codigo
         }]
       }]
 
