@@ -82,12 +82,12 @@
             Cantidad de Contenido
           %td
             -if @producto.new_record?
-              =params[:unidades] ? text_field(:quantity, :units, value: @producto_.quantity.units, size: 60) : text_field(:quantity, :units, size: 60)
+              =params[:unidades] ? text_field(:quantity, :units, value: params[:unidades], size: 60) : text_field(:quantity, :units, size: 60)
             -else
               =@producto.quantity ? text_field(:quantity, :units, value: @producto.quantity.units, size: 60) : text_field(:quantity, :units, size: 60)
           %td
             -if @producto.new_record?
-              =params[:medida] ? collection_select(:quantity, :medida_id, Medida.all.order(:nombre), :id, :nombre, prompt: true, selected: @producto_.medida.id) : collection_select(:quantity, :medida_id, Medida.all.order(:nombre), :id, :nombre, :prompt => "-Seleccione-")
+              =params[:medida] ? collection_select(:quantity, :medida_id, Medida.all.order(:nombre), :id, :nombre, prompt: true, selected: params[:medida]) : collection_select(:quantity, :medida_id, Medida.all.order(:nombre), :id, :nombre, :prompt => "-Seleccione-")
             -else
               = @producto.quantity ? collection_select(:quantity, :medida_id, Medida.all.order(:nombre), :id, :nombre, prompt: true, selected: @producto.medida.id) : collection_select(:quantity, :medida_id, Medida.all.order(:nombre), :id, :nombre, :prompt => "-Seleccione-")
         %tr

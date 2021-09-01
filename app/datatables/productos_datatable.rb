@@ -33,6 +33,7 @@ private
       elsif params[:insolvente] == 'true'
         
         if (UsuariosAlcance.verificar_alcance(@perfil, @gerencia, 'Generar Código'))
+          byebug
           medida = producto.quantity ? producto.medida.id : nil
           unidades = producto.quantity ? producto.quantity.units : nil
           boton_gtin_14 = link_to(( content_tag(:span, '',:class => 'ui-icon ui-icon-extlink')+"GTIN14").html_safe, "/empresas/#{params[:empresa_id]}/productos/new?gtin=#{producto.gtin}&base=#{base}&descripcion=#{producto.descripcion}&marca=#{producto.marca.gsub(/‘/, '%27')}&gpc=#{producto.gpc}&medida=#{medida}&unidades=#{unidades}",{:class => "ui-state-default ui-corner-all botones_servicio", :title => "Generar GTIN-14"})
