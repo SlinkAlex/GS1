@@ -292,7 +292,6 @@ class Producto < ActiveRecord::Base
     return verificacion 
 
   end
-
   
   def self.completar_secuencia(secuencia, tipo_gtin)
      
@@ -325,7 +324,6 @@ class Producto < ActiveRecord::Base
 
   end
 
-
   def self.completar_prefijo(secuencia, prefijo_empresa)
 
     if prefijo_empresa.to_s.size == 5
@@ -338,9 +336,6 @@ class Producto < ActiveRecord::Base
     return gtin
 
   end
-
-  
-
 
   def self.import_gtin_14(file, original_file_name, tipo_gtin_, prefijo, usuario, fecha) #Importar GTIN 14
 
@@ -424,7 +419,6 @@ class Producto < ActiveRecord::Base
     return codigo_invalido
 
   end
-
   
   def self.verificar_gtin_existente(base, prefijo,codigo_producto) # Si se sta generando GTIN14 base 12 en el parametro codigo_producto va el GTIN12 que se va a transformar en GTIN13
 
@@ -468,8 +462,6 @@ class Producto < ActiveRecord::Base
     return gtin_existente
   end
 
-  
-
   def self.crear_gtin_14(secuencia, gtin, base)
     
 
@@ -495,9 +487,6 @@ class Producto < ActiveRecord::Base
     return gtin_generado
 
   end
-
-
-  
 
   def self.transferir_gtin(productos, empresa)
 

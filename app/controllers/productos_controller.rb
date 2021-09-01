@@ -91,23 +91,15 @@ class ProductosController < ApplicationController
                    
                   }
       format.pdf  {
-
-                    
-                    pdf = ProductosPdf.new(@empresa,params[:tipo_gtin], params[:gtin], params[:descripcion], params[:marca], params[:codigo_producto], params[:fecha_creacion], params[:fecha_modificacion])
+                    pdf = ProductosPdf.new(@empresa, params[:tipo_gtin], params[:gtin], params[:descripcion], params[:marca], params[:codigo_producto], params[:fecha_creacion], params[:fecha_modificacion])
 
                     send_data pdf.render, filename: "#{@empresa.nombre_empresa.strip}_productos.pdf", type: "application/pdf", disposition: "inline"
       }
       format.xlsx{
-                  
-                  
                   if params[:exportar_gtin_8] == 'true'
-                    
                     render '/productos/productos_gtin_8.xlsx.axlsx'
-
-                  else
-                    
+                  else                    
                     render '/productos/index.xlsx.axlsx'
-
                   end
       }
       
@@ -151,6 +143,8 @@ class ProductosController < ApplicationController
     if params[:classification_id]
       @producto.classification_id = params[:classification_id]
       @producto.country_ids =  @producto_.country_ids
+      @unidades = params[:unidades]
+      @medida = params[:medida]
     end
 
     

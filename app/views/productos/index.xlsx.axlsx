@@ -53,11 +53,15 @@ wb.add_worksheet(name: "GS1") do |sheet|
 			sheet.add_row ['Productos Activos']
 			sheet.add_row ['']
 
-			sheet.add_row ["Tipo GTIN", "GTIN", "Descripción", "Marca", "Clasificación", "Paises de Comercialización", "URL"], :style => [black_cell,black_cell,black_cell,black_cell, black_cell, black_cell]
+			sheet.add_row ["TIPO GTIN", "GTIN",  "DESCRIPCION", "MARCA", "ESTATUS", "CODIGO", "CLASIFICACION", "PAISES COMERCIALIZACION", "ORIGEN","FECHA CREACION", "FECHA MODIFICACION"], :style => [black_cell,black_cell,black_cell,black_cell, black_cell, black_cell]
 			@productos.each do |producto|
-
-  				sheet.add_row [ producto.try(:tipo_gtin).try(:tipo), producto.gtin,producto.descripcion, producto.marca, producto.try(:classification_description), producto.try(:countries), producto.img_url], :style => [tomas, tomas,tomas,tomas, tomas, tomas],    :types =>  [:string, :string, :string, :string, :string, :string]		
+				if producto.origen == 1
+					origen = "Sistema de Gestion"
+				else
+					origen = "Sistema de Solicitud"
+				end
+  				sheet.add_row [ producto.tipo_gtin.tipo, producto.gtin, producto.descripcion, producto.marca, producto.estatus.descripcion, producto.codigo_prod,producto.try(:classification_description), producto.try(:countries), origen, producto.fecha_creacion.strftime("%Y-%m-%d"), producto.fecha_ultima_modificacion ? producto.fecha_ultima_modificacion.strftime("%Y-%m-%d") : ""], :style => [tomas, tomas, tomas, tomas, tomas, tomas],    :types =>  [:string, :string, :string, :string, :string, :string]		
 			end
-			sheet.column_widths 15,25,90,30,90,60,30,60
+			sheet.column_widths 15,25,90,25,15,25,90,30,25,25
 	end 
 end

@@ -1,12 +1,11 @@
  #encoding: UTF-8
 class ReporteProductosPdf < Prawn::Document	
 	
-
 	def initialize(nombre_empresa, prefijo, tipo_gtin, gtin, descripcion,marca, codigo_producto, clasificacion, pais, fecha_creacion, fecha_modificacion, estatus, filtro_general)
 
 		super(:top_margin => 10, :page_layout => :landscape)
 		
-		productos = Producto.includes(:estatus, :tipo_gtin, :empresa, :classification, :has_country, :country).limit(20).order("empresa.prefijo")
+		productos = Producto.includes(:estatus, :tipo_gtin, :empresa, :classification, :has_country, :country).order("empresa.prefijo")
 
 		productos = productos.where("empresa.nombre_empresa like '%#{nombre_empresa}%'") if nombre_empresa != ''
 		productos = productos.where("empresa.prefijo = #{prefijo}") if prefijo != ''
@@ -21,25 +20,22 @@ class ReporteProductosPdf < Prawn::Document
 		productos = productos.where("CONVERT(varchar(255),  producto.fecha_creacion ,126) like '%#{fecha_creacion}%'")  if fecha_creacion != ''
 		productos = productos.where("CONVERT(varchar(255),  producto.fecha_ultima_modificacion ,126) like '%#{fecha_modificacion}%'") if fecha_modificacion != ''
 
-
-		
-
 		font("#{Rails.root}/fonts/arial.ttf", :size => 10) do
 
-			productos_arreglo = [["EMPRESA", "PREFIJO", "TIPO GTIN", "GTIN",  "DESCRIPCION", "MARCA", "ESTATUS", "CODIGO", "CLASIFICACION", "PAISES COMERCIALIZACION","FECHA CREACION"]]
+			productos_arreglo = [["EMPRESA", "PREFIJO", "TIPO GTIN", "GTIN",  "DESCRIPCION", "MARCA", "ESTATUS", "CODIGO", "CLASIFICACION", "PAISES COMERCIALIZACION", "ORIGEN", "FECHA CREACION", "FECHA MODIFICACION"]]
 
-
-			productos.each do |producto| 
-				productos_arreglo << [producto.try(:empresa).try(:nombre_empresa).strip, producto.prefijo, producto.tipo_gtin.tipo, producto.gtin, producto.descripcion, producto.marca, producto.estatus.descripcion, producto.codigo_prod,producto.try(:classification_description), producto.try(:countries), producto.fecha_creacion.strftime("%Y-%m-%d")]
-
+			productos.each do |producto|
+				if producto.origen == 1
+					origen = "Sistema de Gestion"
+				else
+					origen = "Sistema de Solicitud"
+				end 
+				productos_arreglo << [producto.try(:empresa).try(:nombre_empresa).strip, producto.prefijo, producto.tipo_gtin.tipo, producto.gtin, producto.descripcion, producto.marca, producto.estatus.descripcion, producto.codigo_prod,producto.try(:classification_description), producto.try(:countries), origen, producto.fecha_creacion.strftime("%Y-%m-%d"), producto.fecha_ultima_modificacion ? producto.fecha_ultima_modificacion.strftime("%Y-%m-%d") : ""]
 			end
-
-			
 
 			text ""
 			move_down 10
 			text "Fecha del Reporte:      #{Time.now.strftime("%d/%m/%Y")}", :size => 9, :align => :right
-
 
 			move_down 30
 			text ""

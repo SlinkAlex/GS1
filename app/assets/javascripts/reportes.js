@@ -92,7 +92,7 @@
         sAjaxSource: $('#data_table_reporte_productos').data('source')
     });
    
-    oTable.columnFilter({ aoColumns: [{ type: "text"},{ type: "text"}, {type: "text" }, {type: "text"}, {type: "text"}, {type: "text"}, {type: "text"}, {type: "text"},{type: "text"},{type: "text"}]});
+    oTable.columnFilter({ aoColumns: [{ type: "text"},{ type: "text"}, {type: "text" }, {type: "text"}, {type: "text"}, {type: "text"}, null, {type: "text"},{type: "text"},{type: "text"}, null, {type: "text"}, { type: "text"}]});
 
     oTable.fnFilterOnReturn();
 
