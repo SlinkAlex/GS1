@@ -192,6 +192,7 @@ class ProductosController < ApplicationController
     puts "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
     puts params[:countries]
     puts "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    @producto.origen = 0
     
     respond_to do |format|
       if @producto.valid?
@@ -205,7 +206,6 @@ class ProductosController < ApplicationController
               puts "REQUEST TO API SUCCESS"
               Auditoria.registrar_evento(session[:usuario],"producto", "Crear", Time.now, "GTIN:#{@producto.gtin} DESCRIPCION:#{@producto.descripcion} TIPO GTIN:#{@producto.tipo_gtin.tipo}")
               format.html { redirect_to empresa_productos_path, notice: "EL #{@producto.tipo_gtin.tipo} #{@producto.gtin} fue creado correctamente." }
-  
             else
               puts "REQUEST FAILED TO API"
               format.html { 

@@ -8,8 +8,6 @@ class Producto < ActiveRecord::Base
   belongs_to :classification , :foreign_key => "classification_id"
   has_many :has_country, :foreign_key => "producto_id"
   has_many :country, through: :has_country
-
-  
   has_one :quantity, :foreign_key => "producto_id"
   accepts_nested_attributes_for :quantity
   has_one :medida, through: :quantity

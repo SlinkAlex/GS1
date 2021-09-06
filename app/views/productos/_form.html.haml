@@ -77,19 +77,20 @@
               =params[:img_url] ? f.text_field(:img_url, :value => params[:img_url], :size =>60): f.text_field(:img_url, :autocomplete => "off", :size => 60)
             -else
               =params[:img_url] ? f.text_field(:img_url, :value => params[:img_url], :size => 60): f.text_field(:img_url, :autocomplete => "off", :size => 60)
-        %tr
-          %td
-            Cantidad de Contenido
-          %td
-            -if @producto.new_record?
-              =params[:unidades] ? text_field(:quantity, :units, value: params[:unidades], size: 60) : text_field(:quantity, :units, size: 60)
-            -else
-              =@producto.quantity ? text_field(:quantity, :units, value: @producto.quantity.units, size: 60) : text_field(:quantity, :units, size: 60)
-          %td
-            -if @producto.new_record?
-              =params[:medida] ? collection_select(:quantity, :medida_id, Medida.all.order(:nombre), :id, :nombre, prompt: true, selected: params[:medida]) : collection_select(:quantity, :medida_id, Medida.all.order(:nombre), :id, :nombre, :prompt => "-Seleccione-")
-            -else
-              = @producto.quantity ? collection_select(:quantity, :medida_id, Medida.all.order(:nombre), :id, :nombre, prompt: true, selected: @producto.medida.id) : collection_select(:quantity, :medida_id, Medida.all.order(:nombre), :id, :nombre, :prompt => "-Seleccione-")
+        -if (@producto.id.blank? && params[:origen].present? && params[:origen] == "0") || (@producto.id.blank? && params[:origen].blank? )
+          %tr
+            %td
+              Cantidad de Contenido
+            %td
+              -if @producto.new_record?
+                =params[:unidades] ? text_field(:quantity, :units, value: params[:unidades], size: 60, :required => true) : text_field(:quantity, :units, size: 60, :required => true)
+              -else
+                =@producto.quantity ? text_field(:quantity, :units, value: @producto.quantity.units, size: 60, :required => true) : text_field(:quantity, :units, size: 60, :required => true)
+            %td
+              -if @producto.new_record?
+                =params[:medida] ? collection_select(:quantity, :medida_id, Medida.all.order(:nombre), :id, :nombre, prompt: true, selected: params[:medida]) : collection_select(:quantity, :medida_id, Medida.all.order(:nombre), :id, :nombre, :prompt => "-Seleccione-")
+              -else
+                = @producto.quantity ? collection_select(:quantity, :medida_id, Medida.all.order(:nombre), :id, :nombre, prompt: true, selected: @producto.medida.id) : collection_select(:quantity, :medida_id, Medida.all.order(:nombre), :id, :nombre, :prompt => "-Seleccione-")
         %tr
           %td
             Clasificación

@@ -36,7 +36,7 @@ private
           byebug
           medida = producto.quantity ? producto.medida.id : nil
           unidades = producto.quantity ? producto.quantity.units : nil
-          boton_gtin_14 = link_to(( content_tag(:span, '',:class => 'ui-icon ui-icon-extlink')+"GTIN14").html_safe, "/empresas/#{params[:empresa_id]}/productos/new?gtin=#{producto.gtin}&base=#{base}&descripcion=#{producto.descripcion}&marca=#{producto.marca.gsub(/‘/, '%27')}&gpc=#{producto.gpc}&medida=#{medida}&unidades=#{unidades}",{:class => "ui-state-default ui-corner-all botones_servicio", :title => "Generar GTIN-14"})
+          boton_gtin_14 = link_to(( content_tag(:span, '',:class => 'ui-icon ui-icon-extlink')+"GTIN14").html_safe, "/empresas/#{params[:empresa_id]}/productos/new?gtin=#{producto.gtin}&base=#{base}&descripcion=#{producto.descripcion}&marca=#{producto.marca.gsub(/‘/, '%27')}&gpc=#{producto.gpc}&medida=#{medida}&unidades=#{unidades}&origen=#{producto.origen}",{:class => "ui-state-default ui-corner-all botones_servicio", :title => "Generar GTIN-14"})
         else
           boton_gtin_14 = ""
         end
@@ -69,8 +69,8 @@ private
           marca_codificada = producto.marca.gsub(/%/, '')
           medida = producto.quantity ? producto.medida.id : nil
           unidades = producto.quantity ? producto.quantity.units : nil
-          boton_gtin_14 = link_to(( content_tag(:span, '',:class => 'ui-icon ui-icon-extlink')+"GTIN14").html_safe, "/empresas/#{params[:empresa_id]}/productos/new?gtin=#{producto.gtin}&base=#{base}&descripcion=#{descripcion_codificada}&marca=#{marca_codificada}&gpc=#{producto.gpc}&generar_gtin_14=true&classification_id=#{producto.classification_id}&medida=#{medida}&unidades=#{unidades}",{:class => "ui-state-default ui-corner-all botones_servicio", :title => "Generar GTIN-14"})
-        
+          boton_gtin_14 = link_to(( content_tag(:span, '',:class => 'ui-icon ui-icon-extlink')+"GTIN14").html_safe, "/empresas/#{params[:empresa_id]}/productos/new?gtin=#{producto.gtin}&base=#{base}&descripcion=#{descripcion_codificada}&marca=#{marca_codificada}&gpc=#{producto.gpc}&generar_gtin_14=true&classification_id=#{producto.classification_id}&medida=#{medida}&unidades=#{unidades}&origen=#{producto.origen}",{:class => "ui-state-default ui-corner-all botones_servicio", :title => "Generar GTIN-14"})
+          
         end
 
         if UsuariosAlcance.verificar_alcance(@perfil, @gerencia, 'Modificar Producto')
@@ -81,21 +81,28 @@ private
 
       end
       
+      cadena = producto.descripcion.split(" X ")
       
       [ 
        producto.try(:tipo_gtin).try(:tipo),
        producto.gtin,
-       producto.quantity ? producto.descripcion + " " + producto.quantity.units + " " + producto.medida.abreviatura.upcase : producto.descripcion,
+       if cadena.count == 1
+        producto.quantity ? cadena[0] + " " + producto.quantity.units + " " + producto.medida.abreviatura.upcase : producto.descripcion
+       else
+        producto.quantity ? cadena[0] + " " + producto.quantity.units + " " + producto.medida.abreviatura.upcase + " X " + cadena[1] : producto.descripcion 
+       end,
        producto.marca,
        producto.try(:estatus).try(:descripcion),
        producto.codigo_prod,
        producto.try(:classification_description),
        producto.try(:countries),
-       if producto.origen == 1
+       if producto.origen == 0
         "Sistema de Gestion"
-      else
+       elsif producto.origen == 1
         "Sistema de Solicitud"
-      end,
+       else
+        ""
+       end,
        (producto.fecha_creacion) ? producto.fecha_creacion.strftime("%Y-%m-%d") : "",
        (producto.fecha_ultima_modificacion) ? producto.fecha_ultima_modificacion.strftime("%Y-%m-%d") : "",
        boton_gtin_14,

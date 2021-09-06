@@ -23,21 +23,29 @@ private
 
     productos.map do |producto|
 
+      cadena = producto.descripcion.split(" X ")
+
       [ 
         producto.try(:empresa).try(:nombre_empresa),
         producto.prefijo,
         producto.try(:tipo_gtin).try(:tipo),
         producto.gtin,
-        producto.quantity ? producto.descripcion + " " + producto.quantity.units + " " + producto.medida.abreviatura.upcase : producto.descripcion,
+        if cadena.count == 1
+          producto.quantity ? cadena[0] + " " + producto.quantity.units + " " + producto.medida.abreviatura.upcase : producto.descripcion
+        else
+          producto.quantity ? cadena[0] + " " + producto.quantity.units + " " + producto.medida.abreviatura.upcase + " X " + cadena[1] : producto.descripcion, 
+        end,
         producto.marca,
         producto.try(:estatus).try(:descripcion),
         producto.codigo_prod,
         producto.try(:classification_description),
         producto.try(:countries),
-        if producto.origen == 1
-          "Sistema de Gestion"
+        if producto.origen == 0
+        "Sistema de Gestion"
+        elsif producto.origen == 1
+        "Sistema de Solicitud"
         else
-          "Sistema de Solicitud"
+        ""
         end,
         (producto.fecha_creacion) ? producto.fecha_creacion.strftime("%Y-%m-%d") : "",
         (producto.fecha_ultima_modificacion) ? producto.fecha_ultima_modificacion.strftime("%Y-%m-%d") : ""
