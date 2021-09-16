@@ -74,7 +74,7 @@ private
         end
 
         if UsuariosAlcance.verificar_alcance(@perfil, @gerencia, 'Modificar Producto')
-          boton_editar = link_to(( content_tag(:span, '',:class => 'ui-icon ui-icon-extlink')+"Editar").html_safe, "/empresas/#{params[:empresa_id]}/productos/#{producto.gtin}/edit",{:class => "ui-state-default ui-corner-all botones_servicio", :title => "Editar Producto"})
+          boton_editar = link_to(( content_tag(:span, '',:class => 'ui-icon ui-icon-extlink')+"Editar").html_safe, "/empresas/#{params[:empresa_id]}/productos/#{producto.gtin}/edit?comes_edit=#{true}",{:class => "ui-state-default ui-corner-all botones_servicio", :title => "Editar Producto"})
         else
           boton_editar = ""
         end

@@ -77,7 +77,7 @@
               =params[:img_url] ? f.text_field(:img_url, :value => params[:img_url], :size =>60): f.text_field(:img_url, :autocomplete => "off", :size => 60)
             -else
               =params[:img_url] ? f.text_field(:img_url, :value => params[:img_url], :size => 60): f.text_field(:img_url, :autocomplete => "off", :size => 60)
-        -if (@producto.id.blank? && params[:origen].present? && params[:origen] == "0") || (@producto.id.blank? && params[:origen].blank? )
+        -if (@producto.id.blank? && params[:origen].present? && params[:origen] == "0") || (@producto.id.blank? && params[:origen].blank? ) || (@producto.origen == 0 && params[:comes_edit].present?)
           %tr
             %td
               Cantidad de Contenido

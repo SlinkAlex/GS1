@@ -103,15 +103,12 @@ class ProductosController < ApplicationController
                   end
       }
       
-   end
+    end
   end
 
   # GET /productos/1
   # GET /productos/1.json
   def show
-
-     
-
     @producto = Producto.find(params[:id])
 
     respond_to do |format|
@@ -197,21 +194,22 @@ class ProductosController < ApplicationController
     respond_to do |format|
       if @producto.valid?
         if @producto.save
-          cantidad = Quantity.new(units: params[:quantity][:units], producto_id: @producto, medida_id: params[:quantity][:medida_id])
           #CREACION DE RELACION PARA UNIDADES DE MEDIDA
-          if cantidad.valid?
-            cantidad.save
-            data = registrar_gtin(@producto)
-            if data.present?
-              puts "REQUEST TO API SUCCESS"
-              Auditoria.registrar_evento(session[:usuario],"producto", "Crear", Time.now, "GTIN:#{@producto.gtin} DESCRIPCION:#{@producto.descripcion} TIPO GTIN:#{@producto.tipo_gtin.tipo}")
-              format.html { redirect_to empresa_productos_path, notice: "EL #{@producto.tipo_gtin.tipo} #{@producto.gtin} fue creado correctamente." }
+          if params[:quantity].present?
+            cantidad = Quantity.new(units: params[:quantity][:units], producto_id: @producto, medida_id: params[:quantity][:medida_id])
+            if cantidad.valid?
+              cantidad.save
+                if @producto.tipo_gtin.tipo != "GTIN-14"
+                  data = registrar_gtin(@producto)
+                end
             else
               puts "REQUEST FAILED TO API"
-              format.html { 
-                render action: "new" }
-            end 
+                format.html { 
+                  render action: "new" }
+            end
           end
+          Auditoria.registrar_evento(session[:usuario],"producto", "Crear", Time.now, "GTIN:#{@producto.gtin} DESCRIPCION:#{@producto.descripcion} TIPO GTIN:#{@producto.tipo_gtin.tipo}")
+          format.html { redirect_to empresa_productos_path, notice: "EL #{@producto.tipo_gtin.tipo} #{@producto.gtin} fue creado correctamente." }
         else
           format.html { 
             render action: "new" }
@@ -226,11 +224,15 @@ class ProductosController < ApplicationController
   # PUT /productos/1
   # PUT /productos/1.json
   def update
-    
     @producto = Producto.find(:first, :conditions => ["gtin like ?", params[:id]])
     @producto.countries = params[:countries]
     puts "YYYYYYYYYYYYYYYYYYYYYYYYYYYYY"
     puts params[:countries]
+    params[:producto][:fecha_creacion] = params[:producto][:fecha_creacion].to_datetime
+    if params[:quantity].present?
+      @producto.quantity.units = params[:quantity][:units]
+      @producto.quantity.medida_id = params[:quantity][:medida_id]
+    end
     
     respond_to do |format|
       if @producto.update_attributes(params[:producto])
