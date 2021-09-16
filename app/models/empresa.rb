@@ -655,7 +655,16 @@
 		producto.classification_id = @classification ? @classification.id : 2712
 		producto.countries = [1]
 		producto.fecha_creacion = fecha
-
+		producto.origen = 0
+		
+		spreadsheet.empty?(fila,1) ? @medida = Medida.where(abreviatura: spreadsheet.row(fila)[4]).first : @medida = Medida.where(abreviatura: spreadsheet.row(fila)[5]).first
+		if @medida.present?
+			quantity = Quantity.new
+			quantity.units = spreadsheet.empty?(fila,1) ? spreadsheet.row(fila)[3] :  spreadsheet.row(fila)[4]
+			quantity.medida_id = @medida.id
+			quantity.producto_id = producto.gtin
+		end
+		
 		if prefijo.to_s.size == 7 or prefijo.to_s.size == 5
 
 			producto.codigo_prod = producto.gtin[7..11]
@@ -679,6 +688,7 @@
 					puts "\n\n\n\n\n"
 				else
 					puts "PRODUCTO CREADO"
+					quantity.save
 				end
 
 			Auditoria.registrar_evento(usuario,"producto", "Importar", Time.now, "GTIN:#{producto.gtin} DESCRIPCION:#{producto.descripcion} TIPO:GTIN-13")

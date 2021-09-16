@@ -363,9 +363,18 @@ class Producto < ActiveRecord::Base
         producto.id_estatus = 3
         producto.fecha_creacion = fecha
         @classification = Classification.find(:first, :conditions => ["code = ?", spreadsheet.row(fila)[4]? spreadsheet.row(fila)[4] :  '99999999'])
-	      producto.img_url = spreadsheet.row(fila)[5]
-	      producto.classification_id = @classification ? @classification.id : 2712
-	      producto.countries = [1]
+        producto.img_url = spreadsheet.row(fila)[5]
+        producto.classification_id = @classification ? @classification.id : 2712
+        producto.countries = [1]
+        producto.origen = 0
+
+        @medida = Medida.where(abreviatura: spreadsheet.row(fila)[6]).first
+        if @medida.present?
+          quantity = Quantity.new
+          quantity.units = spreadsheet.row(fila)[5]
+          quantity.medida_id = @medida.id
+          quantity.producto_id = producto.gtin
+        end
         
 
         if (tipo_gtin.base == "GTIN-13" and prefijo.to_s.size == 7)
@@ -403,6 +412,7 @@ class Producto < ActiveRecord::Base
           puts "\n\n\n\n\n"
         end
 
+        quantity.save
         Auditoria.registrar_evento(usuario,"producto", "Importar", Time.now, "GTIN:#{producto.gtin} DESCRIPCION:#{producto.descripcion} TIPO:GTIN-14")
         
       else

@@ -216,7 +216,6 @@ class EmpresasController < ApplicationController
     end
   end
 
- 
   # GET /empresas/1/edit
   def edit
 
@@ -419,7 +418,5 @@ class EmpresasController < ApplicationController
       format.json { head :no_content }
     end
   end
-
-  
 
 end
