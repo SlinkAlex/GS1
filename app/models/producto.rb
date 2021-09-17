@@ -90,12 +90,21 @@ class Producto < ActiveRecord::Base
       if producto
         if producto.tipo_gtin.tipo == "GTIN-14" 
           
-          producto_eliminar = Producto.find_by(gtin: producto.gtin)  
+          producto_eliminar = Producto.find_by(gtin: producto.gtin) 
+          quantity = producto_eliminar.quantity
+          if quantity.present?
+            quantity.destroy
+          end
           producto_eliminar.destroy
           productos_eliminados << producto.gtin
         else
           productos = Producto.find(:all, :conditions => ["prefijo = ? and codigo_prod = ?",parametros[:empresa_id], producto.codigo_prod])
-          productos.map{|producto_eliminar| producto_eliminar.destroy; productos_eliminados << producto_eliminar.gtin}
+          productos.map{|producto_eliminar| producto_eliminar.destroy; 
+          quantity = producto_eliminar.quantity
+          if quantity.present?
+            quantity.destroy
+          end;
+           productos_eliminados << producto_eliminar.gtin}
         end
 
         # TODO: La traza de la infromacion del usaurio y los producvtos que esta eliminando
@@ -369,9 +378,15 @@ class Producto < ActiveRecord::Base
         producto.origen = 0
 
         @medida = Medida.where(abreviatura: spreadsheet.row(fila)[6]).first
+        units = spreadsheet.row(fila)[5]
+        if units % 1 == 0
+          cantidad = units.to_i
+        else
+          cantidad = units
+        end
         if @medida.present?
           quantity = Quantity.new
-          quantity.units = spreadsheet.row(fila)[5]
+          quantity.units = cantidad
           quantity.medida_id = @medida.id
           quantity.producto_id = producto.gtin
         end
@@ -413,6 +428,8 @@ class Producto < ActiveRecord::Base
         end
 
         quantity.save
+        c = ProductosController.new
+        data = c.registrar_gtin(producto)
         Auditoria.registrar_evento(usuario,"producto", "Importar", Time.now, "GTIN:#{producto.gtin} DESCRIPCION:#{producto.descripcion} TIPO:GTIN-14")
         
       else

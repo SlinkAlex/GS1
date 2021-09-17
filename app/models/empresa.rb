@@ -625,7 +625,7 @@
 		
 		
 		(2..spreadsheet.last_row).each do |fila|  # EL indice 1 es para indicar los datos de cabecera MARCA, DESCRIPCION, ETC
-      
+		
 		productos_gtin_13_codificados = Producto.find(:all, :conditions => ["tipo_gtin.tipo = ? and prefijo = ?", "GTIN-13", prefijo], :include => [:tipo_gtin]) if prefijo.to_s.size == 5
 
 		if (prefijo.to_s.size == 5)
@@ -645,6 +645,8 @@
 
 		end
 
+		
+
 		producto = Producto.new
 		producto.gtin = gtin.to_s
 		producto.descripcion =   spreadsheet.empty?(fila,1) ? spreadsheet.row(fila)[1] :  spreadsheet.row(fila)[2]
@@ -658,9 +660,16 @@
 		producto.origen = 0
 		
 		spreadsheet.empty?(fila,1) ? @medida = Medida.where(abreviatura: spreadsheet.row(fila)[4]).first : @medida = Medida.where(abreviatura: spreadsheet.row(fila)[5]).first
+		spreadsheet.empty?(fila,1) ? units = spreadsheet.row(fila)[3] :  units = spreadsheet.row(fila)[4]
+		if units % 1 == 0
+			cantidad = units.to_i
+		else
+			cantidad = units
+		end
+
 		if @medida.present?
 			quantity = Quantity.new
-			quantity.units = spreadsheet.empty?(fila,1) ? spreadsheet.row(fila)[3] :  spreadsheet.row(fila)[4]
+			quantity.units = cantidad
 			quantity.medida_id = @medida.id
 			quantity.producto_id = producto.gtin
 		end
@@ -689,6 +698,8 @@
 				else
 					puts "PRODUCTO CREADO"
 					quantity.save
+					c = ProductosController.new
+					data = c.registrar_gtin(producto)
 				end
 
 			Auditoria.registrar_evento(usuario,"producto", "Importar", Time.now, "GTIN:#{producto.gtin} DESCRIPCION:#{producto.descripcion} TIPO:GTIN-13")

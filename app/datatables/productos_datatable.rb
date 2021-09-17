@@ -103,8 +103,8 @@ private
        else
         ""
        end,
-       (producto.fecha_creacion) ? producto.fecha_creacion.strftime("%Y-%m-%d") : "",
-       (producto.fecha_ultima_modificacion) ? producto.fecha_ultima_modificacion.strftime("%Y-%m-%d") : "",
+       producto.fecha_creacion ? producto.fecha_creacion.strftime("%Y-%m-%d") : "",
+       producto.fecha_ultima_modificacion ? producto.fecha_ultima_modificacion.strftime("%Y-%m-%d") : "",
        boton_gtin_14,
        boton_editar
       ]

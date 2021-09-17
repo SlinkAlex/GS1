@@ -229,6 +229,7 @@ class ProductosController < ApplicationController
     puts "YYYYYYYYYYYYYYYYYYYYYYYYYYYYY"
     puts params[:countries]
     params[:producto][:fecha_creacion] = params[:producto][:fecha_creacion].to_datetime
+    @producto.fecha_ultima_modificacion = Time.now
     if params[:quantity].present?
       @producto.quantity.units = params[:quantity][:units]
       @producto.quantity.medida_id = params[:quantity][:medida_id]
@@ -313,15 +314,69 @@ class ProductosController < ApplicationController
   def destroy
     @producto = Producto.find(params[:id])
     @quantity = @producto.quantity
-    @producto.destroy
     @quantity.destroy
+    @producto.destroy
 
     respond_to do |format|
       format.html { redirect_to productos_url }
       format.json { head :no_content }
     end
   end
+  
+  def registrar_gtin(producto)
 
+    uri = "https://grp.gs1.org/grp-st/v3/gtins"
+    body = [{
+      "gtin": "0" + producto.gtin,
+      "licenceKey": producto.prefijo,
+      "licenceType": 'GCP',
+      "gtinStatus": producto.estatus.descripcion.upcase,
+      "brandName": [{
+        "language": producto.has_country[0].country.lang_code,
+        "value": producto.marca
+      }],
+      "gpcCategoryCode": producto.classification.code,
+      "countryOfSaleCode": [
+        producto.has_country[0].country.lang_code.split(/-/)[1]
+      ],
+      "productDescription": [
+        {
+          "language": producto.has_country[0].country.lang_code,
+          "value": producto.descripcion
+        }
+      ],
+      "productImageUrl": [{
+        "language": producto.has_country[0].country.lang_code,
+        "value": ""
+      }],
+      "netContent": [{
+        "value": producto.quantity.units,
+        "unitCode": producto.medida.codigo
+      }]
+    }]
+
+    res = make_post_request(uri,body)
+    data = JSON.parse(res)
+
+    return data
+  end
+
+  def make_post_request(uri, body)
+    url = URI(uri)
+
+    https = Net::HTTP.new(url.host, url.port)
+    https.use_ssl = true
+
+    request = Net::HTTP::Post.new(url)
+    # Request headers
+    request["Content-Type"] = "application/json"
+    request['Cache-Control'] = 'no-cache'
+    request['APIKey'] = '9f487becd353409c9ab8c711944ecb5e'
+    request.body = JSON.dump(body)
+
+    return https.request(request).body
+  end
+  
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_product      
@@ -337,57 +392,4 @@ class ProductosController < ApplicationController
       @countries = Country.all.order(:name).to_a
     end
 
-    def registrar_gtin(producto)
-
-      uri = "https://grp.gs1.org/grp-st/v3/gtins"
-      body = [{
-        "gtin": "0" + producto.gtin,
-        "licenceKey": producto.prefijo,
-        "licenceType": 'GCP',
-        "gtinStatus": producto.estatus.descripcion.upcase,
-        "brandName": [{
-          "language": producto.has_country[0].country.lang_code,
-          "value": producto.marca
-        }],
-        "gpcCategoryCode": producto.classification.code,
-        "countryOfSaleCode": [
-          producto.has_country[0].country.lang_code.split(/-/)[1]
-        ],
-        "productDescription": [
-          {
-            "language": producto.has_country[0].country.lang_code,
-            "value": producto.descripcion
-          }
-        ],
-        "productImageUrl": [{
-          "language": producto.has_country[0].country.lang_code,
-          "value": ""
-        }],
-        "netContent": [{
-          "value": producto.quantity.units,
-          "unitCode": producto.medida.codigo
-        }]
-      }]
-
-      res = make_post_request(uri,body)
-      data = JSON.parse(res)
-  
-      return data
-    end
-
-    def make_post_request(uri, body)
-      url = URI(uri)
-
-      https = Net::HTTP.new(url.host, url.port)
-      https.use_ssl = true
-
-      request = Net::HTTP::Post.new(url)
-      # Request headers
-      request["Content-Type"] = "application/json"
-      request['Cache-Control'] = 'no-cache'
-      request['APIKey'] = '9f487becd353409c9ab8c711944ecb5e'
-      request.body = JSON.dump(body)
-
-      return https.request(request).body
-    end
 end
