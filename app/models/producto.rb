@@ -428,8 +428,6 @@ class Producto < ActiveRecord::Base
         end
 
         quantity.save
-        c = ProductosController.new
-        data = c.registrar_gtin(producto)
         Auditoria.registrar_evento(usuario,"producto", "Importar", Time.now, "GTIN:#{producto.gtin} DESCRIPCION:#{producto.descripcion} TIPO:GTIN-14")
         
       else
