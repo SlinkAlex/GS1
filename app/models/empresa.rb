@@ -622,8 +622,6 @@
 	def importar_importar_gtin_13_proceso(ruta, original_filename, tipo_gtin, prefijo, usuario, fecha) #Importar Producto GTIN 13, este metodo se coloca aqui para hacer una una instancia de empresa y utilizar DELAY_JOB
 		spreadsheet = Empresa.open_spreadsheet(ruta, original_filename)
 
-		
-		
 		(2..spreadsheet.last_row).each do |fila|  # EL indice 1 es para indicar los datos de cabecera MARCA, DESCRIPCION, ETC
 		
 		productos_gtin_13_codificados = Producto.find(:all, :conditions => ["tipo_gtin.tipo = ? and prefijo = ?", "GTIN-13", prefijo], :include => [:tipo_gtin]) if prefijo.to_s.size == 5
@@ -653,7 +651,7 @@
 		producto.marca =   spreadsheet.empty?(fila,1) ? spreadsheet.row(fila)[0] :  spreadsheet.row(fila)[1] 
 		producto.id_estatus = 3
 		@classification = Classification.find(:first, :conditions => ["code = ?", spreadsheet.row(fila)[3]? spreadsheet.row(fila)[3] :  '99999999'])
-		producto.img_url = spreadsheet.row(fila)[4]
+		# producto.img_url = spreadsheet.row(fila)[4]
 		producto.classification_id = @classification ? @classification.id : 2712
 		producto.countries = [1]
 		producto.fecha_creacion = fecha

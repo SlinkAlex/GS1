@@ -6,8 +6,8 @@ class CartaAfiliacionPdf < Prawn::Document
 		super(:top_margin => 10, :page_layout => :portrait)
 
 		font("Helvetica", :size => 10)
-		image "#{Prawn::DATADIR}/LOGO 1.png", :size => 10, :at => [0,720], :height => 62, :width => 200
-		image "#{Prawn::DATADIR}/LOGO 2.png", :size => 10, :at => [350,740], :height => 130, :width => 200
+		#image "#{Prawn::DATADIR}/LOGO 1.png", :size => 10, :at => [0,720], :height => 62, :width => 200
+		#image "#{Prawn::DATADIR}/LOGO 2.png", :size => 10, :at => [350,740], :height => 130, :width => 200
 		draw_text "Caracas #{Time.now.strftime("%d-%m-%Y")}", :at => [390,620]
 		draw_text "#{empresa.nombre_empresa}",  :at => [0,620], :styles => [:bold]
 		draw_text "Presente.-", :at => [0,605]
@@ -26,7 +26,7 @@ class CartaAfiliacionPdf < Prawn::Document
 		#text_box "Alberto Delgado", :at => [10,190], :height => 10, :width => 500
 		#text_box "Gerente General", :at => [10,178], :height => 10, :width => 500
 		#text_box "GS1 Venezuela", :size => 10, :at => [10,166], :height => 10, :width => 500
-		image "#{Prawn::DATADIR}/LOGO 3.png", :size => 10, :at => [0,190], :height => 181, :width => 138
+		#image "#{Prawn::DATADIR}/LOGO 3.png", :size => 10, :at => [0,190], :height => 181, :width => 138
 
 		
 	end

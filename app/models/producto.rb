@@ -372,7 +372,7 @@ class Producto < ActiveRecord::Base
         producto.id_estatus = 3
         producto.fecha_creacion = fecha
         @classification = Classification.find(:first, :conditions => ["code = ?", spreadsheet.row(fila)[4]? spreadsheet.row(fila)[4] :  '99999999'])
-        producto.img_url = spreadsheet.row(fila)[5]
+        # producto.img_url = spreadsheet.row(fila)[5]
         producto.classification_id = @classification ? @classification.id : 2712
         producto.countries = [1]
         producto.origen = 0
