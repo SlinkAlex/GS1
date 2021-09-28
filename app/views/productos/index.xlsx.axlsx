@@ -24,8 +24,8 @@ if params[:classification] != ''
   	@productos = @productos.where("CONVERT(varchar(255), classifications.name ,126) like :search", search: "%#{params[:classification]}%")
 end
 
-if params[:country] != ''
-  	@productos = @productos.where("CONVERT(varchar(255), countries.name ,126) like :search", search: "%#{params[:country]}%")
+if params[:pais] != ''
+  	@productos = @productos.where("CONVERT(varchar(255), countries.name ,126) like :search", search: "%#{params[:pais]}%")
 end
 
 if params[:fecha_creacion] != ''

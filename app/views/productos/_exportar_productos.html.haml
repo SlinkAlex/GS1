@@ -2,36 +2,63 @@
     %table
         %tr
             %td
-                %form{action: "#{empresa_productos_path}.pdf", method: "get", target: "_blank"}
-                    .parametros
-                    %input{ :type => "hidden", :name => "tipo_gtin", :value => ""}
-                    %input{ :type => "hidden", :name => "gtin", :value => ""}
-                    %input{ :type => "hidden", :name => "descripcion", :value => ""}
-                    %input{ :type => "hidden", :name => "marca", :value => ""}
-                    %input{ :type => "hidden", :name => "estatus", :value => ""}
-                    %input{ :type => "hidden", :name => "codigo_producto", :value => ""}
-                    %input{ :type => "hidden", :name => "clasificacion", :value => ""}
-                    %input{ :type => "hidden", :name => "country", :value => ""}
-                    %input{ :type => "hidden", :name => "fecha_creacion", :value => ""}
-                    %input{ :type => "hidden", :name => "fecha_modificacion", :value => ""}
-                    %button.ui-state-default.ui-corner-all.exportar_productos{:type => "submit", :title => "Opción que te permite exportar el listado general de Productos a formato PDF"}
-                        %span.ui-icon.ui-icon-disk
-                        Exportar PDF
+                %fieldset
+                    %legend
+                        Filtros para la exportación:
+                    %button.accordion
+                        Exportar a Excel
+                    .panel
+                        %br
+                        %br
+                        %form{action: "#{empresa_productos_path}.xlsx", method: "get", target: "_blank"}
+                            .parametros
+                            %input{ :type => "text", :name => "tipo_gtin", :placeholder => "Tipo GTIN"}
+                            %input{ :type => "text", :name => "gtin", :placeholder => "GTIN"}
+                            %input{ :type => "text", :name => "descripcion", :placeholder => "Descripción"}
+                            %input{ :type => "text", :name => "marca", :placeholder => "Marca"}
+                            %input{ :type => "text", :name => "codigo_producto", :placeholder => "Código Prod"}
+                            %input{ :type => "text", :name => "clasificacion", :placeholder => "Clasificación"}
+                            %input{ :type => "text", :name => "country", :placeholder => "Paises Comercialización"}
+                            %input{ :type => "text", :name => "fecha_creacion", :placeholder => "Fecha Creación"}
+                            %input{ :type => "text", :name => "fecha_modificacion", :placeholder => "Fecha Modificación"}
+                            %br
+                            %br
+                            %button.ui-state-default.ui-corner-all.exportar_reporte_productos{:type => "submit", :title => "Opción que te permite exportar el listado general de Productos a formato Excel"}
+                                %span.ui-icon.ui-icon-disk
+                                Exportar Excel
+                    %button.accordion
+                        Exportar a PDF
+                    .panel
+                        %form{action: "#{empresa_productos_path}.pdf", method: "get", target: "_blank"}
+                            .parametros
+                            %br
+                            %br
+                            %input{ :type => "text", :name => "tipo_gtin", :placeholder => "Tipo GTIN"}
+                            %input{ :type => "text", :name => "gtin", :placeholder => "GTIN"}
+                            %input{ :type => "text", :name => "descripcion", :placeholder => "Descripción"}
+                            %input{ :type => "text", :name => "marca", :placeholder => "Marca"}
+                            %input{ :type => "text", :name => "codigo_producto", :placeholder => "Código Prod"}
+                            %input{ :type => "text", :name => "clasificacion", :placeholder => "Clasificación"}
+                            %input{ :type => "text", :name => "country", :placeholder => "Paises Comercialización"}
+                            %input{ :type => "text", :name => "fecha_creacion", :placeholder => "Fecha Creación"}
+                            %input{ :type => "text", :name => "fecha_modificacion", :placeholder => "Fecha Modificación"}
+                            %br
+                            %br
+                            %button.ui-state-default.ui-corner-all.exportar_reporte_productos{:type => "submit", :title => "Opción que te permite exportar el listado general de Productos a formato PDF"}
+                                %span.ui-icon.ui-icon-disk
+                                Exportar PDF
+    :javascript
+        var acc = document.getElementsByClassName("accordion");
+        var i;
 
-            %td
-                %form{action: "#{empresa_productos_path}.xlsx", method: "get"}
-                    .parametros
-                    %input{ :type => "hidden", :name => "tipo_gtin", :value => ""}
-                    %input{ :type => "hidden", :name => "gtin", :value => ""}
-                    %input{ :type => "hidden", :name => "descripcion", :value => ""}
-                    %input{ :type => "hidden", :name => "marca", :value => ""}
-                    %input{ :type => "hidden", :name => "estatus", :value => ""}
-                    %input{ :type => "hidden", :name => "codigo_producto", :value => ""}
-                    %input{ :type => "hidden", :name => "clasificacion", :value => ""}
-                    %input{ :type => "hidden", :name => "country", :value => ""}
-                    %input{ :type => "hidden", :name => "fecha_creacion", :value => ""}
-                    %input{ :type => "hidden", :name => "fecha_modificacion", :value => ""}
-                    %button.ui-state-default.ui-corner-all.exportar_productos{:type => "submit", :title => "Opción que te permite exportar el listado general de Productos a formato Excel"}
-                        %span.ui-icon.ui-icon-disk
-                        Exportar Excel
-       
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var panel = this.nextElementSibling;
+            if (panel.style.display === "block") {
+                panel.style.display = "none";
+            } else {
+                panel.style.display = "block";
+            }
+            });
+        }
