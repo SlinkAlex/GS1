@@ -1,40 +1,15 @@
 @productos = Producto.where("prefijo = ? and estatus.descripcion = ?", params[:empresa_id], 'Activo').includes(:estatus, :tipo_gtin, :classification, :has_country, :country).order("producto.fecha_creacion desc") 
 
-if params[:tipo_gtin] != ''
-  @productos = @productos.where("tipo_gtin.tipo like :search", search: "%#{params[:tipo_gtin]}%" )
-end
-
-if params[:gtin] != ''
-  @productos = @productos.where("producto.gtin like :search", search: "%#{params[:gtin]}%" )
-end
-
-if params[:descripcion] != ''
-  @productos = @productos.where("producto.descripcion like :search", search: "%#{params[:descripcion]}%" )
-end
-
-if params[:marca] != ''
-  @productos = @productos.where("producto.marca like :search", search: "%#{params[:marca]}%" )
-end
-
-if params[:codigo_producto] != ''
-    @productos = @productos.where("producto.codigo_prod like :search", search: "%#{params[:codigo_producto]}%" )
-end
-
-if params[:classification] != ''
-  	@productos = @productos.where("CONVERT(varchar(255), classifications.name ,126) like :search", search: "%#{params[:classification]}%")
-end
-
-if params[:pais] != ''
-  	@productos = @productos.where("CONVERT(varchar(255), countries.name ,126) like :search", search: "%#{params[:pais]}%")
-end
-
-if params[:fecha_creacion] != ''
-  	@productos = @productos.where("CONVERT(varchar(255),  producto.fecha_creacion ,126) like :search", search: "%#{params[:fecha_creacion]}%")
-end
-
-if params[:fecha_modificacion] != ''
-  	@productos = @productos.where("CONVERT(varchar(255),  producto.fecha_ultima_modificacion ,126) like :search", search: "%#{params[:fecha_modificacion]}%")
-end
+@productos = @productos.where("tipo_gtin.tipo like '%#{params[:tipo_gtin]}%'") if params[:tipo_gtin] != ''
+@productos = @productos.where("producto.gtin like '%#{params[:gtin]}%'") if params[:gtin]
+@productos = @productos.where("producto.descripcion like '%#{params[:descripcion]}%'") if params[:descripcion] != ''
+@productos = @productos.where("producto.marca like '%#{params[:marca]}%'" ) if params[:marca] != ''
+@productos = @productos.where("estatus.descripcion like '%#{params[:estatus]}%'") if params[:estatus] != ''
+@productos = @productos.where("producto.codigo_prod like '%#{params[:codigo_producto]}%'") if params[:codigo_producto] != ''
+@productos = productos.where("classifications.name like :search8", search8: "%#{params[:classification]}%" )     if params[:classification].present? # classification
+@productos = productos.where("classifications.name like :search8", search8: "%#{params[:pais]}%" )     if params[:pais].present? # Paises Comercialización
+@productos = @productos.where("CONVERT(varchar(255),  producto.fecha_creacion ,126) like '%#{params[:fecha_creacion]}%'")  if params[:fecha_creacion] != ''
+@productos = @productos.where("CONVERT(varchar(255),  producto.fecha_ultima_modificacion ,126) like '%#{params[:fecha_ultima_modificacion]}%'") if params[:fecha_modificacion] != ''
 
 
 xlsx_package = Axlsx::Package.new 
