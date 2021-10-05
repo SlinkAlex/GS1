@@ -81,7 +81,7 @@ private
 
       end
       
-      cadena = producto.descripcion.split(" X ")
+      cadena = producto.descripcion.upcase.split(" X ")
       
       [ 
        producto.try(:tipo_gtin).try(:tipo),

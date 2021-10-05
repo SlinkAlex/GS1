@@ -31,7 +31,7 @@ wb.add_worksheet(name: "GS1") do |sheet|
 			sheet.add_row ["TIPO GTIN", "GTIN",  "DESCRIPCION", "MARCA", "ESTATUS", "CODIGO", "CLASIFICACION", "PAISES COMERCIALIZACION", "ORIGEN","FECHA CREACION", "FECHA MODIFICACION"], :style => [black_cell,black_cell,black_cell,black_cell, black_cell, black_cell]
 			@productos.each do |producto|
 
-				cadena = producto.descripcion.split(" X ")
+				cadena = producto.descripcion.upcase.split(" X ")
                 if cadena.count == 1
                     descripcion = producto.quantity ? cadena[0] + " " + producto.quantity.units + " " + producto.medida.abreviatura.upcase : producto.descripcion
                 else
