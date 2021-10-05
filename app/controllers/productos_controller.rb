@@ -327,31 +327,31 @@ class ProductosController < ApplicationController
 
     uri = "https://grp.gs1.org/grp-st/v3/gtins"
     body = [{
-      "gtin": "0" + producto.gtin,
-      "licenceKey": producto.prefijo,
-      "licenceType": 'GCP',
-      "gtinStatus": producto.estatus.descripcion.upcase,
-      "brandName": [{
-        "language": producto.has_country[0].country.lang_code,
-        "value": producto.marca
+      "gtin"=> "0" + producto.gtin,
+      "licenceKey"=> producto.prefijo,
+      "licenceType"=> 'GCP',
+      "gtinStatus"=> producto.estatus.descripcion.upcase,
+      "brandName"=> [{
+        "language"=> producto.has_country[0].country.lang_code,
+        "value"=> producto.marca
       }],
-      "gpcCategoryCode": producto.classification.code,
-      "countryOfSaleCode": [
+      "gpcCategoryCode"=> producto.classification.code,
+      "countryOfSaleCode"=> [
         producto.has_country[0].country.lang_code.split(/-/)[1]
       ],
-      "productDescription": [
+      "productDescription"=> [
         {
-          "language": producto.has_country[0].country.lang_code,
-          "value": producto.descripcion
+          "language"=> producto.has_country[0].country.lang_code,
+          "value"=> producto.descripcion
         }
       ],
-      "productImageUrl": [{
-        "language": producto.has_country[0].country.lang_code,
-        "value": ""
+      "productImageUrl"=> [{
+        "language"=> producto.has_country[0].country.lang_code,
+        "value"=> ""
       }],
-      "netContent": [{
-        "value": producto.quantity.units,
-        "unitCode": producto.medida.codigo
+      "netContent"=> [{
+        "value"=> producto.quantity.units,
+        "unitCode"=> producto.medida.codigo
       }]
     }]
 
