@@ -22,13 +22,20 @@ class ProductosPdf < Prawn::Document
 			productos.each do |producto| 
 
 				cadena = producto.descripcion.upcase.split(" X ")
-                if cadena.count == 1
+				if cadena.count == 1
                     descripcion = producto.quantity ? cadena[0] + " " + producto.quantity.units + " " + producto.medida.abreviatura.upcase : producto.descripcion
                 else
                     descripcion = producto.quantity ? cadena[0] + " " + producto.quantity.units + " " + producto.medida.abreviatura.upcase + " X " + cadena[1] : producto.descripcion 
                 end
 
-				productos_arreglo << [ producto.marca, descripcion, producto.gtin, producto.try(:tipo_gtin).try(:tipo)]
+				if producto.origen == 0
+					origen = "Sistema de Gestion"
+				elsif producto.origen == 1
+					origen = "Sistema de Solicitud"
+				else
+					origen = ""
+				end 
+				productos_arreglo << [producto.try(:empresa).try(:nombre_empresa).strip, producto.prefijo, producto.tipo_gtin.tipo, producto.gtin, producto.descripcion, producto.marca, producto.estatus.descripcion, producto.codigo_prod,producto.try(:classification_description), producto.try(:countries), origen, producto.fecha_creacion.strftime("%Y-%m-%d"), producto.fecha_ultima_modificacion ? producto.fecha_ultima_modificacion.strftime("%Y-%m-%d") : ""]
 			end
 
 			text ""

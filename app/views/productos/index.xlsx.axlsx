@@ -38,10 +38,12 @@ wb.add_worksheet(name: "GS1") do |sheet|
                     descripcion = producto.quantity ? cadena[0] + " " + producto.quantity.units + " " + producto.medida.abreviatura.upcase + " X " + cadena[1] : producto.descripcion 
                 end
 
-				if producto.origen == 1
+				if producto.origen == 0
 					origen = "Sistema de Gestion"
-				else
+				elsif producto.origen == 1
 					origen = "Sistema de Solicitud"
+				else
+					origen = ""
 				end
   				sheet.add_row [ producto.tipo_gtin.tipo, producto.gtin, descripcion, producto.marca, producto.estatus.descripcion, producto.codigo_prod,producto.try(:classification_description), producto.try(:countries), origen, producto.fecha_creacion.strftime("%Y-%m-%d"), producto.fecha_ultima_modificacion ? producto.fecha_ultima_modificacion.strftime("%Y-%m-%d") : ""], :style => [tomas, tomas, tomas, tomas, tomas, tomas],    :types =>  [:string, :string, :string, :string, :string, :string]		
 			end
