@@ -20,7 +20,15 @@ class ProductosPdf < Prawn::Document
 			productos_arreglo = [["MARCA", "DESCRIPCION", "GTIN", "TIPO GTIN"]]
 
 			productos.each do |producto| 
-			  productos_arreglo << [ producto.marca, producto.descripcion, producto.gtin, producto.try(:tipo_gtin).try(:tipo)]
+				
+				cadena = producto.descripcion.split(" X ")
+                if cadena.count == 1
+                    descripcion = producto.quantity ? cadena[0] + " " + producto.quantity.units + " " + producto.medida.abreviatura.upcase : producto.descripcion
+                else
+                    descripcion = producto.quantity ? cadena[0] + " " + producto.quantity.units + " " + producto.medida.abreviatura.upcase + " X " + cadena[1] : producto.descripcion 
+                end
+
+				productos_arreglo << [ producto.marca, descripcion, producto.gtin, producto.try(:tipo_gtin).try(:tipo)]
 			end
 
 			text ""
