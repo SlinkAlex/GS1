@@ -7,8 +7,8 @@ gem 'rails', '4.0.0'
 gem 'tiny_tds'
 
 # Ojo este adpatador solo funciona con arel 4.0.0
-gem 'activerecord-sqlserver-adapter', '~> 4.0.0'
-gem 'arel', '4.0.1'
+gem 'activerecord-sqlserver-adapter', github: 'rnhurt/activerecord-sqlserver-adapter', branch: '4.0.0' 
+gem 'arel', '4.0.0'
 
 gem 'sqlite3'
 
