@@ -1,4 +1,12 @@
 GIT
+  remote: git://github.com/rnhurt/activerecord-sqlserver-adapter.git
+  revision: e05026b6b4ed6e3df13ab99da0f73fff71757d3a
+  branch: 4.0.0
+  specs:
+    activerecord-sqlserver-adapter (3.2.12)
+      activerecord (~> 4.0.0)
+
+GIT
   remote: git://github.com/rweng/jquery-datatables-rails.git
   revision: d486b31b192a2924b1913e080ad23460e6b96d31
   specs:
@@ -33,9 +41,6 @@ GEM
       activesupport (= 4.0.0)
       arel (~> 4.0.0)
     activerecord-deprecated_finders (1.0.4)
-    activerecord-sqlserver-adapter (4.0.4)
-      activerecord (~> 4.0.0)
-      arel (~> 4.0.1)
     activesupport (4.0.0)
       i18n (~> 0.6, >= 0.6.4)
       minitest (~> 4.2)
@@ -44,7 +49,7 @@ GEM
       tzinfo (~> 0.3.37)
     ajax-datatables-rails (0.4.3)
       railties (>= 4.0)
-    arel (4.0.1)
+    arel (4.0.0)
     axlsx (2.0.1)
       htmlentities (~> 4.3.1)
       nokogiri (>= 1.4.1)
@@ -56,7 +61,6 @@ GEM
     bcrypt-ruby (3.1.5)
       bcrypt (>= 3.1.3)
     builder (3.1.4)
-    byebug (9.0.6)
     coffee-rails (4.2.2)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0)
@@ -87,7 +91,6 @@ GEM
       haml (>= 3.1, < 5.0)
       railties (~> 4.0.0)
     hike (1.2.3)
-    hirb (0.7.3)
     htmlentities (4.3.4)
     i18n (0.9.5)
       concurrent-ruby (~> 1.0)
@@ -198,20 +201,18 @@ DEPENDENCIES
   actionpack-action_caching
   actionpack-page_caching
   activerecord-deprecated_finders
-  activerecord-sqlserver-adapter (~> 4.0.0)
+  activerecord-sqlserver-adapter!
   ajax-datatables-rails
-  arel (= 4.0.1)
+  arel (= 4.0.0)
   axlsx (~> 2.0.1)
   axlsx_rails
   bcrypt-ruby
   bundler (= 1.17.3)
-  byebug
   coffee-rails
   daemons
   delayed_job_active_record
   delayed_job_web
   haml-rails
-  hirb
   jquery-datatables-rails!
   jquery-rails
   jquery-ui-rails
