@@ -380,7 +380,8 @@ class ProductosController < ApplicationController
           "unitCode"=> producto.medida.codigo
         }]
       }]
-
+    end
+    
     res = make_post_request(uri,body)
     data = JSON.parse(res)
     Rails.logger.info "API | BATCH GS1 ----- " + data + " --------- "
