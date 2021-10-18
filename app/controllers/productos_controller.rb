@@ -383,7 +383,7 @@ class ProductosController < ApplicationController
 
     res = make_post_request(uri,body)
     data = JSON.parse(res)
-
+    Rails.logger.info "API | BATCH GS1 ----- " + data + " --------- "
     return data
   end
 
