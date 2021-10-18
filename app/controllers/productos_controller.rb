@@ -331,7 +331,7 @@ class ProductosController < ApplicationController
         "gtin"=> "0" + producto.gtin,
         "licenceKey"=> producto.prefijo,
         "licenceType"=> 'GCP',
-        "gtinStatus"=> producto.estatus.descripcion.upcase,
+        "gtinStatus"=> "ACTIVO",
         "brandName"=> [{
           "language"=> producto.has_country[0].country.lang_code,
           "value"=> producto.marca
@@ -360,7 +360,7 @@ class ProductosController < ApplicationController
         "gtin"=> "0" + producto.gtin,
         "licenceKey"=> producto.prefijo,
         "licenceType"=> 'GCP',
-        "gtinStatus"=> producto.estatus.descripcion.upcase,
+        "gtinStatus"=> "ACTIVO",
         "brandName"=> [{
           "language"=> producto.has_country[0].country.lang_code,
           "value"=> producto.marca
