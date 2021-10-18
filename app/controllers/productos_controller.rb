@@ -326,34 +326,60 @@ class ProductosController < ApplicationController
   def registrar_gtin(producto)
 
     uri = "https://grp.gs1.org/grp-st/v3/gtins"
-    body = [{
-      "gtin"=> "0" + producto.gtin,
-      "licenceKey"=> producto.prefijo,
-      "licenceType"=> 'GCP',
-      "gtinStatus"=> producto.estatus.descripcion.upcase,
-      "brandName"=> [{
-        "language"=> producto.has_country[0].country.lang_code,
-        "value"=> producto.marca
-      }],
-      "gpcCategoryCode"=> producto.classification.code,
-      "countryOfSaleCode"=> [
-        producto.has_country[0].country.lang_code.split(/-/)[1]
-      ],
-      "productDescription"=> [
-        {
+    if producto.img_url.present?
+      body = [{
+        "gtin"=> "0" + producto.gtin,
+        "licenceKey"=> producto.prefijo,
+        "licenceType"=> 'GCP',
+        "gtinStatus"=> producto.estatus.descripcion.upcase,
+        "brandName"=> [{
           "language"=> producto.has_country[0].country.lang_code,
-          "value"=> producto.descripcion
-        }
-      ],
-      "productImageUrl"=> [{
-        "language"=> producto.has_country[0].country.lang_code,
-        "value"=> ""
-      }],
-      "netContent"=> [{
-        "value"=> producto.quantity.units,
-        "unitCode"=> producto.medida.codigo
+          "value"=> producto.marca
+        }],
+        "gpcCategoryCode"=> producto.classification.code,
+        "countryOfSaleCode"=> [
+          producto.has_country[0].country.lang_code.split(/-/)[1]
+        ],
+        "productDescription"=> [
+          {
+            "language"=> producto.has_country[0].country.lang_code,
+            "value"=> producto.descripcion
+          }
+        ],
+        "productImageUrl"=> [{
+          "language"=> producto.has_country[0].country.lang_code,
+          "value"=> producto.img_url
+        }],
+        "netContent"=> [{
+          "value"=> producto.quantity.units,
+          "unitCode"=> producto.medida.codigo
+        }]
       }]
-    }]
+    else
+      body = [{
+        "gtin"=> "0" + producto.gtin,
+        "licenceKey"=> producto.prefijo,
+        "licenceType"=> 'GCP',
+        "gtinStatus"=> producto.estatus.descripcion.upcase,
+        "brandName"=> [{
+          "language"=> producto.has_country[0].country.lang_code,
+          "value"=> producto.marca
+        }],
+        "gpcCategoryCode"=> producto.classification.code,
+        "countryOfSaleCode"=> [
+          producto.has_country[0].country.lang_code.split(/-/)[1]
+        ],
+        "productDescription"=> [
+          {
+            "language"=> producto.has_country[0].country.lang_code,
+            "value"=> producto.descripcion
+          }
+        ],
+        "netContent"=> [{
+          "value"=> producto.quantity.units,
+          "unitCode"=> producto.medida.codigo
+        }]
+      }]
 
     res = make_post_request(uri,body)
     data = JSON.parse(res)
@@ -384,7 +410,7 @@ class ProductosController < ApplicationController
       @empresa = Empresa.find(:first, :conditions => ["prefijo = ?", params[:empresa_id]])
       @producto = Producto.find(:first, :conditions => ["gtin like ?", params[:id]? params[:id]:params[:gtin]])
       if @producto
-         @selected = HasCountry.where("producto_id = ?", @producto.id)
+        @selected = HasCountry.where("producto_id = ?", @producto.id)
       end
     end
 
