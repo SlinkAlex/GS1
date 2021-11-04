@@ -27,16 +27,24 @@ class ReporteProductosPdf < Prawn::Document
 			productos.each do |producto|
 				
 				cadena = producto.descripcion.upcase.split(" X ")
-                cadena_final = ""
-                for index in 1..cadena.count-1
-                    cadena_final = cadena_final + ' X ' + cadena[index]
-                end
+				cadena_final = ""
+				for index in 1..cadena.count-1
+					if cadena[index].include?("UND")
+					if !cadena_final.include?("UND")
+						cadena_final = producto.quantity ? cadena_final + " " + producto.quantity.units + " " + producto.medida.abreviatura.upcase + " X " + cadena[index] : cadena_final + ' X ' + cadena[index]
+					else
+						cadena_final = cadena_final + ' X ' + cadena[index]
+					end 
+					else
+					cadena_final = cadena_final + ' X ' + cadena[index]
+					end
+				end
 
-                if cadena.count == 1
-                    descripcion = producto.quantity ? cadena[0] + " " + producto.quantity.units + " " + producto.medida.abreviatura.upcase : producto.descripcion
-                else
-                    descripcion = producto.quantity ? cadena[0] + " " + producto.quantity.units + " " + producto.medida.abreviatura.upcase + cadena_final : producto.descripcion
-                end
+				if producto.tipo_gtin.tipo == "GTIN-13" || producto.tipo_gtin.tipo == "GTIN-8"
+					descripcion = producto.quantity ? producto.descripcion + " " + producto.quantity.units + " " + producto.medida.abreviatura.upcase : producto.descripcion
+				else
+					descripcion = cadena[0] + cadena_final
+				end
 
 				if producto.origen == 0
 					origen = "Sistema de Gestion"

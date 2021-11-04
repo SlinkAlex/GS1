@@ -80,21 +80,28 @@ private
         end
 
       end
-      
+
       cadena = producto.descripcion.upcase.split(" X ")
       cadena_final = ""
       for index in 1..cadena.count-1
-        cadena_final = cadena_final + ' X ' + cadena[index]
+        if cadena[index].include?("UND")
+          if !cadena_final.include?("UND")
+            cadena_final = producto.quantity ? cadena_final + " " + producto.quantity.units + " " + producto.medida.abreviatura.upcase + " X " + cadena[index] : cadena_final + ' X ' + cadena[index]
+          else
+            cadena_final = cadena_final + ' X ' + cadena[index]
+          end 
+        else
+          cadena_final = cadena_final + ' X ' + cadena[index]
+        end
       end
-
       
       [ 
        producto.try(:tipo_gtin).try(:tipo),
        producto.gtin,
-       if cadena.count == 1
-        producto.quantity ? cadena[0] + " " + producto.quantity.units + " " + producto.medida.abreviatura.upcase : producto.descripcion
+       if producto.tipo_gtin.tipo == "GTIN-13" || producto.tipo_gtin.tipo == "GTIN-8"
+        descripcion_final = producto.quantity ? producto.descripcion + " " + producto.quantity.units + " " + producto.medida.abreviatura.upcase : producto.descripcion
        else
-        producto.quantity ? cadena[0] + " " + producto.quantity.units + " " + producto.medida.abreviatura.upcase + cadena_final : producto.descripcion
+        cadena[0] + cadena_final
        end,
        producto.marca,
        producto.try(:estatus).try(:descripcion),
