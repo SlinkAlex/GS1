@@ -14,7 +14,7 @@ module Requests
         # Request headers
         request["Content-Type"] = "application/json"
         request['Cache-Control'] = 'no-cache'
-        request['APIKey'] = '9f487becd353409c9ab8c711944ecb5e'
+        request['APIKey'] = 'e7159b3ec4574221afb8909128e0e32b'
         return https.request(request).body
     end
 
@@ -28,7 +28,7 @@ module Requests
         # Request headers
         request["Content-Type"] = "application/json"
         request['Cache-Control'] = 'no-cache'
-        request['APIKey'] = '9f487becd353409c9ab8c711944ecb5e'
+        request['APIKey'] = 'e7159b3ec4574221afb8909128e0e32b'
         request.body = JSON.dump(body)
         return https.request(request).body
     end

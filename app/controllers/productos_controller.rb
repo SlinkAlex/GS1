@@ -325,7 +325,7 @@ class ProductosController < ApplicationController
   
   def registrar_gtin(producto)
 
-    uri = "https://grp.gs1.org/grp-st/v3/gtins"
+    uri = "https://grp.gs1.org/grp/v3/gtins"
     if producto.img_url.present?
       body = [{
         "gtin"=> "0" + producto.gtin,
